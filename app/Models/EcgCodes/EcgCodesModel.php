@@ -13,7 +13,13 @@ class EcgCodesModel extends Model
 
     public function getAllCodes($loggedInUserId)
     {
-        $M = EcgCodesModel::leftJoin('ecg_code_users', 'ecg_code_users.user_id', '=', $loggedInUserId);
-        return $M->paginate();
+        return EcgCodesAssignedToUsersModel::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
+            ->where('ecg_codes_assigned_users.user_id', $loggedInUserId)->paginate();
     }
+
+    public function findById(mixed $code_id)
+    {
+        return EcgCodesModel::find($code_id);
+    }
+
 }

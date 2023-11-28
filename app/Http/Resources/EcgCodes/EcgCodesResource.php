@@ -15,6 +15,7 @@ class EcgCodesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => (int)$this->id,
             'serial_no' => (int)$this->id,
             'name' => (string)$this->name,
             'code' => (string)$this->code,

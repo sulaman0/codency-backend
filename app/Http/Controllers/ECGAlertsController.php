@@ -5,22 +5,21 @@ namespace App\Http\Controllers;
 use App\AppHelper\AppHelper;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
-use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Service\EcgAlertsService;
 use App\Service\EcgCodesService;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ECGCodesController extends Controller
+class ECGAlertsController extends Controller
 {
-    private EcgCodesService $ecgCodesService;
+    protected EcgAlertsService $ecgAlertsService;
 
     /**
-     * @param EcgCodesService $ecgCodesService
+     * @param EcgAlertsService $ecgAlertsService
      */
-    public function __construct(EcgCodesService $ecgCodesService)
+    public function __construct(EcgAlertsService $ecgAlertsService)
     {
-        $this->ecgCodesService = $ecgCodesService;
+        $this->ecgAlertsService = $ecgAlertsService;
     }
 
     /**
@@ -28,16 +27,7 @@ class ECGCodesController extends Controller
      */
     public function index()
     {
-        return view('ecg_codes.index');
-    }
-
-    public function indexJson(Request $request): EcgCodesCollection|JsonResponse
-    {
-        try {
-            return $this->ecgCodesService->getAlLCodes($request);
-        } catch (\Exception $exception) {
-            return AppHelper::logErrorException($exception);
-        }
+        //
     }
 
     /**
@@ -53,6 +43,12 @@ class ECGCodesController extends Controller
      */
     public function store(NewEcgCodeAlertRequest $request): JsonResponse|bool
     {
+        try {
+            $this->ecgAlertsService->pressCode($request);
+            return AppHelper::sendSuccessResponse(true, 'Alert Created');
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 
     /**
@@ -60,7 +56,7 @@ class ECGCodesController extends Controller
      */
     public function show(string $id)
     {
-        return view('ecg_codes.details');
+        //
     }
 
     /**
@@ -77,7 +73,7 @@ class ECGCodesController extends Controller
     public function update(RespondEcgCodeRequest $request, string $id): JsonResponse
     {
         try {
-            $this->ecgCodesService->respondToCde($request);
+            $this->ecgAlertsService->respondToCde($request);
             return AppHelper::sendSuccessResponse(true, 'Alert Created');
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);

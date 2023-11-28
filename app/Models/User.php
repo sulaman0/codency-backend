@@ -5,9 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\AppHelper\AppHelper;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
-use App\Http\Requests\Users\MyProfile\UpdateProfilePasswordRequest;
-use App\Models\EcgCodes\EcgCodesAssociatedUserModel;
-use App\Models\EcgCodes\EcgCodesModel;
+
+use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\Locations\LocationModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,7 +51,7 @@ class User extends Authenticatable
 
     function ecgCodes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(EcgCodesAssociatedUserModel::class, 'user_id', 'id');
+        return $this->hasMany(EcgCodesAssignedToUsersModel::class, 'user_id', 'id');
     }
 
 

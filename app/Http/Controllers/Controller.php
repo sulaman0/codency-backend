@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Hash;
 
 class Controller extends BaseController
 {
@@ -32,5 +33,15 @@ class Controller extends BaseController
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }
+    }
+
+    function testFunction()
+    {
+        $U = new User();
+        $U->name = "SLMN";
+        $U->email = "abc@gmail.com";
+        $U->designation = "abc@gmail.com";
+        $U->password = Hash::make('testing09');
+        $U->save();
     }
 }

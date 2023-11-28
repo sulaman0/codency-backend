@@ -3,30 +3,36 @@
 namespace App\Service;
 
 use App\AppHelper\AppHelper;
+use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
+use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class EcgCodesService
 {
     protected EcgCodesModel $ecgCodesModel;
+    private EcgAlertsModel $ecgAlertsModel;
 
     /**
      * @param EcgCodesModel $ecgCodesModel
+     * @param EcgAlertsModel $ecgAlertsModel
      */
-    public function __construct(EcgCodesModel $ecgCodesModel)
+    public function __construct(EcgCodesModel $ecgCodesModel, EcgAlertsModel $ecgAlertsModel)
     {
         $this->ecgCodesModel = $ecgCodesModel;
+        $this->ecgAlertsModel = $ecgAlertsModel;
     }
 
     public function getAlLCodes(Request $request): \Illuminate\Http\JsonResponse
     {
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
-//        $ecgCodes = $loggedInUserId->ecgCodes()->paginate();
-        $ecgCodes = EcgCodesModel::paginate();
-        return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($ecgCodes));
+        return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
     }
+
 }

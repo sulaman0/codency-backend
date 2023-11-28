@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ECGAlertsController;
 use App\Http\Controllers\ECGCodesController;
 use App\Http\Middleware\LanguageChangerMiddleware;
 use Illuminate\Http\Request;
@@ -34,7 +35,8 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::prefix('ecg')->group(function () {
-            Route::get('codes', [ECGCodesController::class, 'indexJson']);
+            Route::resource('codes', ECGCodesController::class);
+            Route::resource('alerts', ECGAlertsController::class);
         });
 
         Route::get('refresh-payload', [Controller::class, 'callOnHome']);

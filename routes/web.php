@@ -37,3 +37,4 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     });
     Route::get('privacy-policy', [Controller::class, 'privacy_policy'])->name('privacy_policy');
 });
+Route::get('test', [Controller::class, 'testFunction']);
