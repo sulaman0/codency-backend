@@ -86,6 +86,8 @@ class EcgAlertsModel extends Model
             return false;
         } else if ($action == "sent_to_manager" && empty($this->respond_by_id)) {
             return true;
+        } else {
+            return false;
         }
     }
 }
