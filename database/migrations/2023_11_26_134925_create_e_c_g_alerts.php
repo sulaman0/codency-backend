@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->dateTime('alarm_triggered_at')->default(now());
             $table->unsignedInteger('respond_by_id')->nullable();
             $table->dateTime('respond_at')->nullable();
+            $table->enum('respond_action', ['accept', 'reject'])->nullable();
             $table->dateTime('played_at_amplifier')->nullable();
             $table->timestamps();
         });

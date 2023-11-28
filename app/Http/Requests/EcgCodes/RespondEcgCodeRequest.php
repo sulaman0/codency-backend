@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\EcgCodes;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\ApiFormRequest;
 use JetBrains\PhpStorm\ArrayShape;
 
-class RespondEcgCodeRequest extends FormRequest
+class RespondEcgCodeRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,6 +13,13 @@ class RespondEcgCodeRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    #[ArrayShape(['action' => "mixed"])] function validationData()
+    {
+        return [
+            'action' => $this->action,
+        ];
     }
 
     /**
@@ -25,8 +32,8 @@ class RespondEcgCodeRequest extends FormRequest
         return [
             'action' => [
                 'required',
-                'in:accept|reject'
-            ]
+                'in:accept,reject'
+            ],
         ];
     }
 }

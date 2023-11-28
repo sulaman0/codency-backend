@@ -8,6 +8,9 @@ use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Service\EcgCodesService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,9 +29,13 @@ class ECGCodesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Factory|Application|View|EcgCodesCollection|JsonResponse|\Illuminate\Contracts\Foundation\Application
     {
-        return view('ecg_codes.index');
+        if ($request->wantsJson()) {
+            return $this->indexJson($request);
+        } else {
+            return view('ecg_codes.index');
+        }
     }
 
     public function indexJson(Request $request): EcgCodesCollection|JsonResponse
@@ -74,14 +81,8 @@ class ECGCodesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RespondEcgCodeRequest $request, string $id): JsonResponse
+    public function update(Request $request, string $id)
     {
-        try {
-            $this->ecgCodesService->respondToCde($request);
-            return AppHelper::sendSuccessResponse(true, 'Alert Created');
-        } catch (\Exception $exception) {
-            return AppHelper::logErrorException($exception);
-        }
     }
 
     /**

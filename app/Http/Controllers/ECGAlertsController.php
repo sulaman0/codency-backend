@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\AppHelper\AppHelper;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
+use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Service\EcgAlertsService;
 use App\Service\EcgCodesService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -25,9 +29,22 @@ class ECGAlertsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Factory|Application|View|EcgCodesCollection|JsonResponse|\Illuminate\Contracts\Foundation\Application
     {
-        //
+        if ($request->wantsJson()) {
+            return $this->indexJson($request);
+        } else {
+            return view('reports.code_pressed');
+        }
+    }
+
+    public function indexJson(Request $request): EcgCodesCollection|JsonResponse
+    {
+        try {
+            return $this->ecgAlertsService->getAlerts($request);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 
     /**
@@ -73,7 +90,7 @@ class ECGAlertsController extends Controller
     public function update(RespondEcgCodeRequest $request, string $id): JsonResponse
     {
         try {
-            $this->ecgAlertsService->respondToCde($request);
+            $this->ecgAlertsService->respondToCde($request, $id);
             return AppHelper::sendSuccessResponse(true, 'Alert Created');
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);

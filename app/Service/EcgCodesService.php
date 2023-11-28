@@ -35,4 +35,5 @@ class EcgCodesService
         return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
     }
 
+
 }

@@ -13,13 +13,13 @@ return new class extends Migration {
         Schema::create('ecg_codes_alert_assigned_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('ecg_alert_id');
+            $table->unsignedBigInteger('ecg_code_id');
             $table->timestamps();
         });
 
         Schema::table('ecg_codes_alert_assigned_users', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('ecg_alert_id')->references('id')->on('ecg_alerts');
+            $table->foreign('ecg_code_id')->references('id')->on('ecg_codes');
         });
     }
 

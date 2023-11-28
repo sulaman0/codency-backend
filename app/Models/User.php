@@ -62,8 +62,8 @@ class User extends Authenticatable
 
     function locationNme(): string
     {
-        $location = $this->location();
-        return $location instanceof LocationModel ? $location->name : '-';
+        $location = $this->location()->first();
+        return $location instanceof LocationModel ? $location->loc_nme . ' ' . $location->building_nme : '-';
     }
 
     static function findUserByEmail($email): mixed
