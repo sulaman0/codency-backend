@@ -45,7 +45,8 @@ class EcgAlertsModel extends Model
     public function getAllAlerts(mixed $loggedInUserId)
     {
         return EcgAlertsModel::leftJoin('ecg_codes_alert_assigned_users', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes_alert_assigned_users.ecg_code_id')
-            ->where('ecg_codes_alert_assigned_users.user_id', $loggedInUserId)->paginate();
+            ->select('*')->addSelect('ecg_alerts.id as id')
+            ->where('ecg_codes_alert_assigned_users.user_id', $loggedInUserId)->orderBy('ecg_alerts.id', 'desc')->paginate();
     }
 
     function alarmBy()

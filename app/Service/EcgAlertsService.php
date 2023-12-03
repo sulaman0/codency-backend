@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use mysql_xdevapi\Exception;
+
 
 class EcgAlertsService
 {
@@ -37,7 +37,7 @@ class EcgAlertsService
     /**
      * @throws \Exception
      */
-    public function pressCode(NewEcgCodeAlertRequest $request): bool
+    public function pressCode(NewEcgCodeAlertRequest $request)
     {
         ## User Model
         $loggedInUser = AppHelper::getUserFromRequest($request);
@@ -56,13 +56,16 @@ class EcgAlertsService
         if ($ecgAlertModel) {
             if ($ecgCodeModel->action == "sent_to_amplifier_directly") {
                 ## Send alert directly
-                $this->sendToAmplifier($ecgAlertModel, $ecgCodeModel);
+                return $this->sendToAmplifier($ecgAlertModel, $ecgCodeModel);
             }
         } else {
             throw new \Exception("Failed to Save the Alert");
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function respondToCde(RespondEcgCodeRequest $request, $ecgAlertId)
     {
         ## User Model
@@ -84,12 +87,13 @@ class EcgAlertsService
             ## Check whether to sent to Amplifier or not.
             if ($ecgCode->action == 'sent_to_manager') {
                 ## Now send to Amplifier
-                $this->sendToAmplifier($ecgAlertModel, $ecgCode);
+                return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
             }
 
         } else {
+
             if ($ecgCode->action == "sent_to_amplifier_directly") {
-                throw new Exception("Alert Already Played To The Amplifier");
+                throw new \Exception("Alert Already Played To The Amplifier");
             } else {
                 throw new \Exception("Invalid Alert Passed");
             }
@@ -108,5 +112,6 @@ class EcgAlertsService
 
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode)
     {
+        return true;
     }
 }

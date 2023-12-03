@@ -108,8 +108,10 @@ class LoginController extends Controller
             return new JsonResponse([
                 'status' => true,
                 'message' => trans('common.user_has_been_logged_in'),
-                'payload' => new UserResource($loggedInUser),
-                'token' => $loggedInUser->createToken(env('APP_KEY') . $loggedInUser->id)->plainTextToken
+                'payload' => [
+                    'user' => new UserResource($loggedInUser),
+                    'token' => $loggedInUser->createToken(env('APP_KEY') . $loggedInUser->id)->plainTextToken
+                ],
             ], 200);
         } else {
             return redirect()->intended($this->redirectPath());
