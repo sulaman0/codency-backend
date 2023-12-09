@@ -49,11 +49,11 @@ class EcgAlertsModel extends Model
             ->where('ecg_codes_alert_assigned_users.user_id', $loggedInUserId);
 
         if ($request->user_id) {
-            $M->where('alarm_triggered_by_id', $request->user_id);
+            $M->where('ecg_alerts.alarm_triggered_by_id', $request->user_id);
         }
 
         if ($request->code_id) {
-            $M->where('ecg_code_id', $request->code_id);
+            $M->where('ecg_alerts.ecg_code_id', $request->code_id);
         }
 
         return $M->orderBy('ecg_alerts.id', 'desc')->paginate();
