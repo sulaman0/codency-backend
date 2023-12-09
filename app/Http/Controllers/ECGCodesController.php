@@ -47,7 +47,7 @@ class ECGCodesController extends Controller
         }
     }
 
-    public function ecgCodesListForSearch($request)
+    public function ecgCodesListForSearch(Request $request)
     {
         try {
             return $this->ecgCodesService->getAlLCodesForSearch($request);

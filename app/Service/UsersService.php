@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\AppHelper\AppHelper;
 use App\Http\Resources\Users\UsersSearchListCollection;
 use App\Models\User;
 
@@ -14,13 +15,14 @@ class UsersService
      * @param User $user
      * @return void
      */
-    function __constructor(User $user)
+
+    public function __construct(User $user)
     {
         $this->userModel = $user;
     }
 
-    function getAllUsersForSearch(): UsersSearchListCollection
+    function getAllUsersForSearch(): \Illuminate\Http\JsonResponse
     {
-        return new UsersSearchListCollection($this->userModel->getAllUsersForSearch());
+        return AppHelper::sendSuccessResponse(true, 'found', ['data' => new UsersSearchListCollection($this->userModel->getAllUsersForSearch())]);
     }
 }

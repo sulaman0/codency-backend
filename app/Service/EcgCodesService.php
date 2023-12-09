@@ -36,9 +36,11 @@ class EcgCodesService
         return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
     }
 
-    public function getAlLCodesForSearch($request): EcgCodesSearchListCollection
+    public function getAlLCodesForSearch($request): \Illuminate\Http\JsonResponse
     {
-        return new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch());
+        return AppHelper::sendSuccessResponse(true, 'found', [
+            'data' => new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch($request->search))
+        ]);
     }
 
 

@@ -23,9 +23,16 @@ class EcgCodesModel extends Model
     }
 
 
-    function getAllCodesForSearch(): \Illuminate\Database\Eloquent\Collection
+    function getAllCodesForSearch($search = null): \Illuminate\Database\Eloquent\Collection
     {
-        return EcgCodesModel::all();
+        $M = EcgCodesModel::where('id', '<>', 0);
+
+        if ($search) {
+            $M = $M->where(function ($M) use ($search) {
+                $M->where('name', 'LIKE', '%' . $search . '%')->OrWhere('code', '%' . $search . '%');
+            });
+        }
+        return $M->get();
     }
 
 }

@@ -91,8 +91,8 @@ class User extends Authenticatable
     {
         $users = User::where('id', '<>', 0);
         if ($search) {
-            $users->where('name', 'LIKE', '%' . $search . '%');
+            $users = $users->where('name', 'LIKE', '%' . $search . '%');
         }
-        return $users->all();
+        return $users->get();
     }
 }

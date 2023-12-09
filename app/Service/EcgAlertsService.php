@@ -101,7 +101,7 @@ class EcgAlertsService
     {
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
-        return AppHelper::sendSuccessResponse(true, 'result', new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id)));
+        return AppHelper::sendSuccessResponse(true, 'result', new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id, $request)));
     }
 
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
