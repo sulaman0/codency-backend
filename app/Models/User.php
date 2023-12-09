@@ -86,4 +86,13 @@ class User extends Authenticatable
     {
         return User::findOrFail($userId);
     }
+
+    function getAllUsersForSearch($search = null)
+    {
+        $users = User::where('id', '<>', 0);
+        if ($search) {
+            $users->where('name', 'LIKE', '%' . $search . '%');
+        }
+        return $users->all();
+    }
 }

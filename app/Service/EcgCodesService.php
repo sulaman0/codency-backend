@@ -6,6 +6,7 @@ use App\AppHelper\AppHelper;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Http\Resources\EcgCodes\SearchList\EcgCodesSearchListCollection;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
@@ -33,6 +34,11 @@ class EcgCodesService
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
         return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
+    }
+
+    public function getAlLCodesForSearch($request): EcgCodesSearchListCollection
+    {
+        return new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch());
     }
 
 

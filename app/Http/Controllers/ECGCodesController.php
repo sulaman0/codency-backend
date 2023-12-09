@@ -47,6 +47,15 @@ class ECGCodesController extends Controller
         }
     }
 
+    public function ecgCodesListForSearch($request)
+    {
+        try {
+            return $this->ecgCodesService->getAlLCodesForSearch($request);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

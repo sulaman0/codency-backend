@@ -22,4 +22,10 @@ class EcgCodesModel extends Model
         return EcgCodesModel::find($code_id);
     }
 
+
+    function getAllCodesForSearch(): \Illuminate\Database\Eloquent\Collection
+    {
+        return EcgCodesModel::all();
+    }
+
 }

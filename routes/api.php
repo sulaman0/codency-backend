@@ -33,7 +33,8 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
             Route::resource('codes', ECGCodesController::class);
             Route::resource('alerts', ECGAlertsController::class);
         });
-        Route::get('')
+        Route::get('ecg-codes-list', [ECGCodesController::class, 'ecgCodesListForSearch']);
+        Route::get('users-list', [Controller::class, 'usersList']);
         Route::get('refresh-payload', [Controller::class, 'callOnHome']);
         Route::put('update-password', [Controller::class, 'updatePassword']);
     });

@@ -6,6 +6,7 @@ use App\AppHelper\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\Users\UserDeviceModel;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
@@ -71,6 +72,11 @@ class LoginController extends Controller
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
+
+            // Save user login device, Information.
+            $loggedInUser = AppHelper::getUserFromRequest($request);
+            UserDeviceModel::storeUserDeviceInformation($loggedInUser->id, $request->fcm_token, $request->device_type);
+
             return $this->sendLoginResponse($request);
         }
 

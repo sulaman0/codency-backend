@@ -11,7 +11,7 @@ class UserDeviceModel extends Model
 
     protected $table = 'user_devices';
 
-    function storeUserDeviceInformation(int $userId, string $fcmToken, string $deviceType)
+    static function storeUserDeviceInformation(int $userId, string $fcmToken, string $deviceType)
     {
         $M = new UserDeviceModel();
         $M->user_id = $userId;

@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Http\Requests\CallOnHomeRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Service\UsersService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 
 class Controller extends BaseController
 {
+
     use AuthorizesRequests, ValidatesRequests;
 
     function callOnHome(CallOnHomeRequest $request)
@@ -43,5 +45,14 @@ class Controller extends BaseController
         $U->designation = "abc@gmail.com";
         $U->password = Hash::make('testing09');
         $U->save();
+    }
+
+    function usersList(UsersService $usersService): JsonResponse|\App\Http\Resources\Users\UsersSearchListCollection
+    {
+        try {
+            return $usersService->getAllUsersForSearch();
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 }

@@ -37,7 +37,9 @@ class LoginRequest extends ApiFormRequest
             'email' => [
                 'required'
             ],
-            'password' => 'required'
+            'password' => 'required',
+            'fcm_token' => 'required',
+            'device_type' => 'required|in:ios,android', // IOS, Android
         ];
     }
 
