@@ -22,10 +22,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware([LanguageChangerMiddleware::class])->group(function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::post('request-reset-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
@@ -33,12 +29,11 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
 
 
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::prefix('ecg')->group(function () {
             Route::resource('codes', ECGCodesController::class);
             Route::resource('alerts', ECGAlertsController::class);
         });
-
+        Route::get('')
         Route::get('refresh-payload', [Controller::class, 'callOnHome']);
         Route::put('update-password', [Controller::class, 'updatePassword']);
     });

@@ -31,8 +31,7 @@ class RespondEcgCodeRequest extends ApiFormRequest
     {
         return [
             'action' => [
-                'required',
-                'in:accept,reject'
+                'required', 'in:accept,reject'
             ],
         ];
     }

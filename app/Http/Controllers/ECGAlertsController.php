@@ -91,7 +91,7 @@ class ECGAlertsController extends Controller
     {
         try {
             $this->ecgAlertsService->respondToCde($request, $id);
-            return AppHelper::sendSuccessResponse(true, 'Alert Created');
+            return AppHelper::sendSuccessResponse(true, '');
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }

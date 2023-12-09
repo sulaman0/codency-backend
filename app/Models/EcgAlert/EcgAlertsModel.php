@@ -32,7 +32,7 @@ class EcgAlertsModel extends Model
     {
         $ecgAlertsModel->respond_by_id = $respondedById;
         $ecgAlertsModel->respond_at = $respondedByAt;
-        $ecgAlertsModel->action = $action;
+        $ecgAlertsModel->responded_action = $action;
         $ecgAlertsModel->save();
     }
 

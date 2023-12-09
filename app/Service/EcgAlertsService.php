@@ -75,6 +75,11 @@ class EcgAlertsService
         $ecgAlertModel = $this->ecgAlertsModel->getByIdFindFail($ecgAlertId);
         $ecgCode = $ecgAlertModel->ecgCode();
 
+        ## Validate is allow  user to  press this option.
+        if (!$ecgAlertModel->shouldShowActionBtn($ecgCode->action)) {
+            throw new \Exception("You're not allowed to Press this action.");
+        }
+
         ## Validate Is this user is valid to respond this Alert.
         $isValidToRespond = $this->ecgCodesAlertsAssignedToUsersModel->isUserAllowToRespondEcgCode($loggedInUser->id, $ecgAlertModel->ecg_code_id);
 
@@ -85,22 +90,11 @@ class EcgAlertsService
                 $loggedInUser->id, AppHelper::getMySQLFormattedDateTime(Carbon::now()), $request->action);
 
             ## Check whether to sent to Amplifier or not.
-            if ($ecgCode->action == 'sent_to_manager') {
-                ## Now send to Amplifier
-                return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
-            }
-
+            ## Now send to Amplifier
+            return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
         } else {
-
-            if ($ecgCode->action == "sent_to_amplifier_directly") {
-                throw new \Exception("Alert Already Played To The Amplifier");
-            } else {
-                throw new \Exception("Invalid Alert Passed");
-            }
-
+            throw new \Exception("You're not allowed to Press this action.");
         }
-
-
     }
 
     public function getAlerts(Request $request): JsonResponse
@@ -110,7 +104,7 @@ class EcgAlertsService
         return AppHelper::sendSuccessResponse(true, 'result', new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id)));
     }
 
-    private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode)
+    private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
     {
         return true;
     }
