@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Users\UserDeviceModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -94,5 +95,20 @@ class User extends Authenticatable
             $users = $users->where('name', 'LIKE', '%' . $search . '%');
         }
         return $users->get();
+    }
+
+    function userDeviceInformation()
+    {
+        return $this->hasOne(UserDeviceModel::class, 'user_id', 'id')->first();
+    }
+
+    function fcmToken(): string
+    {
+        $deviceInformation = $this->userDeviceInformation();
+        if ($deviceInformation instanceof UserDeviceModel) {
+            return $deviceInformation->fcm_token();
+        } else {
+            return '';
+        }
     }
 }

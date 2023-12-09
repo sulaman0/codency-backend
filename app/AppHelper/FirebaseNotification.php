@@ -50,7 +50,6 @@ class FirebaseNotification
             return curl_error($ch);
         }
         curl_close($ch);
-//        return $fields;
         return array_merge(json_decode($result, true), $fields);
     }
 

@@ -101,4 +101,9 @@ class EcgAlertsModel extends Model
             return false;
         }
     }
+
+    function assignedUsers()
+    {
+        return EcgCodesAlertsAssignedToUsersModel::where('ecg_code_id', $this->ecg_code_id)->get();
+    }
 }

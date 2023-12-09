@@ -3,9 +3,12 @@
 namespace App\Service;
 
 use App\AppHelper\AppHelper;
+use App\Events\EcgAlert\EcgAlertEvent;
+use App\Events\Space\SpaceDiscussion\SpaceNewMessageEvent;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgAlerts\EcgAlertsCollection;
+use App\Http\Resources\EcgAlerts\EcgAlertsResource;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
@@ -54,10 +57,15 @@ class EcgAlertsService
         );
 
         if ($ecgAlertModel) {
+
+            ## Send this notification to all other apps.
+            EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+
             if ($ecgCodeModel->action == "sent_to_amplifier_directly") {
                 ## Send alert directly
                 return $this->sendToAmplifier($ecgAlertModel, $ecgCodeModel);
             }
+
         } else {
             throw new \Exception("Failed to Save the Alert");
         }

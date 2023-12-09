@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\EcgAlert\EcgAlertEvent;
+use App\Events\EcgAlertNotificationEvent;
+use App\Listeners\ECGAlert\EcgAlertNotifyToOtherListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +20,11 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        EcgAlertEvent::class => [],
+        EcgAlertNotificationEvent::class => [
+            EcgAlertNotifyToOtherListener::class
         ],
     ];
 

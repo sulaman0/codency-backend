@@ -37,6 +37,7 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
         Route::get('users-list', [Controller::class, 'usersList']);
         Route::get('refresh-payload', [Controller::class, 'callOnHome']);
         Route::put('update-password', [Controller::class, 'updatePassword']);
+        Route::post("broadcasting/auth", [Controller::class, 'authorizePusherChannel']);
     });
 
 });

@@ -11,8 +11,10 @@ use App\Service\UsersService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Hash;
+use Pusher\Pusher;
 
 class Controller extends BaseController
 {
@@ -54,5 +56,12 @@ class Controller extends BaseController
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }
+    }
+
+    function authorizePusherChannel(Request $request)
+    {
+        $pusher = new Pusher(env('PUSHER_APP_KEY', 'f0c4b5800196a5c61a74'), env('PUSHER_APP_SECRET', 'ea4dbdb5a749ae44d02c'), env('PUSHER_APP_ID', '1502051'));
+        echo $pusher->authorizeChannel($request->channel_name, $request->socket_id);
+        exit();
     }
 }
