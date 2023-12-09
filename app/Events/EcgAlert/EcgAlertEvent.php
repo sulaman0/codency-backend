@@ -15,7 +15,7 @@ class EcgAlertEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private EcgAlertsResource $ecgAlertsResource;
+    public EcgAlertsResource $ecgAlertsResource;
 
     /**
      * Create a new event instance.

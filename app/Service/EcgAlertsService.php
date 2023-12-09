@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\AppHelper\AppHelper;
 use App\Events\EcgAlert\EcgAlertEvent;
+use App\Events\EcgAlertNotificationEvent;
 use App\Events\Space\SpaceDiscussion\SpaceNewMessageEvent;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
@@ -18,6 +19,8 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Print_;
 
 
 class EcgAlertsService
@@ -60,6 +63,7 @@ class EcgAlertsService
 
             ## Send this notification to all other apps.
             EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+            EcgAlertNotificationEvent::dispatch($ecgAlertModel);
 
             if ($ecgCodeModel->action == "sent_to_amplifier_directly") {
                 ## Send alert directly
