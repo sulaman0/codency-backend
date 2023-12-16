@@ -54,18 +54,18 @@ var KTSigninGeneral = function () {
                         "Valid" == r ?
                             (e.setAttribute("data-kt-indicator", "on"), e.disabled = !0,
                                 axios.post(e.closest("form").getAttribute("action"), new FormData(t)).then((function (e) {
-
-                                    if (e) {
-                                        t.reset();
+                                    if (e.data.status) {
                                         const e = t.getAttribute("data-kt-redirect-url");
                                         e && (location.href = e)
-                                    } else Swal.fire({
-                                        text: "Sorry, the email or password is incorrect, please try again.",
-                                        icon: "error",
-                                        buttonsStyling: !1,
-                                        confirmButtonText: "Ok, got it!",
-                                        customClass: {confirmButton: "btn btn-primary"}
-                                    })
+                                    } else {
+                                        Swal.fire({
+                                            text: e.data.message,
+                                            icon: "error",
+                                            buttonsStyling: !1,
+                                            confirmButtonText: "Ok, got it!",
+                                            customClass: {confirmButton: "btn btn-primary"}
+                                        });
+                                    }
                                 })).catch((function (t) {
                                     Swal.fire({
                                         text: t.response.data.message ? t.response.data.message : "Sorry, looks like there are some errors detected, please try again.",

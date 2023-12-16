@@ -12,12 +12,13 @@ use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EcgCodesService
 {
     protected EcgCodesModel $ecgCodesModel;
-    private EcgAlertsModel $ecgAlertsModel;
+    protected EcgAlertsModel $ecgAlertsModel;
 
     /**
      * @param EcgCodesModel $ecgCodesModel
@@ -29,14 +30,21 @@ class EcgCodesService
         $this->ecgAlertsModel = $ecgAlertsModel;
     }
 
-    public function getAlLCodes(Request $request): \Illuminate\Http\JsonResponse
+    public function getAlLCodes(Request $request, $isApiCall = true)
     {
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
-        return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
+        if ($isApiCall) {
+            return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
+        } else {
+            return view('ecg_codes.table', [
+                'ecg_codes' => $this->ecgCodesModel->getAllCodesAdmin($request)
+            ])->render();
+        }
+
     }
 
-    public function getAlLCodesForSearch($request): \Illuminate\Http\JsonResponse
+    public function getAlLCodesForSearch($request): JsonResponse
     {
         return AppHelper::sendSuccessResponse(true, 'found', [
             'data' => new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch($request->search))

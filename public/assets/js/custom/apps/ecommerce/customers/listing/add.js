@@ -5,67 +5,82 @@ var KTModalCustomersAdd = function () {
         init: function () {
             i = new bootstrap.Modal(document.querySelector("#kt_modal_add_customer")), r = document.querySelector("#kt_modal_add_customer_form"), t = r.querySelector("#kt_modal_add_customer_submit"), e = r.querySelector("#kt_modal_add_customer_cancel"), o = r.querySelector("#kt_modal_add_customer_close"), n = FormValidation.formValidation(r, {
                 fields: {
-                    name: {validators: {notEmpty: {message: "This field is required"}}},
-                    email: {validators: {notEmpty: {message: "Customer email is required"}}},
-                    "first-name": {validators: {notEmpty: {message: "First name is required"}}},
-                    "last-name": {validators: {notEmpty: {message: "Last name is required"}}},
-                    country: {validators: {notEmpty: {message: "Country is required"}}},
-                    address1: {validators: {notEmpty: {message: "Address 1 is required"}}},
-                    city: {validators: {notEmpty: {message: "City is required"}}},
-                    state: {validators: {notEmpty: {message: "State is required"}}},
-                    postcode: {validators: {notEmpty: {message: "Postcode is required"}}}
-                },
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger,
-                    bootstrap: new FormValidation.plugins.Bootstrap5({
-                        rowSelector: ".fv-row",
-                        eleInvalidClass: "",
-                        eleValidClass: ""
+                    name: {validators: {notEmpty: {message: "Staff Name is required"}}},
+                    email: {validators: {notEmpty: {message: "Email is required"}}},
+                    designation: {validators: {notEmpty: {message: "Designation is required"}}},
+                    password: {
+                        validators: {
+                            notEmpty: {message: "Password is required"}, minlength: 1000
+                        }
+                    },
+                }, plugins: {
+                    trigger: new FormValidation.plugins.Trigger, bootstrap: new FormValidation.plugins.Bootstrap5({
+                        rowSelector: ".fv-row", eleInvalidClass: "", eleValidClass: ""
                     })
                 }
             }), $(r.querySelector('[name="country"]')).on("change", (function () {
                 n.revalidateField("country")
             })), t.addEventListener("click", (function (e) {
                 e.preventDefault(), n && n.validate().then((function (e) {
-                    console.log("validated!"), "Valid" == e ? (t.setAttribute("data-kt-indicator", "on"), t.disabled = !0, setTimeout((function () {
-                        t.removeAttribute("data-kt-indicator"), Swal.fire({
-                            text: "Form has been successfully submitted!",
-                            icon: "success",
+
+
+                    if (e === "Invalid") {
+                        return;
+                    }
+
+                    t.setAttribute("data-kt-indicator", "on")
+                    t.disabled = !0
+                    axios.post(t.closest("form").getAttribute("action"), new FormData(r)).then((function (e) {
+                        if (e.data.status) {
+                            i.hide();
+                            Swal.fire({
+                                text: "Form has been successfully submitted!",
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {confirmButton: "btn btn-primary"}
+                            }).then((function (e) {
+                                e.isConfirmed && i.hide() && r.reset()
+                                getPageData($('#main-content').attr('data-href'), 'main-content');
+                            }))
+
+                        } else {
+                            Swal.fire({
+                                text: e.data.message,
+                                icon: "error",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {confirmButton: "btn btn-primary"}
+                            });
+                        }
+                    })).catch((function (t) {
+                        Swal.fire({
+                            text: t.response.data.message ? t.response.data.message : "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
                             buttonsStyling: !1,
                             confirmButtonText: "Ok, got it!",
                             customClass: {confirmButton: "btn btn-primary"}
-                        }).then((function (e) {
-                            e.isConfirmed && (i.hide(), t.disabled = !1, window.location = r.getAttribute("data-kt-redirect"))
-                        }))
-                    }), 2e3)) : Swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
-                        icon: "error",
-                        buttonsStyling: !1,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {confirmButton: "btn btn-primary"}
-                    })
+                        })
+                    })).then((() => {
+                        t.removeAttribute("data-kt-indicator"), t.disabled = !1
+                    }));
                 }))
             })), e.addEventListener("click", (function (t) {
-                t.preventDefault(),
-
+                t.preventDefault(), // Cancel Event.
                     Swal.fire({
-                    text: "Are you sure you would like to cancel?",
-                    icon: "warning",
-                    showCancelButton: !0,
-                    buttonsStyling: !1,
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, return",
-                    customClass: {confirmButton: "btn btn-primary", cancelButton: "btn btn-active-light"}
-                }).then((function (t) {
-                        i.hide()
-                    // t.value ? (r.reset(), i.hide()) : "cancel" === t.dismiss && Swal.fire({
-                    //     text: "Your form has not been cancelled!.",
-                    //     icon: "error",
-                    //     buttonsStyling: !1,
-                    //     confirmButtonText: "Ok, got it!",
-                    //     customClass: {confirmButton: "btn btn-primary"}
-                    // })
-                }))
+                        text: "Are you sure you would like to cancel?",
+                        icon: "warning",
+                        showCancelButton: !0,
+                        buttonsStyling: !1,
+                        confirmButtonText: "Yes, cancel it!",
+                        cancelButtonText: "No, return",
+                        customClass: {confirmButton: "btn btn-primary", cancelButton: "btn btn-active-light"}
+                    }).then((function (t) {
+                        if (t.value) {
+                            r.reset();
+                            i.hide()
+                        }
+                    }))
             })), o.addEventListener("click", (function (t) {
                 t.preventDefault(), Swal.fire({
                     text: "Are you sure you would like to cancel?",
@@ -90,4 +105,21 @@ var KTModalCustomersAdd = function () {
 }();
 KTUtil.onDOMContentLoaded((function () {
     KTModalCustomersAdd.init()
+    $(document).on('click', '.edit-link', function (e) {
+        e.preventDefault();
+        $('#kt_modal_add_customer').modal('show');
+        $('.loading-progress-div').removeClass('d-none');
+        getPageData($(this).attr('href'), null, function (res) {
+            let formElement = $('form#kt_modal_add_customer_form');
+            $(formElement).find('input[name=id]').val(res.payload.id);
+            $(formElement).find('input[name=name]').val(res.payload.name);
+            $(formElement).find('input[name=email]').val(res.payload.email);
+            $(formElement).find('input[name=password]').val('testing09');
+            $(formElement).find('input[name=designation]').val(res.payload.designation);
+            $(formElement).find('input[name=phone]').val(res.payload.phone);
+            $(formElement).find('select[name=location]').val(res.payload.location_id);
+        }, 'GET', false, false, false, function () {
+            $('.loading-progress-div').addClass('d-none');
+        });
+    });
 }));

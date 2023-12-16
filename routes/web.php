@@ -30,7 +30,9 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     });
     Route::resource('staff', StaffController::class);
+    Route::get('ecg-staff', [StaffController::class, 'tableRecord'])->name('staff_table');
     Route::resource('ecg-codes', ECGCodesController::class);
+    Route::get('ecg-table-codes', [ECGCodesController::class, 'tableRecord'])->name('ecg_codes_table');
     Route::resource('locations', LocationController::class);
     Route::prefix('reports')->group(function () {
         Route::get('/code-pressed', [ReportsController::class, 'index'])->name('reports.code_pressed');

@@ -54780,15 +54780,15 @@ body {
 
 @media (min-width: 1400px) {
     .sidebar-enabled .wrapper {
-        padding-right: 400px
+        padding-right: 55px
     }
 
     .sidebar-enabled .engage-toolbar {
-        right: 400px !important
+        right: 55px !important
     }
 
     .sidebar-enabled .scrolltop {
-        right: 405px !important
+        right: 55px !important
     }
 }
 
@@ -54820,7 +54820,7 @@ body {
 
 @media (min-width: 1400px) {
     .sidebar-enabled[data-kt-sticky-header=on] .header {
-        right: 400px !important
+        right: 55px !important
     }
 }
 
@@ -54836,7 +54836,8 @@ body {
         position: fixed;
         top: 0;
         right: 0;
-        left: 350px;
+        left: 407px;
+        /*left: 350px;*/
         z-index: 97;
         background-color: var(--bs-header-desktop-fixed-bg-color);
         box-shadow: var(--bs-header-desktop-fixed-box-shadow);
@@ -55185,4 +55186,11 @@ body {
     .content {
         padding: 20px 0 0 0
     }
+}
+
+.loading-progress-div{
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+    text-transform: uppercase;
 }

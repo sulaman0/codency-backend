@@ -38,6 +38,15 @@ class ECGCodesController extends Controller
         }
     }
 
+    public function tableRecord(Request $request)
+    {
+        try {
+            return $this->ecgCodesService->getAlLCodes($request, false);
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
     public function indexJson(Request $request): EcgCodesCollection|JsonResponse
     {
         try {
@@ -59,9 +68,9 @@ class ECGCodesController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        //
+        return \view('ecg_codes.create');
     }
 
     /**

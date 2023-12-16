@@ -64,8 +64,8 @@
                 <a href="{{ url('/') }}">
                     <img alt="Logo" src="{{ asset('assets/media/logos/demo3.svg') }}"
                          class="h-150px logo theme-light-show"/>
-                    <img alt="Logo" src="{{ asset('assets/media/logos/demo3-dark.svg') }}"
-                         class="h-150px logo theme-dark-show"/>
+                    {{--                    <img alt="Logo" src="{{ asset('assets/media/logos/demo3-dark.svg') }}"--}}
+                    {{--                         class="h-150px logo theme-dark-show"/>--}}
                 </a>
             </div>
             <div class="aside-menu flex-column-fluid ps-5 pe-3 mb-9" id="kt_aside_menu">
@@ -184,6 +184,7 @@
 <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/custom/widgets.js?'.time()) }}"></script>
 <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
+<script src="{{ asset('assets/js/custom/common.js?'.time()) }}"></script>
 @yield('js_files')
 </body>
 </html>

@@ -16,9 +16,9 @@ class EcgCodesResource extends JsonResource
     {
         return [
             'id' => (int)$this->id,
-            'serial_no' => (int)$this->id,
+            'serial_no' => $this->serialNo(),
             'name' => (string)$this->name,
-            'code' => (string)$this->code,
+            'code' => $this->code(),
             'clr_code' => (string)$this->color_code,
         ];
     }
