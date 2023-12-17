@@ -38,4 +38,29 @@ $(function () {
         e.preventDefault();
         getPageData($(this).attr('href'), 'main-content');
     });
+
+    $(document).on('click', '.delete-link', function (e) {
+        e.preventDefault();
+        getPageData($(this).attr('href'), null, (res) => {
+            if (res.status) {
+                Swal.fire({
+                    text: "Item has been deleted!",
+                    icon: "success",
+                    buttonsStyling: !1,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {confirmButton: "btn btn-primary"}
+                }).then((function (e) {
+                    getPageData($('#main-content').attr('data-href'), 'main-content');
+                }))
+            } else {
+                Swal.fire({
+                    text: res.data ? res.data.message : res.message,
+                    icon: "error",
+                    buttonsStyling: !1,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {confirmButton: "btn btn-primary"}
+                });
+            }
+        }, 'GET', null, false, false, null);
+    })
 });

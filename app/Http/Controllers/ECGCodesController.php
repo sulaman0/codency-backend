@@ -3,27 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\AppHelper\AppHelper;
-use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
-use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
+use App\Http\Requests\EcgCodes\CreateNewEcgCodeRequest;
+use App\Http\Requests\EcgCodes\EditEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Models\EcgCodes\EcgCodesModel;
+use App\Models\User;
 use App\Service\EcgCodesService;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\NoReturn;
 
 class ECGCodesController extends Controller
 {
     private EcgCodesService $ecgCodesService;
+    private User $user;
+    private EcgCodesModel $ecgCodesModel;
 
     /**
      * @param EcgCodesService $ecgCodesService
      */
-    public function __construct(EcgCodesService $ecgCodesService)
+    public function __construct(EcgCodesService $ecgCodesService, User $user, EcgCodesModel $ecgCodesModel)
     {
         $this->ecgCodesService = $ecgCodesService;
+        $this->user = $user;
+        $this->ecgCodesModel = $ecgCodesModel;
     }
 
     /**
@@ -34,7 +40,7 @@ class ECGCodesController extends Controller
         if ($request->wantsJson()) {
             return $this->indexJson($request);
         } else {
-            return view('ecg_codes.index');
+            return view('ecg_codes.index', []);
         }
     }
 
@@ -42,6 +48,24 @@ class ECGCodesController extends Controller
     {
         try {
             return $this->ecgCodesService->getAlLCodes($request, false);
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function receiverTableList(Request $request, $id): string
+    {
+        try {
+            return $this->ecgCodesService->receiverTable($id);
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function senderTableList(Request $request, $id): string
+    {
+        try {
+            return $this->ecgCodesService->senderTable($id);
         } catch (\Exception $exception) {
             return "Error: " . $exception->getMessage();
         }
@@ -70,44 +94,63 @@ class ECGCodesController extends Controller
      */
     public function create(): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        return \view('ecg_codes.create');
+        return \view('ecg_codes.create', ['users' => $this->user->getAllUsersForSearch()]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(NewEcgCodeAlertRequest $request): JsonResponse|bool
+    public function store(CreateNewEcgCodeRequest $request): JsonResponse|bool
     {
+        try {
+            return $this->ecgCodesService->createEcgCode($request);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('ecg_codes.details');
+        /** @var $ecgCode EcgCodesModel */
+        $ecgCode = $this->ecgCodesModel->findById($id);
+        return view('ecg_codes.details', [
+            'codesToUsers' => $ecgCode->assignedToUsers(),
+            'alertsToUsers' => $ecgCode->alertAssignedToUsers(),
+            'ecgCode' => $ecgCode,
+            'lastCall' => $ecgCode->lastCallAt($ecgCode->id),
+            'totalCodePressed' => $ecgCode->totalCodePressed($ecgCode->id)
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        //
+        /** @var $ecgCode EcgCodesModel */
+        $ecgCode = $this->ecgCodesModel->findById($id);
+        return \view('ecg_codes.edit', [
+                'users' => $this->user->getAllUsersForSearch(),
+                'codesToUsers' => $ecgCode->assignedToUsersIds(),
+                'alertsToUsers' => $ecgCode->alertAssignedToUsersIds(),
+                'ecgCode' => $ecgCode,
+            ]
+        );
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    #[NoReturn] public function updateEcgCode(EditEcgCodeRequest $request, string $id)
     {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            return $this->ecgCodesService->updateEcgCode($request, $id);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 }

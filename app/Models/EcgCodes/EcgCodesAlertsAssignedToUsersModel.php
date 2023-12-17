@@ -21,4 +21,25 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id')->first();
     }
+
+    function findCodesByIdAndCodeId($userId, $codeId)
+    {
+        return EcgCodesAlertsAssignedToUsersModel::where('user_id', $userId)->where('ecg_code_id', $codeId)->first();
+    }
+
+    function deleteCodesByCodeId($codeId)
+    {
+        return EcgCodesAlertsAssignedToUsersModel::where('ecg_code_id', $codeId)->first();
+    }
+
+    function assignedCodesAlertsToUser($userId, $codeId)
+    {
+        $M = $this->findCodesByIdAndCodeId($userId, $codeId);
+        if (empty($M)) {
+            $M = new EcgCodesAlertsAssignedToUsersModel();
+        }
+        $M->user_id = $userId;
+        $M->ecg_code_id = $codeId;
+        $M->save();
+    }
 }

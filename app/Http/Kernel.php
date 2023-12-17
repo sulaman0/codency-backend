@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Amplifier\AmplifierAppAuthMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -75,5 +76,6 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'amplifier.middleware' => AmplifierAppAuthMiddleware::class
     ];
 }

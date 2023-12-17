@@ -6,6 +6,7 @@ use App\AppHelper\AppHelper;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Models\User;
 use App\Service\EcgAlertsService;
 use App\Service\EcgCodesService;
 use Illuminate\Contracts\View\Factory;
@@ -17,13 +18,16 @@ use Illuminate\Http\Request;
 class ECGAlertsController extends Controller
 {
     protected EcgAlertsService $ecgAlertsService;
+    private User $user;
 
     /**
      * @param EcgAlertsService $ecgAlertsService
+     * @param User $user
      */
-    public function __construct(EcgAlertsService $ecgAlertsService)
+    public function __construct(EcgAlertsService $ecgAlertsService, User $user)
     {
         $this->ecgAlertsService = $ecgAlertsService;
+        $this->user = $user;
     }
 
     /**
@@ -34,7 +38,7 @@ class ECGAlertsController extends Controller
         if ($request->wantsJson()) {
             return $this->indexJson($request);
         } else {
-            return view('reports.code_pressed');
+            return view('reports.code_pressed', []);
         }
     }
 
@@ -97,11 +101,13 @@ class ECGAlertsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    function getUnPlayedAlarm()
     {
-        //
+        try {
+            $this->ecgAlertsService->getUnPlayedAlarmToAmplifier();
+            return AppHelper::sendSuccessResponse(true, '');
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 }

@@ -66,21 +66,18 @@
                     data-kt-menu="true">
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="../../demo3/dist/apps/customers/view.html"
+                        <a href="{{ route('ecg-codes.show', $ecgCode->id) }}"
                            class="menu-link px-3">View</a>
                     </div>
                     <div class="menu-item px-3">
-                        <a href="#" class="menu-link px-3"
+                        <a href="{{ route('ecg-codes.edit', $ecgCode->id) }}" class="menu-link px-3"
                            data-kt-customer-table-filter="delete_row">Edit</a>
                     </div>
-                    <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="#" class="menu-link px-3"
-                           data-kt-customer-table-filter="delete_row">Delete</a>
+                        <a href="{{ route('delete_model', ['model' => 'ecgCode', 'ref'=> $ecgCode->id]) }}"
+                           class="menu-link px-3 delete-link">Delete</a>
                     </div>
-                    <!--end::Menu item-->
                 </div>
-                <!--end::Menu-->
             </td>
         </tr>
     @endforeach

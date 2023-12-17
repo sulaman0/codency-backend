@@ -54780,15 +54780,15 @@ body {
 
 @media (min-width: 1400px) {
     .sidebar-enabled .wrapper {
-        padding-right: 55px
+        padding-right: 400px
     }
 
     .sidebar-enabled .engage-toolbar {
-        right: 55px !important
+        right: 400px !important
     }
 
     .sidebar-enabled .scrolltop {
-        right: 55px !important
+        right: 405px !important
     }
 }
 

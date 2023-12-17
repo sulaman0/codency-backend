@@ -183,7 +183,6 @@
     </div>
 @endsection
 @section('js_files')
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/apps/ecommerce/customers/listing/add.js') }}"></script>
     <script src="{{ asset('assets/js/custom/staffs/listing.js?'.time()) }}"></script>
 @endsection

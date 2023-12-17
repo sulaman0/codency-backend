@@ -2,6 +2,7 @@
 
 namespace App\Models\EcgCodes;
 
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +32,7 @@ class EcgCodesModel extends Model
             $M->where('status', $request->status);
         }
 
-        return $M->paginate();
+        return $M->orderBy('id', 'desc')->paginate(6);
 
     }
 
@@ -74,11 +75,65 @@ class EcgCodesModel extends Model
         return $this->sent_email == "yes" ? 'PN &  Email' : 'PN';
     }
 
+
     function assignedToUsers(): array
     {
+        return $this->assignedToUsersObject()->get()->toArray();
+    }
+
+    function alertAssignedToUsers(): array
+    {
+        return $this->alertsAssignedToUsersObject()->get()->toArray();
+    }
+
+    function assignedToUsersIds(): array
+    {
+        return $this->assignedToUsersObject()->pluck('id')->toArray();
+    }
+
+    function alertAssignedToUsersIds(): array
+    {
+        return $this->alertsAssignedToUsersObject()->pluck('id')->toArray();
+    }
+
+    function assignedToUsersObject(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(EcgCodesAssignedToUsersModel::class, 'ecg_code_id', 'id')
-            ->select('users.name')
-            ->leftJoin('users', 'ecg_codes_assigned_users.user_id', '=', 'users.id')->get()->toArray();
+            ->select('users.name')->addSelect('users.designation')->addSelect('users.created_at')->addSelect('users.id')
+            ->leftJoin('users', 'ecg_codes_assigned_users.user_id', '=', 'users.id');
+    }
+
+    function alertsAssignedToUsersObject(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EcgCodesAlertsAssignedToUsersModel::class, 'ecg_code_id', 'id')
+            ->select('users.name')->addSelect('users.designation')->addSelect('users.created_at')->addSelect('users.id')
+            ->leftJoin('users', 'ecg_codes_alert_assigned_users.user_id', '=', 'users.id');
+    }
+
+    public function createEcgCode(mixed $code_nme, mixed $action, mixed $code, mixed $details, mixed $color_code, mixed $lang, $id = null): EcgCodesModel
+    {
+        $M = $this->findById($id);
+        if (empty($M)) {
+            $M = new EcgCodesModel();
+        }
+        $M->name = $code_nme;
+        $M->code = $code;
+        $M->color_code = $color_code;
+        $M->action = $action;
+        $M->details = $details;
+        $M->preferred_lang = $lang;
+        $M->save();
+        return $M;
+    }
+
+    function lastCallAt($id)
+    {
+        return EcgAlertsModel::where('ecg_code_id', $id)->orderBy('id', 'desc')->first();
+    }
+
+    public function totalCodePressed(mixed $id)
+    {
+        return EcgAlertsModel::where('ecg_code_id', $id)->count();
     }
 
 

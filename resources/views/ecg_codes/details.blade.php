@@ -17,8 +17,8 @@
                     <h1 class="d-flex flex-column text-dark fw-bold my-0 fs-1">Hello, Qaiser Khan</h1>
                     <ul class="breadcrumb breadcrumb-dot fw-semibold fs-base my-1">
 
-                        <li class="breadcrumb-item text-muted">Staff</li>
-                        <li class="breadcrumb-item text-dark">Staff Details</li>
+                        <li class="breadcrumb-item text-muted">Code</li>
+                        <li class="breadcrumb-item text-dark">Ecg Code Details</li>
                     </ul>
                 </div>
                 @include('layout.top_menu')
@@ -37,52 +37,47 @@
                             <div class="card-body pt-15">
                                 <!--begin::Summary-->
                                 <div class="d-flex flex-center flex-column mb-5">
-                                    <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-1">Fire
-                                        Alram</a>
+                                    <a href="#"
+                                       class="fs-3 text-gray-800 text-hover-primary fw-bold mb-1 text-uppercase">{{ $ecgCode->name }}</a>
+                                    <a href="{{ route('ecg-codes.edit', $ecgCode->id) }}"><i class="fa-edit"></i></a>
                                 </div>
-                                <!--end::Summary-->
-                                <!--begin::Details toggle-->
                                 <div class="d-flex flex-stack fs-4 py-3">
                                     <div class="fw-bold">Code</div>
-                                    <!--begin::Badge-->
-                                    <div class="badge badge-light-primary d-inline">10</div>
-                                    <!--begin::Badge-->
+                                    <div class="badge badge-light-primary d-inline">{{ $ecgCode->code }}</div>
                                 </div>
-                                <!--end::Details toggle-->
                                 <div class="separator separator-dashed my-3"></div>
-                                <!--begin::Details content-->
                                 <div class="pb-5 fs-6">
-                                    <!--begin::Details item-->
-                                    <!--begin::Details item-->
-                                    <div class="fw-bold mt-5">Notification Tune</div>
-                                    <div class="text-gray-600">
-                                        Play button come here.
-                                    </div>
-                                    <!--begin::Details item-->
-                                    <!--begin::Details item-->
-                                    <div class="fw-bold mt-5">Operation</div>
-                                    <div class="text-gray-600">Sent to Amplifier direclty</div>
-                                    <!--begin::Details item-->
-                                    <!--begin::Details item-->
-                                    <div class="fw-bold mt-5">Notify By</div>
-                                    <div class="text-gray-600">Email</div>
-                                    <!--begin::Details item-->
-                                    <!--begin::Details item-->
+                                    <div class="text-gray-600 mt-5">Action</div>
+                                    <div class="fw-bold">{{ __('common.'.$ecgCode->action) }}</div>
                                     <div class="fw-bold mt-5">Latest Call</div>
-                                    <div class="text-gray-600">2023-12-12</div>
+                                    <div
+                                        class="text-gray-600">{{ empty($lastCall) ? '-' : \App\AppHelper\AppHelper::getAppDateAndTime($lastCall->alarm_triggered_at)  }}</div>
 
                                     <div class="fw-bold mt-5">Last Amplified</div>
-                                    <div class="text-gray-600">2023-12-12</div>
-                                    <!--begin::Details item-->
+                                    <div
+                                        class="text-gray-600">{{ empty($lastCall) || empty($lastCall->played_at_amplifier) ? '-' : \App\AppHelper\AppHelper::getAppDateAndTime($lastCall->played_at_amplifier)  }}</div>
+
+                                    <div class="text-gray-600 mt-5">Notification Tune In English</div>
+                                    <div class="text-gray-600 mt-3">
+                                        <audio controls autoplay>
+                                            <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    </div>
+
+                                    <div class="text-gray-600 mt-5">Notification Tune In Arabic</div>
+                                    <div class="text-gray-600 mt-3">
+                                        <audio controls autoplay>
+                                            <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    </div>
+
                                 </div>
-                                <!--end::Details content-->
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Card-->
                     </div>
-                    <!--end::Sidebar-->
-                    <!--begin::Content-->
+
                     <div class="flex-lg-row-fluid ms-lg-15">
                         <div class="row row-cols-1 row-cols-md-2 mb-6 mb-xl-9">
                             <div class="col">
@@ -101,7 +96,7 @@
                                     <div class="card-body pt-0">
                                         <div class="fw-bold fs-2">
                                             <div class="d-flex">
-                                                <div>4,571</div>
+                                                <div>{{ $totalCodePressed }}</div>
                                             </div>
                                             <div class="fs-7 fw-normal text-muted">How many times this code pressed
                                             </div>
@@ -122,8 +117,8 @@
                                     </div>
                                     <div class="card-body pt-0">
                                         <div class="fw-bold fs-2">
-                                            <div class="fs-7 fw-normal text-white text-active-muted">Call an Ambulance,
-                                                come to admin department switch off everything
+                                            <div class="fs-7 fw-normal text-white text-active-muted">
+                                                {{ $ecgCode->details }}
                                             </div>
                                         </div>
                                     </div>
@@ -137,83 +132,49 @@
                             <!--begin:::Tab item-->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                   href="#kt_ecommerce_customer_overview" aria-selected="true" role="tab">Responders</a>
+                                   href="#senders_tab" aria-selected="true" role="tab">Senders</a>
                             </li>
                             <!--end:::Tab item-->
                             <!--begin:::Tab item-->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                   href="#kt_ecommerce_customer_general" aria-selected="false" tabindex="-1" role="tab">Amplified
-                                    History</a>
+                                   href="#receiver_tab" aria-selected="false" tabindex="-1" role="tab">Receiver</a>
                             </li>
                         </ul>
 
-                        <!--begin::Card-->
-                        <div class="card pt-4 mb-6 mb-xl-9">
-                            <!--begin::Card header-->
-                            <div class="card-header border-0">
-                                <!--begin::Card title-->
-                                <div class="card-title">
-                                    <h2>Responders</h2>
-                                </div>
-                                <!--end::Card title-->
-                            </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body pt-0 pb-5">
-                                <table class="table align-middle table-row-dashed gy-5"
-                                       id="kt_table_customers_payment">
-                                    <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                    <tr class="text-start text-muted text-uppercase gs-0">
-                                        <th class="min-w-100px">Emergency Code</th>
-                                        <th>Designation</th>
-                                        <th class="min-w-100px">Assigned At</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="fs-6 fw-semibold text-black-600">
-                                    <tr>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Sulaman Khan</a>
-                                        </td>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Manager</a>
-                                        </td>
-                                        <td>14 Dec 2020, 8:43 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Sulaman Khan</a>
-                                        </td>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Manager</a>
-                                        </td>
-                                        <td>14 Dec 2020, 8:43 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Sulaman Khan</a>
-                                        </td>
-                                        <td>
-                                            <a href="#"
-                                               class="text-gray-600 text-hover-primary mb-1">Manager</a>
-                                        </td>
-                                        <td>14 Dec 2020, 8:43 pm</td>
-                                    </tr>
 
-                                    </tbody>
-                                </table>
+                        <div class="tab-content mt-n6">
+                            <div class="tab-pane fade active show" id="senders_tab">
+                                <div class="card pt-4 mb-6 mt-4 mb-xl-9">
+                                    <div class="card-body pt-0 pb-5" id="senders_tab_load"
+                                         data-href="{{ route('ecg_code_sender_table', ['id' => $ecgCode->id]) }}">
+                                        <div class="loading-progress-div">
+                                            Loading...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <!--end::Card body-->
+                            <div class="tab-pane fade" id="receiver_tab">
+                                <div class="card pt-4 mb-6 mt-4 mb-xl-9">
+                                    <div class="card-body pt-0 pb-5" id="receiver_tab_load"
+                                         data-href="{{ route('ecg_code_receiver_table', ['id' => $ecgCode->id]) }}">
+                                        <div class="loading-progress-div">
+                                            Loading...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!--end::Card-->
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('js_files')
+    <script src="{{ asset('assets/js/custom/ecg-codes/details.js?'.time()) }}"></script>
 @endsection

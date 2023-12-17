@@ -32,11 +32,17 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     Route::resource('staff', StaffController::class);
     Route::get('ecg-staff', [StaffController::class, 'tableRecord'])->name('staff_table');
     Route::resource('ecg-codes', ECGCodesController::class);
+    Route::get('code-sender-table/{id}', [ECGCodesController::class, 'senderTableList'])->name('ecg_code_sender_table');
+    Route::get('code-receiver-table/{id}', [ECGCodesController::class, 'receiverTableList'])->name('ecg_code_receiver_table');
+    Route::post('ecg-codes/{id}', [ECGCodesController::class, 'updateEcgCode'])->name('update_ecg_code');
     Route::get('ecg-table-codes', [ECGCodesController::class, 'tableRecord'])->name('ecg_codes_table');
     Route::resource('locations', LocationController::class);
+    Route::get('ecg-locations', [LocationController::class, 'tableRecord'])->name('location_table');
     Route::prefix('reports')->group(function () {
         Route::get('/code-pressed', [ReportsController::class, 'index'])->name('reports.code_pressed');
+        Route::any('/ecg-alert-pressed', [ReportsController::class, 'tableRecord'])->name('reports.code_pressed_table');
     });
     Route::get('privacy-policy', [Controller::class, 'privacy_policy'])->name('privacy_policy');
+    Route::get('delete_model', [Controller::class, 'deleteModel'])->name('delete_model');
 });
 Route::get('test', [Controller::class, 'testFunction']);

@@ -5,6 +5,7 @@ namespace App\Models\Locations;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class LocationModel extends Model
 {
@@ -17,8 +18,40 @@ class LocationModel extends Model
         return LocationModel::all();
     }
 
+    public function getAllLocationAdmin(Request $request)
+    {
+        $M = LocationModel::where('id', '<>', 0);
+        if ($request->search) {
+            $M = $M->where(function ($query) use ($request) {
+                $query->orWhere('loc_nme', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('building_nme', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        return $M->orderBy('id', 'desc')->paginate(10);
+    }
+
     function locationName(): string
     {
         return $this->loc_nme . ' - ' . $this->building_nme;
     }
+
+    function findById($id)
+    {
+        return LocationModel::find($id);
+    }
+
+    public function createOrUpdateLocation(mixed $loc_name, mixed $building_nme, mixed $id): bool
+    {
+        $M = $this->findById($id);
+        if (empty($M)) {
+            $M = new LocationModel();
+        }
+
+        $M->loc_nme = $loc_name;
+        $M->building_nme = $building_nme;
+        $M->save();
+        return true;
+    }
+
 }

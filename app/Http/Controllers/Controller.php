@@ -6,6 +6,8 @@ use App\AppHelper\AppHelper;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Http\Requests\CallOnHomeRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\EcgCodes\EcgCodesModel;
+use App\Models\Locations\LocationModel;
 use App\Models\User;
 use App\Service\UsersService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -63,5 +65,25 @@ class Controller extends BaseController
         $pusher = new Pusher(env('PUSHER_APP_KEY', 'f0c4b5800196a5c61a74'), env('PUSHER_APP_SECRET', 'ea4dbdb5a749ae44d02c'), env('PUSHER_APP_ID', '1502051'));
         echo $pusher->authorizeChannel($request->channel_name, $request->socket_id);
         exit();
+    }
+
+    function deleteModel(Request $request)
+    {
+        try {
+            switch ($request->model) {
+                case 'location':
+                    LocationModel::find($request->ref)->delete();
+                    break;
+                case 'ecgCode':
+                    EcgCodesModel::find($request->ref)->delete();
+                    break;
+                case 'user':
+                    User::find($request->ref)->delete();
+                    break;
+            }
+            return AppHelper::sendSuccessResponse();
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 }

@@ -35,11 +35,9 @@
                    class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary"
                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
                     <i class="ki-duotone ki-down fs-5 ms-1"></i></a>
-                <!--begin::Menu-->
                 <div
                     class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                     data-kt-menu="true">
-                    <!--begin::Menu item-->
                     <div class="menu-item px-3">
                         <a href="{{ route('staff.show', $user->id) }}"
                            class="menu-link px-3">View</a>
@@ -48,15 +46,11 @@
                         <a href="{{ route('staff.show', ['staff' => $user->id, 'json' => 1]) }}"
                            class="edit-link menu-link px-3">Edit</a>
                     </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="#" class="menu-link px-3"
-                           data-kt-customer-table-filter="delete_row">Delete</a>
+                        <a href="{{ route('delete_model', ['model' => 'user', 'ref'=> $user->id]) }}"
+                           class="menu-link px-3 delete-link">Delete</a>
                     </div>
-                    <!--end::Menu item-->
                 </div>
-                <!--end::Menu-->
             </td>
         </tr>
     @endforeach

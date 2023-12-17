@@ -110,7 +110,7 @@ class User extends Authenticatable
             $users = $users->where('status', $request->status);
         }
 
-        return $users->orderBy('id', 'desc')->paginate();
+        return $users->orderBy('id', 'desc')->paginate(10);
     }
 
 

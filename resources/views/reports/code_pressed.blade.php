@@ -25,268 +25,191 @@
             </div>
         </div>
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-            <!--begin::Container-->
             <div class="container-xxl" id="kt_content_container">
-                <!--begin::Card-->
                 <div class="card">
-                    <!--begin::Card header-->
                     <div class="card-header border-0 pt-6">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                            <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"
-                                 data-kt-daterangepicker-range="today"
-                                 class="btn btn-sm btn-light d-flex align-items-center px-4">
-                                <!--begin::Display range-->
-                                <div class="text-gray-600 fw-bold">Loading date range...</div>
-                                <!--end::Display range-->
-                                <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                    <span class="path4"></span>
-                                    <span class="path5"></span>
-                                    <span class="path6"></span>
-                                </i>
-                            </div>
-
-                        </div>
-                        <!--begin::Card title-->
-                        <!--begin::Card toolbar-->
+                        <div class="card-title"></div>
                         <div class="card-toolbar">
-                            <!--begin::Toolbar-->
                             <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_new_target">Export Report
+                                        data-bs-target="#kt_modal_add_customer">Filter
                                 </button>
                             </div>
                         </div>
-                        <!--end::Card toolbar-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Table-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <thead>
-                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Code</th>
-                                <th class="min-w-125px">Name</th>
-                                <th class="min-w-125px">Pressed At</th>
-                                <th class="min-w-125px">Operation</th>
-                                <th class="min-w-125px">Played At Amplifier</th>
-                                <th class="min-w-125px">Notify By</th>
-                                <th class="min-w-125px">Respond At</th>
-                                <th class="min-w-125px">Respond By</th>
-                            </tr>
-                            </thead>
-                            <tbody class="fw-semibold text-black-600">
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <!--begin::Thumbnail-->
-                                        <a href="#" class="symbol symbol-50px">
-                                            <span class="symbol-label"
-                                                  style="background-image:url(assets/media//stock/ecommerce/.png);"></span>
-                                        </a>
-                                        <!--end::Thumbnail-->
-                                        <div class="ms-5">
-                                            <!--begin::Title-->
-                                            <a href="#" class="text-gray-800 text-hover-primary fs-5 fw-bold"
-                                               data-kt-ecommerce-product-filter="product_name">01</a>
-                                            <!--end::Title-->
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Fire Alram
-                                </td>
-                                <td>
-                                    2023-12-12 10:12:00
-                                </td>
-                                <td>
-                                    Sent to Amplifier
-                                </td>
-                                <td>
-                                    2023-12-12 12:12:00
-                                </td>
-                                <td>
-                                    Mr.Sulaman
-                                </td>
-                                <td>
-                                    2023-12-12 12:12:00
-                                </td>
-                                <td>
-                                    Mr.Abdullah
-                                </td>
-                            </tr>
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end::Table-->
+                    <div class="card-body pt-0" id="main-content" data-href="{{ route('reports.code_pressed_table') }}">
+                        <div class="loading-progress-div">
+                            Loading...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </div>
                     </div>
-                    <!--end::Card body-->
                 </div>
-                <div class="modal fade" id="kt_modal_new_target" tabindex="-1" aria-hidden="true">
-                    <!--begin::Modal dialog-->
+                <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content rounded">
-                            <!--begin::Modal header-->
-                            <div class="modal-header pb-0 border-0 justify-content-end">
-                                <!--begin::Close-->
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                    <i class="ki-duotone ki-cross fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <!--end::Close-->
-                            </div>
-                            <!--begin::Modal header-->
-                            <!--begin::Modal body-->
-                            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                                <!--begin:Form-->
-                                <form id="kt_modal_new_target_form" class="form" action="#">
-                                    <!--begin::Heading-->
-                                    <div class="mb-13 text-center">
-                                        <h1 class="mb-3">Add Code</h1>
-                                    </div>
-                                    <!--end::Heading-->
-                                    <!--begin::Input group-->
-                                    <div class="d-flex flex-column mb-8 fv-row">
-                                        <!--begin::Label-->
-                                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                            <span class="required">Code Name</span></span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <input type="text" class="form-control form-control-solid"
-                                               placeholder="e.g, Fire Alram" name="target_title"/>
-                                    </div>
 
-                                    <div class="row g-9 mb-8">
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">Operation</label>
+                        <div class="modal-content">
+                            <form class="form" action="{{ route('reports.code_pressed_table') }}"
+                                  id="kt_modal_add_customer_form">
+
+                                <input type="hidden" name="date_range">
+                                <div class="modal-header" id="kt_modal_add_customer_header">
+                                    <h2 class="fw-bold">Filter Ecg Alerts
+                                        <div class="loading-progress-div d-none">
+                                            Loading...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </div>
+                                    </h2>
+                                    <div class="btn btn-icon btn-sm btn-active-icon-primary"
+                                         id="kt_modal_add_customer_close">
+                                        <i class="ki-duotone ki-cross fs-1">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </div>
+                                </div>
+                                <div class="modal-body py-10 px-lg-17">
+                                    <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll"
+                                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                                         data-kt-scroll-max-height="auto"
+                                         data-kt-scroll-dependencies="#kt_modal_add_customer_header"
+                                         data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+                                         data-kt-scroll-offset="300px">
+
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">
+                                                Ecg Codes
+                                                <span class="ms-1" data-bs-toggle="tooltip"
+                                                      title="Search Codes">
+                                                    <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                    </i>
+									            </span>
+                                            </label>
                                             <select class="form-select form-select-solid" data-control="select2"
-                                                    data-hide-search="true" data-placeholder="Select a Team Member"
-                                                    name="target_assign">
-                                                <option value="1">Sent to Amplifier Directly</option>
-                                                <option value="2">Managed by Manager</option>
+                                                    data-placeholder="Emergency Codes"
+                                                    multiple="multiple"
+                                                    name="ecg_codes[]">
+                                                @foreach($codes as $code)
+                                                    <option value="{{ $code->id }}">{{ $code->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                <span class="required">Code</span></span>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">
+                                                Date Range
+                                                <span class="ms-1" data-bs-toggle="tooltip"
+                                                      title="Filter when code pressed">
+                                                    <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                    </i>
+									            </span>
                                             </label>
-                                            <!--end::Label-->
-                                            <input type="text" class="form-control form-control-solid"
-                                                   placeholder="e.g, 10" name="target_title"/>
+                                            <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"
+                                                 data-kt-daterangepicker-range="today"
+                                                 class="btn btn-sm btn-light d-flex align-items-center px-4">
+                                                <div class="text-gray-600 fw-bold">Loading date range...</div>
+                                                <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">
+                                                    <span class="path1"></span>
+                                                    <span class="path2"></span>
+                                                    <span class="path3"></span>
+                                                    <span class="path4"></span>
+                                                    <span class="path5"></span>
+                                                    <span class="path6"></span>
+                                                </i>
+                                            </div>
                                         </div>
-                                        <!--end::Col-->
-                                    </div>
-                                    <div class="d-flex flex-column mb-8">
-                                        <label class="fs-6 fw-semibold mb-2">Code Details</label>
-                                        <textarea class="form-control form-control-solid" rows="3" name="target_details"
-                                                  placeholder="e.g, What should do?"></textarea>
-                                    </div>
-                                    <div class="d-flex flex-column mb-8 fv-row">
-                                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                            <span class="required">Staff</span>
-                                            <span class="ms-1" data-bs-toggle="tooltip"
-                                                  title="Notify these users only">
-										<i class="ki-duotone ki-information-5 text-gray-500 fs-6">
-											<span class="path1"></span>
-											<span class="path2"></span>
-											<span class="path3"></span>
-										</i>
-									</span>
-                                        </label>
-                                        <input class="form-control form-control-solid" value="Mr.Qaiser, Mr.Abdullah"
-                                               name="tags"/>
-                                    </div>
-                                    <div class="row g-9 mb-8">
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">Image</label>
-                                            <input type="file" class="form-control form-control-solid"
-                                                   placeholder="e.g, 10" name="target_title"/>
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                <span class="required">Notification Tune</span></span>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">
+                                                Senders
+                                                <span class="ms-1" data-bs-toggle="tooltip"
+                                                      title="Those users who has pressed the code">
+                                                    <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                    </i>
+									            </span>
                                             </label>
-                                            <!--end::Label-->
-                                            <input type="file" class="form-control form-control-solid"
-                                                   placeholder="e.g, 10" name="target_title"/>
+                                            <select class="form-select form-select-solid" data-control="select2"
+                                                    data-placeholder="Select Staff"
+                                                    multiple="multiple"
+                                                    name="senders_list[]">
+                                                @foreach($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <!--end::Col-->
-                                    </div>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">
+                                                Receivers
+                                                <span class="ms-1" data-bs-toggle="tooltip"
+                                                      title="Those users who has respond the code">
+                                                    <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                    </i>
+									            </span>
+                                            </label>
+                                            <select class="form-select form-select-solid" data-control="select2"
+                                                    data-placeholder="Select Staff"
+                                                    multiple="multiple"
+                                                    name="receivers_list[]">
+                                                @foreach($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">
+                                                Locations
+                                                <span class="ms-1" data-bs-toggle="tooltip"
+                                                      title="Find Location Where code pressed">
+                                                    <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                    </i>
+									            </span>
+                                            </label>
+                                            <select class="form-select form-select-solid" data-control="select2"
+                                                    data-placeholder="Locations"
+                                                    multiple="multiple"
+                                                    name="locations_list[]">
+                                                @foreach($locations as $location)
+                                                    <option
+                                                        value="{{ $location->id }}">{{ $location->locationName() }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
-                                    <div class="mb-15 fv-row">
-                                        <!--begin::Wrapper-->
-                                        <div class="d-flex flex-stack">
-                                            <!--begin::Label-->
-                                            <div class="fw-semibold me-5">
-                                                <label class="fs-6">Notifications</label>
-                                                <div class="fs-7 text-muted">Allow Notifications by Email</div>
-                                            </div>
-                                            <!--end::Label-->
-                                            <!--begin::Checkboxes-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Checkbox-->
-                                                <label class="form-check form-check-custom form-check-solid">
-                                                    <input class="form-check-input h-20px w-20px" type="checkbox"
-                                                           name="communication[]" value="email" checked="checked"/>
-                                                    <span class="form-check-label fw-semibold">Email</span>
-                                                </label>
-                                                <!--end::Checkbox-->
-                                                <!--begin::Checkbox-->
-                                            {{--                                                <label class="form-check form-check-custom form-check-solid">--}}
-                                            {{--                                                    <input class="form-check-input h-20px w-20px" type="checkbox"--}}
-                                            {{--                                                           name="communication[]" value="phone"/>--}}
-                                            {{--                                                    <span class="form-check-label fw-semibold">Phone</span>--}}
-                                            {{--                                                </label>--}}
-                                            <!--end::Checkbox-->
-                                            </div>
-                                            <!--end::Checkboxes-->
-                                        </div>
-                                        <!--end::Wrapper-->
+
                                     </div>
-                                    <!--end::Input group-->
-                                    <!--begin::Actions-->
-                                    <div class="text-center">
-                                        <button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3">
-                                            Cancel
-                                        </button>
-                                        <button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
-                                            <span class="indicator-label">Submit</span>
-                                            <span class="indicator-progress">Please wait...
-									<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                        </button>
-                                    </div>
-                                    <!--end::Actions-->
-                                </form>
-                                <!--end:Form-->
-                            </div>
-                            <!--end::Modal body-->
+                                </div>
+                                <div class="modal-footer flex-center">
+                                    <button data-dismiss="modal" class="btn btn-light me-3"
+                                            id="kt_modal_add_customer_cancel">Reset
+                                    </button>
+                                    <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                                        <span class="indicator-label">Submit</span>
+                                        <span class="indicator-progress">Please wait...
+													<span
+                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <!--end::Modal content-->
                     </div>
-                    <!--end::Modal dialog-->
                 </div>
 
             </div>
-            <!--end::Container-->
         </div>
     </div>
 @endsection
 @section('js_files')
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/utilities/modals/new-target.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/ecg-alerts/listing.js?'.time()) }}"></script>
 @endsection

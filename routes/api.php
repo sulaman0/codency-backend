@@ -39,6 +39,9 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
         Route::put('update-password', [Controller::class, 'updatePassword']);
         Route::post("broadcasting/auth", [Controller::class, 'authorizePusherChannel']);
     });
+    Route::middleware('amplifier.middleware')->group(function () {
+        Route::get('un-played-alert', [ECGAlertsController::class, 'getUnPlayedAlarm']);
+    });
 
 });
 

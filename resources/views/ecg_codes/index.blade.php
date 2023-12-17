@@ -60,9 +60,7 @@
                                     </select>
                                     <!--end::Select2-->
                                 </div>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_new_target">Add Code
-                                </button>
+                                <a href="{{ route('ecg-codes.create') }}" class="btn btn-primary">Add Code</a>
                             </div>
                         </div>
                     </div>
@@ -78,7 +76,5 @@
     </div>
 @endsection
 @section('js_files')
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/utilities/modals/new-target.js?'.time()) }}"></script>
     <script src="{{ asset('assets/js/custom/ecg-codes/listing.js?'.time()) }}"></script>
 @endsection

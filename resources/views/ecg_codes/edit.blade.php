@@ -28,8 +28,8 @@
             <div class="container-xxl" id="kt_content_container">
                 <div class="card p-10">
                     <form id="kt_modal_new_target_form" class="form"
-                          data-kt-redirect="{{ route('ecg-codes.index') }}"
-                          action="{{ route('ecg-codes.store') }}">
+                          data-kt-redirect="{{ route('ecg-codes.show', [$ecgCode->id]) }}"
+                          action="{{ route('update_ecg_code', ['id' => $ecgCode->id]) }}">
 
                         <div class="d-flex justify-content-between">
                             <div class="mb-13 text-left">
@@ -52,7 +52,7 @@
                                 <span class="required">Code Name</span></span>
                             </label>
                             <input type="text" class="form-control form-control-solid"
-                                   placeholder="e.g, Fire Alarm" name="code_nme"/>
+                                   placeholder="e.g, Fire Alarm" name="code_nme" value="{{ $ecgCode->name }}"/>
                         </div>
 
                         <div class="row g-9 mb-8">
@@ -61,8 +61,14 @@
                                 <select class="form-select form-select-solid" data-control="select2"
                                         data-hide-search="true" data-placeholder="Select a Team Member"
                                         name="action">
-                                    <option value="sent_to_amplifier_directly">Sent to Amplifier Directly</option>
-                                    <option value="sent_to_manager">Managed by Manager</option>
+                                    <option
+                                        {{ $ecgCode->action == "sent_to_amplifier_directly" ? 'selected': '' }} value="sent_to_amplifier_directly">
+                                        Sent to Amplifier Directly
+                                    </option>
+                                    <option
+                                        {{ $ecgCode->action == "sent_to_manager" ? 'selected': '' }} value="sent_to_manager">
+                                        Managed by Manager
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-md-6 fv-row">
@@ -70,13 +76,13 @@
                                     <span class="required">Code</span></span>
                                 </label>
                                 <input type="text" class="form-control form-control-solid"
-                                       placeholder="e.g, 10" name="code"/>
+                                       placeholder="e.g, 10" name="code" value="{{ $ecgCode->code }}"/>
                             </div>
                         </div>
                         <div class="d-flex flex-column mb-8">
                             <label class="fs-6 fw-semibold mb-2">Code Details</label>
                             <textarea class="form-control form-control-solid" rows="3" name="details"
-                                      placeholder="e.g, What should do?"></textarea>
+                                      placeholder="e.g, What should do?">{{ $ecgCode->details }}</textarea>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -95,7 +101,8 @@
                                     multiple="multiple"
                                     name="senders_list[]">
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    <option
+                                        {{ in_array($user->id, $codesToUsers) ? 'selected=selected' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -117,7 +124,9 @@
                                     multiple="multiple"
                                     name="receivers_list[]">
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    <option
+                                        {{ in_array($user->id, $alertsToUsers) ? 'selected=selected' : '' }}
+                                        value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -126,7 +135,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">Color Code</label>
                                 <input type="color" class="form-control form-control-solid"
                                        style="height: 43px"
-                                       placeholder="e.g, 10" name="color_code"/>
+                                       placeholder="e.g, 10" name="color_code" value="{{ $ecgCode->color_code }}"/>
                             </div>
                             <div class="col-md-6 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2">Preferred Language</label>
@@ -135,8 +144,10 @@
                                         data-hide-search="true"
                                         data-placeholder="Select Preferred Language for Notification"
                                         name="lang">
-                                    <option value="en">English</option>
-                                    <option value="ar">Arabic</option>
+                                    <option {{ $ecgCode->preferred_lang == 'en' ? 'selected' :'' }} value="en">English
+                                    </option>
+                                    <option {{ $ecgCode->preferred_lang == 'ar' ? 'selected' :'' }} value="ar">Arabic
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -146,18 +157,29 @@
                                     <span class="required">Notification Tune English</span></span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="file" class="form-control form-control-solid"
+                                <input type="file" class="form-control form-control-solid mb-5"
                                        accept=".mp3,audio/*"
                                        placeholder="e.g, 10" name="tune_en"/>
+
+                                <audio controls autoplay>
+                                    <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+
                             </div>
                             <div class="col-md-6 fv-row">
                                 <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                     <span class="required">Notification Tune Arabic</span></span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="file" class="form-control form-control-solid"
+                                <input type="file" class="form-control form-control-solid mb-5"
                                        accept=".mp3,audio/*"
                                        placeholder="e.g, 10" name="tune_ar"/>
+
+                                <audio controls autoplay>
+                                    <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
                             </div>
                         </div>
                     </form>

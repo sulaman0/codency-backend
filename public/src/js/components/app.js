@@ -165,7 +165,7 @@ var KTApp = function () {
             return;
         }
 
-        var elements = [].slice.call(document.querySelectorAll('[data-kt-daterangepicker="true"]'));
+            var elements = [].slice.call(document.querySelectorAll('[data-kt-daterangepicker="true"]'));
         var start = moment().subtract(29, 'days');
         var end = moment();
 

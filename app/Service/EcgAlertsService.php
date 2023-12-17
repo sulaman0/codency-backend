@@ -10,6 +10,7 @@ use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgAlerts\EcgAlertsCollection;
 use App\Http\Resources\EcgAlerts\EcgAlertsResource;
+use App\Http\Resources\EcgAlerts\UnPlayedAlarmCollection;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
@@ -116,8 +117,20 @@ class EcgAlertsService
         return AppHelper::sendSuccessResponse(true, 'result', new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id, $request)));
     }
 
+    public function getAlertsAdmin(Request $request): string
+    {
+        return view('reports.table', [
+            'alerts' => $this->ecgAlertsModel->getAllAlertAdmin($request)
+        ])->render();
+    }
+
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
     {
         return true;
+    }
+
+    public function getUnPlayedAlarmToAmplifier()
+    {
+        return new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier());
     }
 }
