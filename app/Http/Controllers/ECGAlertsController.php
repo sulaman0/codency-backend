@@ -101,11 +101,19 @@ class ECGAlertsController extends Controller
         }
     }
 
-    function getUnPlayedAlarm()
+    function getUnPlayedAlarm(): JsonResponse
     {
         try {
-            $this->ecgAlertsService->getUnPlayedAlarmToAmplifier();
-            return AppHelper::sendSuccessResponse(true, '');
+            return $this->ecgAlertsService->getUnPlayedAlarmToAmplifier();
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
+    }
+
+    function markAlarmPlayed($id): JsonResponse
+    {
+        try {
+            return $this->ecgAlertsService->markAlarmPlayed($id);
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }

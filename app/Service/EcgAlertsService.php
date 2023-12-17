@@ -129,8 +129,15 @@ class EcgAlertsService
         return true;
     }
 
-    public function getUnPlayedAlarmToAmplifier()
+    public function getUnPlayedAlarmToAmplifier(): JsonResponse
     {
-        return new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier());
+        Log::info("AMPLIFIER PINGING TO SERVER");
+        return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
+    }
+
+    public function markAlarmPlayed($id): JsonResponse
+    {
+        Log::info("AMPLIFIER PLAYED TO SERVER UPDATE");
+        return AppHelper::sendSuccessResponse(true, 'played', $this->ecgAlertsModel->playedToAmplifier($id));
     }
 }

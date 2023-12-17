@@ -14,6 +14,10 @@ class UnPlayedAlarmResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'tune' => $this->preferred_lang == 'ar' ? $this->tune_ar : $this->tune_en,
+            'played_at' => $this->played_at_amplifier,
+        ];
     }
 }

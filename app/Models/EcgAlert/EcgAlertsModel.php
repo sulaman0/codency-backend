@@ -7,6 +7,7 @@ use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -167,6 +168,19 @@ class EcgAlertsModel extends Model
 
     public function unPlayedAlarmToAmplifier()
     {
-        return EcgAlertsModel::whereNull('played_at_amplifier')->get();
+        return EcgAlertsModel::whereNull('played_at_amplifier')
+            ->leftJoin('ecg_codes', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes.id')
+            ->select('*')
+            ->addSelect('ecg_alerts.id as id')
+            ->whereNotNull("ecg_codes.tune_en")
+            ->whereNotNull("ecg_codes.tune_ar")
+            ->get();
+    }
+
+    public function playedToAmplifier($id)
+    {
+        return EcgAlertsModel::where('id', $id)->update([
+            'played_at_amplifier' => AppHelper::getMySQLFormattedDateTime(Carbon::now())
+        ]);
     }
 }
