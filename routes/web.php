@@ -44,5 +44,6 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     });
     Route::get('privacy-policy', [Controller::class, 'privacy_policy'])->name('privacy_policy');
     Route::get('delete_model', [Controller::class, 'deleteModel'])->name('delete_model');
+    Route::get('load-dashboard-content', [Controller::class, 'loadDashboardContent'])->name('load_dashboard_content');
 });
 Route::get('test', [Controller::class, 'testFunction']);

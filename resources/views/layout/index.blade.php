@@ -181,8 +181,8 @@
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
 <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-<script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
-<script src="{{ asset('assets/js/custom/widgets.js?'.time()) }}"></script>
+{{--<script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>--}}
+{{--<script src="{{ asset('assets/js/custom/widgets.js?'.time()) }}"></script>--}}
 <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
 <script src="{{ asset('assets/js/custom/common.js?'.time()) }}"></script>
 @yield('js_files')

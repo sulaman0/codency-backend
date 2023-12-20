@@ -9,6 +9,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\User;
+use App\Service\Misc\DashboardService;
 use App\Service\UsersService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -82,6 +83,15 @@ class Controller extends BaseController
                     break;
             }
             return AppHelper::sendSuccessResponse();
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
+    }
+
+    function loadDashboardContent(DashboardService $dashboardService, Request $request)
+    {
+        try {
+            return $dashboardService->dashboardRecord($request);
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }

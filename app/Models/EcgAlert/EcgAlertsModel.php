@@ -6,6 +6,7 @@ use App\AppHelper\AppHelper;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
+use App\Models\Locations\LocationModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,12 +40,6 @@ class EcgAlertsModel extends Model
         $ecgAlertsModel->save();
     }
 
-    function updateAlertAmplifiedStatus(EcgAlertsModel $ecgAlertsModel, $playedAtAmplified)
-    {
-        $ecgAlertsModel->played_at_amplifier = $playedAtAmplified;
-        $ecgAlertsModel->save();
-    }
-
     public function getAllAlerts(mixed $loggedInUserId, $request)
     {
         $M = EcgAlertsModel::leftJoin('ecg_codes_alert_assigned_users', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes_alert_assigned_users.ecg_code_id')
@@ -62,9 +57,9 @@ class EcgAlertsModel extends Model
         return $M->orderBy('ecg_alerts.id', 'desc')->paginate();
     }
 
-    public function getAllAlertAdmin($request)
+    public function getAllAlertAdmin($request, $limit = false)
     {
-        return DB::table('ecg_alerts')
+        $query = DB::table('ecg_alerts')
             ->select(
                 'ecg_alerts.id as id',
                 'ecg_codes.name as ecg_code_nme',
@@ -114,8 +109,14 @@ class EcgAlertsModel extends Model
                 }
 
 
-            })->orderByDesc('id')->paginate(8);
-//            })->orderByDesc('id');
+            })->orderByDesc('id');
+
+        if ($limit) {
+            return $query->limit($limit)->get();
+        } else {
+            return $query->paginate(8);
+        }
+
     }
 
     function alarmBy()
@@ -132,6 +133,17 @@ class EcgAlertsModel extends Model
     function respondedBy()
     {
         return $this->hasOne(User::class, 'id', 'respond_by_id')->first();
+    }
+
+    function location()
+    {
+        return $this->hasOne(LocationModel::class, 'id', 'location_id')->first();
+    }
+
+    function locationNME(): string
+    {
+        $location = $this->location();
+        return $location instanceof LocationModel ? $location->locationName() : '-';
     }
 
     function respondedByNME()
@@ -182,5 +194,71 @@ class EcgAlertsModel extends Model
         return EcgAlertsModel::where('id', $id)->update([
             'played_at_amplifier' => AppHelper::getMySQLFormattedDateTime(Carbon::now())
         ]);
+    }
+
+    public function totalAlertReceives()
+    {
+        return EcgAlertsModel::count();
+    }
+
+    public function totalAccept()
+    {
+        return EcgAlertsModel::where('responded_action', 'accept')->count();
+    }
+
+    public function totalDecline()
+    {
+        return EcgAlertsModel::where('responded_action', 'reject')->count();
+    }
+
+    public function totalPlayedToAmplifier()
+    {
+        return EcgAlertsModel::whereNotNull('played_at_amplifier')->count();
+    }
+
+    public function emergencyCallsDashboardData(): array
+    {
+        return DB::select('
+        SELECT
+            SUBSTRING(YEAR(alarm_triggered_at), 3) AS year,
+            MONTH(alarm_triggered_at) AS month,
+            SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3) AS month_name,
+            CONCAT(SUBSTRING(YEAR(alarm_triggered_at), 3), " ",  SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3)) as date,
+            COUNT(*) AS total_count
+        FROM
+            ecg_alerts
+        WHERE
+            alarm_triggered_at >= DATE_SUB(CURDATE(), INTERVAL 7 MONTH)
+        GROUP BY
+            YEAR(alarm_triggered_at),
+            MONTH(alarm_triggered_at)
+        HAVING
+            total_count > 0
+        ORDER BY
+            year DESC, month DESC;
+        ');
+    }
+
+    public function amplifierCallsDashboardData(): array
+    {
+        return DB::select('
+        SELECT
+            SUBSTRING(YEAR(alarm_triggered_at), 3) AS year,
+            MONTH(alarm_triggered_at) AS month,
+            SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3) AS month_name,
+            CONCAT(SUBSTRING(YEAR(alarm_triggered_at), 3), " ",  SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3)) as date,
+            COUNT(*) AS total_count
+        FROM
+            ecg_alerts
+        WHERE
+            alarm_triggered_at >= DATE_SUB(CURDATE(), INTERVAL 7 MONTH) AND played_at_amplifier IS NOT NULL
+        GROUP BY
+            YEAR(alarm_triggered_at),
+            MONTH(alarm_triggered_at)
+        HAVING
+            total_count > 0
+        ORDER BY
+            year DESC, month DESC;
+        ');
     }
 }

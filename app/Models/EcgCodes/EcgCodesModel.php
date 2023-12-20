@@ -17,7 +17,7 @@ class EcgCodesModel extends Model
     public function getAllCodes($loggedInUserId)
     {
         return EcgCodesAssignedToUsersModel::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
-            ->where('ecg_codes_assigned_users.user_id', $loggedInUserId)->paginate();
+            ->where('ecg_codes_assigned_users.user_id', $loggedInUserId)->orderBy('ecg_codes.id', 'asc')->paginate();
     }
 
     ## This one is for Admin Panel

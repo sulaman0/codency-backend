@@ -19,4 +19,9 @@ class UserDeviceModel extends Model
         $M->device_type = $deviceType;
         $M->save();
     }
+
+    function fcm_token()
+    {
+        return $this->fcm_token;
+    }
 }

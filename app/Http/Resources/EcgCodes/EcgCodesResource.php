@@ -14,12 +14,13 @@ class EcgCodesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $ecgCode = $this->ecgCodes();
         return [
-            'id' => (int)$this->id,
-            'serial_no' => $this->serialNo(),
+            'id' => (int)$ecgCode->id,
+            'serial_no' => $ecgCode->serialNo(),
             'name' => (string)$this->name,
-            'code' => $this->code(),
-            'clr_code' => (string)$this->color_code,
+            'code' => $ecgCode->code(),
+            'clr_code' => (string)$ecgCode->color_code,
         ];
     }
 }

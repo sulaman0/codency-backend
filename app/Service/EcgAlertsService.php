@@ -96,15 +96,23 @@ class EcgAlertsService
         ## Validate Is this user is valid to respond this Alert.
         $isValidToRespond = $this->ecgCodesAlertsAssignedToUsersModel->isUserAllowToRespondEcgCode($loggedInUser->id, $ecgAlertModel->ecg_code_id);
 
-        if ($ecgAlertModel instanceof EcgAlertsModel && $ecgCode->action == "sent_to_manager" && $isValidToRespond instanceof EcgCodesAlertsAssignedToUsersModel) {
 
+        if (
+            $ecgAlertModel instanceof EcgAlertsModel
+            && $isValidToRespond instanceof EcgCodesAlertsAssignedToUsersModel
+            && $ecgCode->action == "sent_to_manager"
+        ) {
             ## Update status of responding
             $this->ecgAlertsModel->updateAlertResponded($ecgAlertModel,
                 $loggedInUser->id, AppHelper::getMySQLFormattedDateTime(Carbon::now()), $request->action);
 
             ## Check whether to sent to Amplifier or not.
-            ## Now send to Amplifier
-            return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
+            if ($request->action == "accept") {
+                ## Now send to Amplifier
+                return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
+            } else {
+                return true;
+            }
         } else {
             throw new \Exception("You're not allowed to Press this action.");
         }
@@ -129,9 +137,13 @@ class EcgAlertsService
         return true;
     }
 
-    public function getUnPlayedAlarmToAmplifier(): JsonResponse
+    public function getUnPlayedAlarmToAmplifier(Request $request): JsonResponse
     {
-        Log::info("AMPLIFIER PINGING TO SERVER");
+        Log::info("AMPLIFIER PINGING TO SERVER", [
+            'all_request' => $request->all(),
+            'ip_address' => $request->ip(),
+            'client_ip' => $request->getClientIp()
+        ]);
         return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
     }
 

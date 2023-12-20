@@ -17,9 +17,13 @@ class EcgAlertsResource extends JsonResource
     {
         $ecgCode = $this->ecgCode();
         $detailsAr = [
+            'code' => [
+                'name' => 'Code',
+                'value' => (string)$ecgCode->code
+            ],
             'location' => [
                 'name' => 'Location',
-                'value' => (string)$this->location_nme
+                'value' => (string)$this->locationNME()
             ],
             'alarm_by' => [
                 'name' => 'Alarm By',

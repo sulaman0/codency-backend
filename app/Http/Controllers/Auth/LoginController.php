@@ -104,7 +104,7 @@ class LoginController extends Controller
         }
 
         $loggedInUser = $request->user();
-        $loggedInUser->tokens()->delete();
+//        $loggedInUser->tokens()->delete();
         $this->clearLoginAttempts($request);
 
         if ($response = $this->authenticated($request, $this->guard()->user())) {

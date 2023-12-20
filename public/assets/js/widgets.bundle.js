@@ -5514,10 +5514,10 @@ var KTChartsWidget36B = function () {
     }
 }();
 "undefined" != typeof module && (module.exports = KTChartsWidget36), KTUtil.onDOMContentLoaded((function () {
-    KTChartsWidget36.init()
+    // KTChartsWidget36.init()
 }));
 "undefined" != typeof module && (module.exports = KTChartsWidget36), KTUtil.onDOMContentLoaded((function () {
-    KTChartsWidget36B.init()
+    // KTChartsWidget36B.init()
 }));
 var KTChartsWidget37 = function () {
     var e = {self: null, rendered: !1}, t = {self: null, rendered: !1}, a = {self: null, rendered: !1},

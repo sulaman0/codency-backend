@@ -1,4 +1,5 @@
-function getPageData(fetcherUrl, patch, callBackFunction = null, httpMethod = 'GET', AppendHTML = true, body = {}, shouldShowLoader = true, finalCallBack = null) {
+function getPageData(fetcherUrl, patch, callBackFunction = null, httpMethod = 'GET', AppendHTML = true, body = {}, shouldShowLoader = true,
+                     finalCallBack = null) {
     let fetchBody = {
         method: httpMethod,
         "X-CSRF-Token": $('meta[name="csrf-token"]').attr('content'),
@@ -15,7 +16,7 @@ function getPageData(fetcherUrl, patch, callBackFunction = null, httpMethod = 'G
             return res.json();
         }
     }).then((res) => {
-        if (AppendHTML) {
+        if (AppendHTML && patch) {
             let patcher = '#' + patch;
             $(patcher).html("");
             $(patcher).html(res);
@@ -27,7 +28,7 @@ function getPageData(fetcherUrl, patch, callBackFunction = null, httpMethod = 'G
         KTMenu.createInstances();
 
     }).finally(() => {
-        if (typeof callBackFunction === 'function') {
+        if (typeof finalCallBack === 'function') {
             finalCallBack();
         }
     })

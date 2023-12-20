@@ -9,8 +9,10 @@
                     class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-10 pb-lg-0"
                     data-kt-swapper="true" data-kt-swapper-mode="prepend"
                     data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-                    <h1 class="d-flex flex-column text-dark fw-bold my-0 fs-1">Hello, Qaiser Khan
-                        <small class="text-muted fs-6 fw-semibold pt-1">2023-12-12</small></h1>
+                    <h1 class="d-flex flex-column text-dark fw-bold my-0 fs-1">Hello, {{ auth()->user()->name }}
+                        <small
+                            class="text-muted fs-6 fw-semibold pt-1">{{ \App\AppHelper\AppHelper::getAppDate(now()) }}</small>
+                    </h1>
                 </div>
                 @include('layout.top_menu')
             </div>
@@ -19,28 +21,18 @@
             <div class="container-xxl" id="kt_content_container">
                 <div class="row gy-5 g-xl-10">
                     <div class="col-xl-6">
-                        <!--begin::Mixed Widget 13-->
                         <div class="card card-xl-stretch mb-xl-10 theme-dark-bg-body"
                              style="background-color: #F7D9E3">
-                            <!--begin::Body-->
                             <div class="card-body d-flex flex-column">
-                                <!--begin::Wrapper-->
                                 <div class="d-flex flex-column flex-grow-1">
-                                    <!--begin::Title-->
                                     <a href="#" class="text-dark text-hover-primary fw-bold fs-3">Emergency
                                         Calls</a>
-                                    <!--end::Title-->
-                                    <!--begin::Chart-->
-                                    <div class="mixed-widget-13-chart" style="height: 100px"></div>
-                                    <!--end::Chart-->
+                                    <div class="mixed-widget-13-chart-custom" style="height: 100px"></div>
                                 </div>
-                                <!--end::Wrapper-->
-                                <!--begin::Stats-->
                                 <div class="pt-5">
-                                    <span class="text-dark fw-bold fs-3x me-2 lh-0">560</span>
+                                    <span class="text-dark fw-bold fs-3x me-2 lh-0" id="total_emergency_calls">0</span>
                                     <span class="text-dark fw-bold fs-6 lh-0">Total</span>
                                 </div>
-                                <!--end::Stats-->
                             </div>
                         </div>
                     </div>
@@ -50,10 +42,10 @@
                             <div class="card-body d-flex flex-column">
                                 <div class="d-flex flex-column flex-grow-1">
                                     <a href="#" class="text-dark text-hover-primary fw-bold fs-3">Announcements</a>
-                                    <div class="mixed-widget-14-chart" style="height: 100px"></div>
+                                    <div class="mixed-widget-14-chart-custom" style="height: 100px"></div>
                                 </div>
                                 <div class="pt-5">
-                                    <span class="text-dark fw-bold fs-3x me-2 lh-0">447</span>
+                                    <span class="text-dark fw-bold fs-3x me-2 lh-0" id="total_played_calls">0</span>
                                     <span class="text-dark fw-bold fs-6 lh-0">Amplified</span>
                                 </div>
                             </div>
@@ -71,38 +63,28 @@
                                     <span
                                         class="text-gray-400 mt-1 fw-semibold fs-6">Respond time of Calls</span>
                                 </h3>
-                                <!--end::Title-->
-                                <!--begin::Toolbar-->
-                                <div class="card-toolbar">
-                                    <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
-                                    <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"
-                                         data-kt-daterangepicker-range="today"
-                                         class="btn btn-sm btn-light d-flex align-items-center px-4">
-                                        <!--begin::Display range-->
-                                        <div class="text-gray-600 fw-bold">Loading date range...</div>
-                                        <!--end::Display range-->
-                                        <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                            <span class="path6"></span>
-                                        </i>
-                                    </div>
-                                    <!--end::Daterangepicker-->
-                                </div>
-                                <!--end::Toolbar-->
+                                {{--                                <div class="card-toolbar">--}}
+                                {{--                                    <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"--}}
+                                {{--                                         data-kt-daterangepicker-range="today"--}}
+                                {{--                                         class="btn btn-sm btn-light d-flex align-items-center px-4">--}}
+                                {{--                                        <!--begin::Display range-->--}}
+                                {{--                                        <div class="text-gray-600 fw-bold">Loading date range...</div>--}}
+                                {{--                                        <!--end::Display range-->--}}
+                                {{--                                        <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">--}}
+                                {{--                                            <span class="path1"></span>--}}
+                                {{--                                            <span class="path2"></span>--}}
+                                {{--                                            <span class="path3"></span>--}}
+                                {{--                                            <span class="path4"></span>--}}
+                                {{--                                            <span class="path5"></span>--}}
+                                {{--                                            <span class="path6"></span>--}}
+                                {{--                                        </i>--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
                             </div>
-                            <!--end::Header-->
-                            <!--begin::Card body-->
                             <div class="card-body d-flex align-items-end p-0">
-                                <!--begin::Chart-->
                                 <div id="kt_charts_widget_36" class="min-h-auto w-100 ps-4 pe-6"
                                      style="height: 300px"></div>
-                                <!--end::Chart-->
                             </div>
-                            <!--end::Card body-->
                         </div>
                     </div>
                     <div class="col-xl-6">
@@ -115,38 +97,28 @@
                                     <span
                                         class="text-gray-400 mt-1 fw-semibold fs-6">Calls sent to Amplifier</span>
                                 </h3>
-                                <!--end::Title-->
-                                <!--begin::Toolbar-->
-                                <div class="card-toolbar">
-                                    <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
-                                    <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"
-                                         data-kt-daterangepicker-range="today"
-                                         class="btn btn-sm btn-light d-flex align-items-center px-4">
-                                        <!--begin::Display range-->
-                                        <div class="text-gray-600 fw-bold">Loading date range...</div>
-                                        <!--end::Display range-->
-                                        <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                            <span class="path6"></span>
-                                        </i>
-                                    </div>
-                                    <!--end::Daterangepicker-->
-                                </div>
-                                <!--end::Toolbar-->
+                                {{--                                <div class="card-toolbar">--}}
+                                {{--                                    <div data-kt-daterangepicker="true" data-kt-daterangepicker-opens="left"--}}
+                                {{--                                         data-kt-daterangepicker-range="today"--}}
+                                {{--                                         class="btn btn-sm btn-light d-flex align-items-center px-4">--}}
+                                {{--                                        <!--begin::Display range-->--}}
+                                {{--                                        <div class="text-gray-600 fw-bold">Loading date range...</div>--}}
+                                {{--                                        <!--end::Display range-->--}}
+                                {{--                                        <i class="ki-duotone ki-calendar-8 fs-1 ms-2 me-0">--}}
+                                {{--                                            <span class="path1"></span>--}}
+                                {{--                                            <span class="path2"></span>--}}
+                                {{--                                            <span class="path3"></span>--}}
+                                {{--                                            <span class="path4"></span>--}}
+                                {{--                                            <span class="path5"></span>--}}
+                                {{--                                            <span class="path6"></span>--}}
+                                {{--                                        </i>--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
                             </div>
-                            <!--end::Header-->
-                            <!--begin::Card body-->
                             <div class="card-body d-flex align-items-end p-0">
-                                <!--begin::Chart-->
                                 <div id="kt_charts_widget_36_b" class="min-h-auto w-100 ps-4 pe-6"
                                      style="height: 300px"></div>
-                                <!--end::Chart-->
                             </div>
-                            <!--end::Card body-->
                         </div>
                     </div>
 
@@ -1955,19 +1927,13 @@
 															</i>
 														</span>
                                         </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Text-->
                                         <div class="d-flex flex-column">
                                             <a href="#"
                                                class="text-white text-hover-primary fs-6 fw-bold">Development</a>
                                             <span class="sidebar-text-muted fw-bold">DevOps</span>
                                         </div>
-                                        <!--end::Text-->
                                     </div>
-                                    <!--end::Item-->
-                                    <!--begin::Item-->
                                     <div class="d-flex flex-nowrap align-items-center">
-                                        <!--begin::Symbol-->
                                         <div class="symbol symbol-50px me-5">
 														<span class="symbol-label sidebar-bg-muted">
 															<i class="ki-duotone ki-security-user fs-2x text-info">
@@ -1976,28 +1942,24 @@
 															</i>
 														</span>
                                         </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Text-->
                                         <div class="d-flex flex-column">
                                             <a href="#"
                                                class="text-white text-hover-primary fs-6 fw-bold">Testing</a>
                                             <span class="sidebar-text-muted fw-bold">QA Managers</span>
                                         </div>
-                                        <!--end::Text-->
                                     </div>
-                                    <!--end::Item-->
                                 </div>
-                                <!--end::Body-->
                             </div>
-                            <!--end::Tasks Widget-->
                         </div>
-                        <!--end::Tab pane-->
                     </div>
-                    <!--end::Tab content-->
                 </div>
             </div>
-            <!--end::Sidebar Content-->
         </div>
-        <!--end::Sidebar Content-->
     </div>
+@endsection
+@section('js_files')
+    <script>
+        let dashboardData = "{{ route('load_dashboard_content') }}";
+    </script>
+    <script src="{{ asset('assets/js/custom/dashboard/details.js?'.time()) }}"></script>
 @endsection
