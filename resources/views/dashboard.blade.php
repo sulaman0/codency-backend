@@ -981,9 +981,11 @@
                                             <div
                                                 class="sidebar-border-dashed d-flex flex-column justify-content-center rounded p-3 p-xxl-5">
                                                 <!--begin::Value-->
-                                                <div class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1"
-                                                     data-kt-countup="true" data-kt-countup-value="28"
-                                                     data-kt-countup-prefix="">0
+                                                <div
+                                                    class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1 self-generated"
+                                                    data-kt-countup="true" data-kt-countup-value=""
+                                                    id="ecg_code_receives"
+                                                    data-kt-countup-prefix="">0
                                                 </div>
                                                 <!--begin::Value-->
                                                 <!--begin::Label-->
@@ -999,9 +1001,11 @@
                                             <div
                                                 class="sidebar-border-dashed d-flex flex-column justify-content-center rounded p-3 p-xxl-5">
                                                 <!--begin::Value-->
-                                                <div class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1"
-                                                     data-kt-countup="true" data-kt-countup-value="204"
-                                                     data-kt-countup-prefix="">0
+                                                <div
+                                                    class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1 self-generated"
+                                                    data-kt-countup="true" data-kt-countup-value=""
+                                                    id="ecg_code_accepted"
+                                                    data-kt-countup-prefix="">0
                                                 </div>
                                                 <!--begin::Value-->
                                                 <!--begin::Label-->
@@ -1017,9 +1021,11 @@
                                             <div
                                                 class="sidebar-border-dashed d-flex flex-column justify-content-center rounded p-3 p-xxl-5">
                                                 <!--begin::Value-->
-                                                <div class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1"
-                                                     data-kt-countup="true" data-kt-countup-value="76"
-                                                     data-kt-countup-prefix="">0
+                                                <div
+                                                    class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1 self-generated"
+                                                    data-kt-countup="true" data-kt-countup-value=""
+                                                    id="ecg_code_decline"
+                                                    data-kt-countup-prefix="">0
                                                 </div>
                                                 <!--begin::Value-->
                                                 <!--begin::Label-->
@@ -1035,9 +1041,11 @@
                                             <div
                                                 class="sidebar-border-dashed d-flex flex-column justify-content-center rounded p-3 p-xxl-5">
                                                 <!--begin::Value-->
-                                                <div class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1"
-                                                     data-kt-countup="true" data-kt-countup-value="9"
-                                                     data-kt-countup-prefix="">0
+                                                <div
+                                                    class="sidebar-text-muted fs-2 fs-xxl-2x fw-bold mb-1 self-generated"
+                                                    data-kt-countup="true" data-kt-countup-value=""
+                                                    id="ecg_code_annoucement"
+                                                    data-kt-countup-prefix="">0
                                                 </div>
                                                 <!--begin::Value-->
                                                 <!--begin::Label-->
@@ -1053,89 +1061,15 @@
                                 </div>
                                 <!--end::Card Body-->
                             </div>
-                            <!--end::Statistics Widget-->
-                            <!--begin::Best Sellers Widget-->
                             <div class="card card-flush card-p-0 shadow-none bg-transparent mb-5">
-                                <!--begin::Header-->
                                 <div class="card-header align-items-center">
                                     <h3 class="card-title text-dark text-hover-primary fw-bold fs-3">
                                         Dail Codes
                                     </h3>
                                 </div>
-                                <!--end::Header-->
-                                <!--begin::Body-->
-                                <div class="card-body">
-                                    <div class="d-flex flex-nowrap align-items-center mb-7">
-                                        <!--begin::Image-->
-                                        <div class="symbol symbol-40px symbol-2by3 me-4">
-                                            <img src="https://dummyimage.com/60x40/#f6f6f6/#f6f6f6" alt=""
-                                                 class="mw-100"/>
-                                        </div>
-                                        <!--end::Image-->
-                                        <!--begin::Title-->
-                                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                            <a href="#"
-                                               class="text-white fw-semibold text-dark text-hover-primary fs-6">01</a>
-                                            <span
-                                                class="sidebar-text-muted fw-semibold fs-7 my-1">Fire Alarm</span>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <div class="d-flex flex-nowrap align-items-center mb-7">
-                                        <!--begin::Image-->
-                                        <div class="symbol symbol-40px symbol-2by3 me-4">
-                                            <img src="https://dummyimage.com/60x40/#f6f6f6/#f6f6f6" alt=""
-                                                 class="mw-100"/>
-                                        </div>
-                                        <!--end::Image-->
-                                        <!--begin::Title-->
-                                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                            <a href="#"
-                                               class="text-white fw-semibold text-dark text-hover-primary fs-6">10</a>
-                                            <span
-                                                class="sidebar-text-muted fw-semibold fs-7 my-1">Patient Emergency</span>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <div class="d-flex flex-nowrap align-items-center mb-7">
-                                        <!--begin::Image-->
-                                        <div class="symbol symbol-40px symbol-2by3 me-4">
-                                            <img src="https://dummyimage.com/60x40/#f6f6f6/#f6f6f6" alt=""
-                                                 class="mw-100"/>
-                                        </div>
-                                        <!--end::Image-->
-                                        <!--begin::Title-->
-                                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                            <a href="#"
-                                               class="text-white fw-semibold text-dark text-hover-primary fs-6">20</a>
-                                            <span
-                                                class="sidebar-text-muted fw-semibold fs-7 my-1">Glass broken</span>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <div class="d-flex flex-nowrap align-items-center mb-7">
-                                        <!--begin::Image-->
-                                        <div class="symbol symbol-40px symbol-2by3 me-4">
-                                            <img src="https://dummyimage.com/60x40/#f6f6f6/#f6f6f6" alt=""
-                                                 class="mw-100"/>
-                                        </div>
-                                        <!--end::Image-->
-                                        <!--begin::Title-->
-                                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                            <a href="#"
-                                               class="text-white fw-semibold text-dark text-hover-primary fs-6">11</a>
-                                            <span
-                                                class="sidebar-text-muted fw-semibold fs-7 my-1">Fire Alarm</span>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end: Card Body-->
+                                <div class="card-body" id="dailCodes"></div>
                             </div>
-                            <!--end::Best Sellers Widget-->
                         </div>
-                        <!--end::Tab pane-->
-                        <!--begin::Tab pane-->
                         <div class="tab-pane fade" id="kt_sidebar_tab_4" role="tabpanel">
                             <!--begin::Statistics Widget-->
                             <div class="card card-flush card-p-0 shadow-none bg-transparent mb-10">

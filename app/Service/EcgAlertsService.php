@@ -12,6 +12,7 @@ use App\Http\Resources\EcgAlerts\EcgAlertsCollection;
 use App\Http\Resources\EcgAlerts\EcgAlertsResource;
 use App\Http\Resources\EcgAlerts\UnPlayedAlarmCollection;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
+use App\Models\Amplifier\EcgAmplifierStatusModel;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
@@ -29,16 +30,18 @@ class EcgAlertsService
     protected EcgCodesModel $ecgCodesModel;
     protected EcgAlertsModel $ecgAlertsModel;
     protected EcgCodesAlertsAssignedToUsersModel $ecgCodesAlertsAssignedToUsersModel;
+    private EcgAmplifierStatusModel $ecgAmplifierStatusModel;
 
     /**
      * @param EcgCodesModel $ecgCodesModel
      * @param EcgAlertsModel $ecgAlertsModel
      */
-    public function __construct(EcgCodesModel $ecgCodesModel, EcgAlertsModel $ecgAlertsModel, EcgCodesAlertsAssignedToUsersModel $ecgCodesAlertsAssignedToUsersModel)
+    public function __construct(EcgCodesModel $ecgCodesModel, EcgAlertsModel $ecgAlertsModel, EcgCodesAlertsAssignedToUsersModel $ecgCodesAlertsAssignedToUsersModel, EcgAmplifierStatusModel $ecgAmplifierStatusModel)
     {
         $this->ecgCodesModel = $ecgCodesModel;
         $this->ecgAlertsModel = $ecgAlertsModel;
         $this->ecgCodesAlertsAssignedToUsersModel = $ecgCodesAlertsAssignedToUsersModel;
+        $this->ecgAmplifierStatusModel = $ecgAmplifierStatusModel;
     }
 
     /**
@@ -61,7 +64,6 @@ class EcgAlertsService
         );
 
         if ($ecgAlertModel) {
-
             ## Send this notification to all other apps.
             EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
             EcgAlertNotificationEvent::dispatch($ecgAlertModel);
@@ -134,16 +136,15 @@ class EcgAlertsService
 
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
     {
+        $ecgAlertsModel->should_play_to_amplifier = 1;
+        $ecgAlertsModel->played_type = $ecgCode->action;
+        $ecgAlertsModel->save();
         return true;
     }
 
     public function getUnPlayedAlarmToAmplifier(Request $request): JsonResponse
     {
-        Log::info("AMPLIFIER PINGING TO SERVER", [
-            'all_request' => $request->all(),
-            'ip_address' => $request->ip(),
-            'client_ip' => $request->getClientIp()
-        ]);
+        $this->ecgAmplifierStatusModel->saveAmplifierStatus($request->header('header-x-unique'), $request->header('header-x-battery-health'));
         return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
     }
 

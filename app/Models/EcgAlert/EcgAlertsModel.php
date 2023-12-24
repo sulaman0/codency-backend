@@ -74,6 +74,8 @@ class EcgAlertsModel extends Model
                 'sender.name as sender_name',
                 'ecg_codes.code',
                 'ecg_codes.color_code',
+                'ecg_alerts.responded_action',
+                'ecg_alerts.played_type',
             )
             ->leftJoin('users as responder', 'ecg_alerts.respond_by_id', '=', 'responder.id')
             ->leftJoin('ecg_codes', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes.id')
@@ -186,6 +188,7 @@ class EcgAlertsModel extends Model
             ->addSelect('ecg_alerts.id as id')
             ->whereNotNull("ecg_codes.tune_en")
             ->whereNotNull("ecg_codes.tune_ar")
+            ->where('should_play_to_amplifier', 1)
             ->get();
     }
 
@@ -219,46 +222,44 @@ class EcgAlertsModel extends Model
     public function emergencyCallsDashboardData(): array
     {
         return DB::select('
-        SELECT
-            SUBSTRING(YEAR(alarm_triggered_at), 3) AS year,
-            MONTH(alarm_triggered_at) AS month,
-            SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3) AS month_name,
-            CONCAT(SUBSTRING(YEAR(alarm_triggered_at), 3), " ",  SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3)) as date,
-            COUNT(*) AS total_count
-        FROM
-            ecg_alerts
-        WHERE
-            alarm_triggered_at >= DATE_SUB(CURDATE(), INTERVAL 7 MONTH)
-        GROUP BY
-            YEAR(alarm_triggered_at),
-            MONTH(alarm_triggered_at)
-        HAVING
-            total_count > 0
-        ORDER BY
-            year DESC, month DESC;
+                 SELECT
+                DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY) AS alarm_date,
+                DAY(DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY)) AS day,
+                MONTH(DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY)) AS month,
+                SUBSTRING(MONTHNAME(DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY)), 1, 3) AS month_name,
+                COUNT(ecg_alerts.alarm_triggered_at) AS total_count
+            FROM (
+                SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7
+            ) AS numbers
+            LEFT JOIN ecg_alerts ON DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY) = DATE(ecg_alerts.alarm_triggered_at)
+            WHERE DATE_ADD(CURDATE(), INTERVAL (1 - n) DAY) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+            GROUP BY alarm_date, day, month
+            ORDER BY alarm_date ASC ;
         ');
     }
 
     public function amplifierCallsDashboardData(): array
     {
-        return DB::select('
-        SELECT
-            SUBSTRING(YEAR(alarm_triggered_at), 3) AS year,
-            MONTH(alarm_triggered_at) AS month,
-            SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3) AS month_name,
-            CONCAT(SUBSTRING(YEAR(alarm_triggered_at), 3), " ",  SUBSTRING(MONTHNAME(alarm_triggered_at),1,  3)) as date,
-            COUNT(*) AS total_count
-        FROM
-            ecg_alerts
-        WHERE
-            alarm_triggered_at >= DATE_SUB(CURDATE(), INTERVAL 7 MONTH) AND played_at_amplifier IS NOT NULL
-        GROUP BY
-            YEAR(alarm_triggered_at),
-            MONTH(alarm_triggered_at)
-        HAVING
-            total_count > 0
-        ORDER BY
-            year DESC, month DESC;
-        ');
+        return DB::select("
+SELECT
+    DateRange.alarm_date,
+    DAY(DateRange.alarm_date) AS day,
+    MONTH(DateRange.alarm_date) AS month,
+    SUBSTRING(MONTHNAME(DateRange.alarm_date), 1, 3) AS month_name,
+    DATE_FORMAT(DateRange.alarm_date, '%y %b') AS date,
+    COUNT(ecg_alerts.alarm_triggered_at) AS total_count
+FROM (
+    SELECT CURDATE() - INTERVAL (n - 1) DAY AS alarm_date
+    FROM (
+        SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7
+    ) AS numbers
+) AS DateRange
+LEFT JOIN ecg_alerts ON DATE(ecg_alerts.alarm_triggered_at) = DateRange.alarm_date
+WHERE DateRange.alarm_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    AND (ecg_alerts.played_at_amplifier IS NULL OR ecg_alerts.played_at_amplifier IS NOT NULL)
+GROUP BY DateRange.alarm_date, day, month
+ORDER BY DateRange.alarm_date ASC;
+
+        ");
     }
 }

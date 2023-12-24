@@ -40,11 +40,13 @@ var KTModalCustomersAdd = function () {
                     })).then((() => {
                         t.removeAttribute("data-kt-indicator"), t.disabled = !1
                     }));
-                })), e.addEventListener("click", (function (t) {
-                t.preventDefault();
-                r.reset();
-                i.hide();
-            })), o.addEventListener("click", (function (t) {
+                })),
+                e.addEventListener("click", (function (t) {
+                    t.preventDefault();
+                    window.location.reload()
+                    r.reset();
+                    i.hide();
+                })), o.addEventListener("click", (function (t) {
                 t.preventDefault();
                 r.reset();
                 i.hide();

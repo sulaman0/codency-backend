@@ -16,13 +16,13 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <a href="#" class="symbol symbol-50px">
+                    <a href="{{ route('ecg-codes.show', $ecgCode->id) }}" class="symbol symbol-50px">
                                                 <span class="badge badge-primary"
                                                       style="background-color: {{ $ecgCode->color_code }}">&nbsp;</span>
                     </a>
                     <div class="ms-5">
                         <!--begin::Title-->
-                        <a href="{{ route('ecg-codes.show', 1) }}"
+                        <a href="{{ route('ecg-codes.show', $ecgCode->id) }}"
                            class="text-gray-800 text-hover-primary fs-5 fw-bold text-decoration-underline"
                            data-kt-ecommerce-product-filter="product_name">{{ $ecgCode->code() }}</a>
                     </div>

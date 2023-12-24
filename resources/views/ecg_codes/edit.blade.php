@@ -161,7 +161,7 @@
                                        accept=".mp3,audio/*"
                                        placeholder="e.g, 10" name="tune_en"/>
 
-                                <audio controls autoplay>
+                                <audio controls>
                                     <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">
                                     Your browser does not support the audio element.
                                 </audio>
@@ -176,7 +176,7 @@
                                        accept=".mp3,audio/*"
                                        placeholder="e.g, 10" name="tune_ar"/>
 
-                                <audio controls autoplay>
+                                <audio controls>
                                     <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">
                                     Your browser does not support the audio element.
                                 </audio>

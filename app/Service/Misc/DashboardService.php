@@ -28,17 +28,17 @@ class DashboardService
             ],
             'dail_codes' => $this->ecgAlertsModel->getAllAlertAdmin($request, 5),
             'emergency_calls_graph' => $this->emergencyCallsDashboardDataParser($this->ecgAlertsModel->emergencyCallsDashboardData()),
-            'amplifier_calls_graph' => $this->emergencyCallsDashboardDataParser($this->ecgAlertsModel->amplifierCallsDashboardData()),
+            'amplifier_calls_graph' => $this->emergencyCallsDashboardDataParser($this->ecgAlertsModel->amplifierCallsDashboardData(), true),
         ]);
     }
 
-    #[ArrayShape(['xAxios' => "array", 'yAxios' => "array"])] function emergencyCallsDashboardDataParser($calls)
+    #[ArrayShape(['xAxios' => "array", 'yAxios' => "array"])] function emergencyCallsDashboardDataParser($calls, $addToZero = false)
     {
         $xAxios = [];
         $yAxios = [];
         foreach ($calls as $call) {
-            $xAxios[] = $call->date;
-            $yAxios[] = $call->total_count;
+            $xAxios[] = (empty($call->day) ? 0 : $call->day) . ' ' . $call->month_name;
+            $yAxios[] = $addToZero ? $call->total_count + 1 : $call->total_count;
         }
 
         return [
