@@ -41,6 +41,8 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     Route::prefix('reports')->group(function () {
         Route::get('/code-pressed', [ReportsController::class, 'index'])->name('reports.code_pressed');
         Route::any('/ecg-alert-pressed', [ReportsController::class, 'tableRecord'])->name('reports.code_pressed_table');
+        Route::get('/amplifier-status', [ReportsController::class, 'amplifierStatus'])->name('reports.amplifier_status');
+        Route::get('/amplifier-json-status', [ReportsController::class, 'amplifierStatusTableRecord'])->name('reports.amplifier_status_json');
     });
     Route::get('privacy-policy', [Controller::class, 'privacy_policy'])->name('privacy_policy');
     Route::get('delete_model', [Controller::class, 'deleteModel'])->name('delete_model');

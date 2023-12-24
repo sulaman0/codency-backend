@@ -138,7 +138,6 @@
 									</span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <!--begin:Menu link-->
                                     <a class="menu-link"
                                        href="{{ route('reports.code_pressed') }}">
                                                 <span class="menu-bullet">
@@ -146,7 +145,13 @@
                                                 </span>
                                         <span class="menu-title">Code Pressed</span>
                                     </a>
-                                    <!--end:Menu link-->
+                                    <a class="menu-link"
+                                       href="{{ route('reports.amplifier_status') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                        <span class="menu-title">Amplifier Status</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -37,7 +37,21 @@ class ReportsController extends Controller
         ]);
     }
 
+    function amplifierStatus()
+    {
+        return view('reports.amplifier_status', []);
+    }
+
     function tableRecord(Request $request): string
+    {
+        try {
+            return $this->ecgAlertsService->getAlertsAdmin($request);
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
+    function amplifierStatusTableRecord(Request $request): string
     {
         try {
             return $this->ecgAlertsService->getAlertsAdmin($request);

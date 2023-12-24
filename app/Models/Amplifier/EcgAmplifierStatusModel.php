@@ -4,6 +4,7 @@ namespace App\Models\Amplifier;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class EcgAmplifierStatusModel extends Model
 {
@@ -17,5 +18,10 @@ class EcgAmplifierStatusModel extends Model
         $M->device_id = $deviceId;
         $M->battery_health = $health;
         $M->save();
+    }
+
+    public function getAllUpdates(Request $request)
+    {
+        return EcgAmplifierStatusModel::orderBy('id', 'desc')->paginate();
     }
 }

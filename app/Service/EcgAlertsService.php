@@ -134,6 +134,13 @@ class EcgAlertsService
         ])->render();
     }
 
+    public function getAmplifierStatusAdmin(Request $request): string
+    {
+        return view('reports.amplifier_status_table', [
+            'updates' => $this->ecgAmplifierStatusModel->getAllUpdates($request)
+        ])->render();
+    }
+
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
     {
         $ecgAlertsModel->should_play_to_amplifier = 1;
