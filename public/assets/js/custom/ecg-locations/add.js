@@ -5,14 +5,7 @@ var KTModalCustomersAdd = function () {
         init: function () {
             i = new bootstrap.Modal(document.querySelector("#kt_modal_add_customer")), r = document.querySelector("#kt_modal_add_customer_form"), t = r.querySelector("#kt_modal_add_customer_submit"), e = r.querySelector("#kt_modal_add_customer_cancel"), o = r.querySelector("#kt_modal_add_customer_close"), n = FormValidation.formValidation(r, {
                 fields: {
-                    name: {validators: {notEmpty: {message: "Staff Name is required"}}},
-                    email: {validators: {notEmpty: {message: "Email is required"}}},
-                    designation: {validators: {notEmpty: {message: "Designation is required"}}},
-                    password: {
-                        validators: {
-                            notEmpty: {message: "Password is required"}, minlength: 1000
-                        }
-                    },
+                    loc_name: {validators: {notEmpty: {message: "Location Name is required"}}},
                 }, plugins: {
                     trigger: new FormValidation.plugins.Trigger, bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: ".fv-row", eleInvalidClass: "", eleValidClass: ""
@@ -91,13 +84,15 @@ var KTModalCustomersAdd = function () {
                     cancelButtonText: "No, return",
                     customClass: {confirmButton: "btn btn-primary", cancelButton: "btn btn-active-light"}
                 }).then((function (t) {
-                    t.value ? (r.reset(), i.hide()) : "cancel" === t.dismiss && Swal.fire({
-                        text: "Your form has not been cancelled!.",
-                        icon: "error",
-                        buttonsStyling: !1,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {confirmButton: "btn btn-primary"}
-                    })
+                    t.value ? (r.reset(), i.hide()) : ""
+                    // "cancel" === t.dismiss &&
+                    // Swal.fire({
+                    // text: "Your form has not been cancelled!.",
+                    // icon: "error",
+                    // buttonsStyling: !1,
+                    // confirmButtonText: "Ok, got it!",
+                    // customClass: {confirmButton: "btn btn-primary"}
+                    // })
                 }))
             }))
         }
@@ -113,6 +108,8 @@ KTUtil.onDOMContentLoaded((function () {
             let formElement = $('form#kt_modal_add_customer_form');
             $(formElement).find('input[name=id]').val(res.payload.id);
             $(formElement).find('input[name=loc_name]').val(res.payload.loc_nme);
+            $(formElement).find('input[name=floor]').val(res.payload.floor);
+            $(formElement).find('input[name=room]').val(res.payload.room);
             $(formElement).find('input[name=building_nme]').val(res.payload.building_nme);
         }, 'GET', false, false, false, function () {
             $('.loading-progress-div').addClass('d-none');

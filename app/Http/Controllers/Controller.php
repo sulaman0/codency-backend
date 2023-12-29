@@ -11,12 +11,15 @@ use App\Models\Locations\LocationModel;
 use App\Models\User;
 use App\Service\Misc\DashboardService;
 use App\Service\UsersService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Pusher\Pusher;
 
 class Controller extends BaseController
@@ -44,12 +47,13 @@ class Controller extends BaseController
 
     function testFunction()
     {
-        $U = new User();
-        $U->name = "SLMN";
-        $U->email = "abc@gmail.com";
-        $U->designation = "abc@gmail.com";
-        $U->password = Hash::make('testing09');
-        $U->save();
+        $User = User::orderBy('id', 'desc')->first();
+//        return view('email_templates.auth.welcome', [
+//                'user' => $User,
+//                'emailTemplateTitle' => 'Welcome to Codency'
+//            ]
+//        );
+        event(new Registered($User));
     }
 
     function usersList(UsersService $usersService): JsonResponse|\App\Http\Resources\Users\UsersSearchListCollection

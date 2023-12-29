@@ -37,6 +37,8 @@ class LocationsService
             $this->locationModel->createOrUpdateLocation(
                 $request->loc_name,
                 $request->building_nme,
+                $request->room,
+                $request->floor,
                 $request->id
             ));
     }

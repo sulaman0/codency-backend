@@ -2,6 +2,8 @@
     <thead>
     <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
         <th class="min-w-125px">Location</th>
+        <th class="min-w-125px">Room</th>
+        <th class="min-w-125px">Floor</th>
         <th class="min-w-125px">Building</th>
         <th class="text-end min-w-70px">Actions</th>
     </tr>
@@ -11,6 +13,12 @@
         <tr>
             <td>
                 {{ $location->loc_nme }}
+            </td>
+            <td>
+                {{ $location->room }}
+            </td>
+            <td>
+                {{ $location->floor }}
             </td>
             <td>
                 {{ $location->building_nme }}

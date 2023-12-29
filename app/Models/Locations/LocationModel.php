@@ -41,7 +41,7 @@ class LocationModel extends Model
         return LocationModel::find($id);
     }
 
-    public function createOrUpdateLocation(mixed $loc_name, mixed $building_nme, mixed $id): bool
+    public function createOrUpdateLocation(mixed $loc_name, mixed $building_nme, $room, $floor, mixed $id): bool
     {
         $M = $this->findById($id);
         if (empty($M)) {
@@ -50,6 +50,8 @@ class LocationModel extends Model
 
         $M->loc_nme = $loc_name;
         $M->building_nme = $building_nme;
+        $M->room = $room;
+        $M->floor = $floor;
         $M->save();
         return true;
     }

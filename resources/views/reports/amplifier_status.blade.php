@@ -14,7 +14,7 @@
                     class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-10 pb-lg-0"
                     data-kt-swapper="true" data-kt-swapper-mode="prepend"
                     data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-                    <h1 class="d-flex flex-column text-dark fw-bold my-0 fs-1">Emergency Calls</h1>
+                    <h1 class="d-flex flex-column text-dark fw-bold my-0 fs-1">Amplifier Status</h1>
                     <ul class="breadcrumb breadcrumb-dot fw-semibold fs-base my-1">
                         <li class="breadcrumb-item text-muted">App</li>
                         <li class="breadcrumb-item text-muted">Report</li>
@@ -27,16 +27,6 @@
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="container-xxl" id="kt_content_container">
                 <div class="card">
-                    <div class="card-header border-0 pt-6">
-                        <div class="card-title"></div>
-                        <div class="card-toolbar">
-                            <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_add_customer">Filter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body pt-0" id="main-content"
                          data-href="{{ route('reports.amplifier_status_json') }}">
                         <div class="loading-progress-div">

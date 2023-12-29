@@ -65,7 +65,24 @@ class User extends Authenticatable
     function locationNme(): string
     {
         $location = $this->location()->first();
-        return $location instanceof LocationModel ? $location->loc_nme . ' ' . $location->building_nme : '-';
+        if ($location instanceof LocationModel) {
+            $lString = $location->loc_nme;
+            if (!empty($location->room)) {
+                $lString .= " " . $location->room;
+            }
+
+            if (!empty($location->floor)) {
+                $lString .= " " . $location->floor;
+            }
+
+            if (!empty($location->building_nme)) {
+                $lString .= " " . $location->building_nme;
+            }
+
+            return $lString;
+        } else {
+            return '-';
+        }
     }
 
     static function findUserByEmail($email): mixed

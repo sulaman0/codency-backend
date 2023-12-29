@@ -96,12 +96,22 @@
                                         <div class="fv-row mb-7">
                                             <label class="required fs-6 fw-semibold mb-2">Location</label>
                                             <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="building_nme" value=""/>
+                                                   placeholder="" name="loc_name" value=""/>
                                         </div>
                                         <div class="fv-row mb-7">
-                                            <label class="required fs-6 fw-semibold mb-2">Building</label>
+                                            <label class="fs-6 fw-semibold mb-2">Room</label>
                                             <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="loc_name" value=""/>
+                                                   placeholder="" name="room" value=""/>
+                                        </div>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">Floor</label>
+                                            <input type="text" class="form-control form-control-solid"
+                                                   placeholder="" name="floor" value=""/>
+                                        </div>
+                                        <div class="fv-row mb-7">
+                                            <label class="fs-6 fw-semibold mb-2">Building</label>
+                                            <input type="text" class="form-control form-control-solid"
+                                                   placeholder="" name="building_nme" value=""/>
                                         </div>
                                     </div>
                                 </div>

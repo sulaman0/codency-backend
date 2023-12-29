@@ -23,7 +23,6 @@ class CreateLocationRequest extends ApiFormRequest
     {
         return [
             'loc_name' => 'required',
-            'building_nme' => 'required',
         ];
     }
 }

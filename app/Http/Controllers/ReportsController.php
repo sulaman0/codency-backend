@@ -54,7 +54,7 @@ class ReportsController extends Controller
     function amplifierStatusTableRecord(Request $request): string
     {
         try {
-            return $this->ecgAlertsService->getAlertsAdmin($request);
+            return $this->ecgAlertsService->getAmplifierStatusAdmin($request);
         } catch (\Exception $exception) {
             return "Error: " . $exception->getMessage();
         }
