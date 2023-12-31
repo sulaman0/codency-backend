@@ -33,6 +33,7 @@ var KTModalCustomersAdd = function () {
                     axios.post(t.closest("form").getAttribute("action"), new FormData(r)).then((function (e) {
                         if (e.data.status) {
                             i.hide();
+                            r.reset();
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",

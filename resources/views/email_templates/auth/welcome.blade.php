@@ -1,5 +1,12 @@
 @extends('email_templates.base.layout')
 @section('main-content')
+    <style>
+        /* Use inline CSS to style the email address */
+        .email-address {
+            color: #ffffffdb; /* Set the desired color (white in this example) */
+            text-decoration: none; /* Optional: Remove underline */
+        }
+    </style>
     <tr>
         <td>
             <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%"
@@ -12,16 +19,26 @@
                         <p class="m_-4742265021905027275option-text m_-4742265021905027275option-text--variant-2"
                            style="padding-top:16px;margin:0;color:#ffffffdb;font-weight:400;font-size:16px;line-height:1.25">
                             We're thrilled to have you join our community. Here are a few things you can do with
-                            Codency.
-                            App.</p>
+                            Codency App.</p>
                         <ul>
                             <li style="color: #ffffffdb">Call an Emergency</li>
                             <li style="color: #ffffffdb">See What's Emergencies you have</li>
                         </ul>
 
                         <p class="m_-4742265021905027275option-text m_-4742265021905027275option-text--variant-2"
+                           style="padding-top:16px;margin:0;color:#ffffffdb;font-weight:400;font-size:16px;line-height:1.25">
+                            Login details</p>
+                        <ul>
+                            <li style="color: #ffffffdb !important;">Email: <a
+                                    style="color: #ffffffdb !important; text-decoration: none "
+                                    class="email-address"
+                                    href="mailto:{{ $email }}">{{ $email }}</a></li>
+                            <li style="color: #ffffffdb">Password: {{ $password }}</li>
+                        </ul>
+
+                        <p class="m_-4742265021905027275option-text m_-4742265021905027275option-text--variant-2"
                            style="padding-top:16px;margin:0;color:rgb(255,255,255);font-weight:400;font-size:16px;line-height:1.25">
-                            Download our Mobile Apps:</p>
+                            Download Mobile Apps:</p>
 
                         <center style="width:100%">
                             <table border="0" cellpadding="0" cellspacing="0"

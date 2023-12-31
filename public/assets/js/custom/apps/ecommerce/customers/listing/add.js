@@ -33,6 +33,7 @@ var KTModalCustomersAdd = function () {
                     axios.post(t.closest("form").getAttribute("action"), new FormData(r)).then((function (e) {
                         if (e.data.status) {
                             i.hide();
+                            r.reset();
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",
@@ -40,7 +41,7 @@ var KTModalCustomersAdd = function () {
                                 confirmButtonText: "Ok, got it!",
                                 customClass: {confirmButton: "btn btn-primary"}
                             }).then((function (e) {
-                                e.isConfirmed && i.hide() && r.reset()
+                                $('.staff-active-dropdown').addClass('d-none');
                                 getPageData($('#main-content').attr('data-href'), 'main-content');
                             }))
 

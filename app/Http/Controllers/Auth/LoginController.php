@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -78,6 +79,7 @@ class LoginController extends Controller
             // Save user login device, Information.
             $loggedInUser = AppHelper::getUserFromRequest($request);
             if ($loggedInUser->status == 'blocked') {
+                Auth::logout();
                 return AppHelper::sendSuccessResponse(false, 'Your account is locked please contact to Admin');
             }
             UserDeviceModel::storeUserDeviceInformation($loggedInUser->id, $request->fcm_token, $request->device_type);

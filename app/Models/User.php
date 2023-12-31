@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Users\UserDeviceModel;
+use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
@@ -64,25 +65,7 @@ class User extends Authenticatable
 
     function locationNme(): string
     {
-        $location = $this->location()->first();
-        if ($location instanceof LocationModel) {
-            $lString = $location->loc_nme;
-            if (!empty($location->room)) {
-                $lString .= " " . $location->room;
-            }
-
-            if (!empty($location->floor)) {
-                $lString .= " " . $location->floor;
-            }
-
-            if (!empty($location->building_nme)) {
-                $lString .= " " . $location->building_nme;
-            }
-
-            return $lString;
-        } else {
-            return '-';
-        }
+        return AppHelper::parseLocation($this->location()->first());
     }
 
     static function findUserByEmail($email): mixed
@@ -170,6 +153,8 @@ class User extends Authenticatable
             $M->password = Hash::make($password);
         }
         $M->save();
+
+        $M->notify(new SendWelcomeEmailToUsersNotifications($password));
         return true;
     }
 

@@ -103,12 +103,15 @@
                  data-bs-toggle="tooltip"
                  title="Amplifier status"
                  data-kt-menu-placement="top-end">
-                <span class="pulse-ring"></span>
-                <i class="ki-duotone ki-notification fs-1">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span>
-                </i>
+
+                <a href="{{ route('reports.amplifier_status') }}">
+                    <span class="pulse-ring"></span>
+                    <i class="ki-duotone ki-notification fs-1">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                    </i>
+                </a>
             </div>
         </div>
     </div>

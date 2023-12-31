@@ -15,14 +15,16 @@ class SendWelcomeEmailToUsersMail extends Mailable
     use Queueable, SerializesModels;
 
     private $notifiable;
+    private string $password;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($notifiable)
+    public function __construct($notifiable, string $password)
     {
         //
         $this->notifiable = $notifiable;
+        $this->password = $password;
     }
 
     /**
@@ -45,7 +47,9 @@ class SendWelcomeEmailToUsersMail extends Mailable
             view: 'email_templates.auth.welcome',
             with: [
                 'username' => $this->notifiable->name,
-                'emailTemplateTitle' => 'Welcome to Codency'
+                'emailTemplateTitle' => 'Welcome to Codency',
+                'email' => $this->notifiable->email,
+                'password' => $this->password,
             ]
         );
     }

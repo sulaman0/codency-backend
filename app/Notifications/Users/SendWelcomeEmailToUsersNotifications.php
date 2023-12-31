@@ -10,12 +10,15 @@ class SendWelcomeEmailToUsersNotifications extends Notification
 {
     use Queueable;
 
+    private string $password;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(string $password)
     {
         //
+        $this->password = $password;
     }
 
     /**
@@ -33,7 +36,7 @@ class SendWelcomeEmailToUsersNotifications extends Notification
      */
     public function toMail(object $notifiable): SendWelcomeEmailToUsersMail
     {
-        return (new SendWelcomeEmailToUsersMail($notifiable))->to($notifiable->email);
+        return (new SendWelcomeEmailToUsersMail($notifiable, $this->password))->to($notifiable->email);
     }
 
     /**

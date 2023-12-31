@@ -89,7 +89,7 @@
                         <div class="modal-content">
                             <form class="form" action="#" id="kt_modal_add_customer_form"
                                   data-kt-redirect="{{ route('staff.store') }}">
-                                <input type="hidden" name="id">
+                                <input type="text" name="id">
                                 <div class="modal-header" id="kt_modal_add_customer_header">
 
                                     <h2 class="fw-bold">Staff
@@ -190,6 +190,6 @@
     </div>
 @endsection
 @section('js_files')
-    <script src="{{ asset('assets/js/custom/apps/ecommerce/customers/listing/add.js?1.') }}"></script>
+    <script src="{{ asset('assets/js/custom/apps/ecommerce/customers/listing/add.js?'.time()) }}"></script>
     <script src="{{ asset('assets/js/custom/staffs/listing.js?'.time()) }}"></script>
 @endsection

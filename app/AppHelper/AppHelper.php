@@ -4,6 +4,7 @@
 namespace App\AppHelper;
 
 
+use App\Models\Locations\LocationModel;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -450,6 +451,28 @@ class AppHelper
     {
 
         return ceil((float)$price);
+    }
+
+    public static function parseLocation($location)
+    {
+        if ($location instanceof LocationModel) {
+            $lString = $location->loc_nme;
+            if (!empty($location->room)) {
+                $lString .= " " . $location->room;
+            }
+
+            if (!empty($location->floor)) {
+                $lString .= " " . $location->floor;
+            }
+
+            if (!empty($location->building_nme)) {
+                $lString .= " " . $location->building_nme;
+            }
+
+            return $lString;
+        } else {
+            return '-';
+        }
     }
 
 }

@@ -49,8 +49,17 @@ class Controller extends BaseController
 
     function testFunction()
     {
-        $User = User::where('email', 'qkhan.it@gmail.com')->first();
-        $User = User::where('email', 'symikhan70@gmail.com')->first();
+//        $User = User::where('email', 'qkhan.it@gmail.com')->first();
+//        return view('email_templates.auth.welcome', [
+//                'username' => "Mr. Sulaman Khan",
+//                'emailTemplateTitle' => 'Welcome to Codency',
+//                'email' => $User->email,
+//                'password' => 12345678,
+//            ]
+//        );
+
+
+//        $User = User::where('email', 'symikhan70@gmail.com')->first();
 //        return view('email_templates.auth.welcome', [
 //                'user' => $User,
 //                'emailTemplateTitle' => 'Welcome to Codency'
@@ -59,7 +68,7 @@ class Controller extends BaseController
 
 //        $User->notify(new SendWelcomeEmailToUsersNotifications());
 //       dispatch(SendWelcomeEmailListener::class)
-        event(new Registered($User));
+//        event(new Registered($User));
     }
 
     function usersList(UsersService $usersService): JsonResponse|\App\Http\Resources\Users\UsersSearchListCollection

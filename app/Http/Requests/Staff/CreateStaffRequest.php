@@ -23,7 +23,7 @@ class CreateStaffRequest extends ApiFormRequest
     {
         $rules = [
             'name' => 'required',
-            'email' => 'required|unique:users,email',
+            'email' => 'required|unique:users,email|email',
             'designation' => 'required',
             'phone' => 'nullable',
             'location' => 'required',
