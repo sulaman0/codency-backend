@@ -6,9 +6,11 @@ use App\AppHelper\AppHelper;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Http\Requests\CallOnHomeRequest;
 use App\Http\Resources\User\UserResource;
+use App\Listeners\Registered\SendWelcomeEmailListener;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\User;
+use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
 use App\Service\Misc\DashboardService;
 use App\Service\UsersService;
 use Illuminate\Auth\Events\Registered;
@@ -47,12 +49,16 @@ class Controller extends BaseController
 
     function testFunction()
     {
-        $User = User::orderBy('id', 'desc')->first();
+        $User = User::where('email', 'qkhan.it@gmail.com')->first();
+        $User = User::where('email', 'symikhan70@gmail.com')->first();
 //        return view('email_templates.auth.welcome', [
 //                'user' => $User,
 //                'emailTemplateTitle' => 'Welcome to Codency'
 //            ]
 //        );
+
+//        $User->notify(new SendWelcomeEmailToUsersNotifications());
+//       dispatch(SendWelcomeEmailListener::class)
         event(new Registered($User));
     }
 

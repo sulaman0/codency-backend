@@ -22,6 +22,6 @@ class EcgAmplifierStatusModel extends Model
 
     public function getAllUpdates(Request $request)
     {
-        return EcgAmplifierStatusModel::orderBy('id', 'desc')->paginate();
+        return EcgAmplifierStatusModel::orderBy('id', 'desc')->limit(10)->get();
     }
 }

@@ -47,7 +47,9 @@
                                                             <tr>
                                                                 <td>Download on the AppStore</td>
                                                                 <td>
-                                                                    <img width="40px" src="https://codency.pmitc.com.sa/assets/media/logos/apple-logo.png" alt="">
+                                                                    <img width="40px"
+                                                                         src="https://codency.pmitc.com.sa/assets/media/logos/apple-logo.png"
+                                                                         alt="">
                                                                 </td>
                                                             </tr>
                                                             </tbody>
@@ -65,9 +67,11 @@
                                                                cellpadding="0" width="auto">
                                                             <tbody>
                                                             <tr>
-                                                                <td>Download on the Google Play</td>
+                                                                <td>Download on the GooglePlay</td>
                                                                 <td>
-                                                                    <img width="43px" src="https://codency.pmitc.com.sa/assets/media/logos/play-logo.png" alt="">
+                                                                    <img width="43px"
+                                                                         src="https://codency.pmitc.com.sa/assets/media/logos/play-logo.png"
+                                                                         alt="">
                                                                 </td>
                                                             </tr>
                                                             </tbody>

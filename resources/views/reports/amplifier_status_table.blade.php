@@ -22,4 +22,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $updates->links() }}
+{{--{{ $updates->links() }}--}}

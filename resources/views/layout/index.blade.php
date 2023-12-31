@@ -93,13 +93,13 @@
                             </a>
                         </div>
                         <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
-                            <a class="menu-parent-link" href="{{ route('ecg-codes.index') }}">
+                            <a class="menu-parent-link" href="{{ route('locations.index') }}">
                                     <span class="menu-link">
                                         <span class="menu-icon">
                                             <i class="ki-duotone ki-black-right fs-2"></i>
                                         </span>
                                         <span class="menu-title">
-                                            ECG Codes
+                                            Locations
                                         </span>
                                     </span>
                             </a>
@@ -117,18 +117,20 @@
                             </a>
                         </div>
                         <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
-                            <a class="menu-parent-link" href="{{ route('locations.index') }}">
+                            <a class="menu-parent-link" href="{{ route('ecg-codes.index') }}">
                                     <span class="menu-link">
                                         <span class="menu-icon">
                                             <i class="ki-duotone ki-black-right fs-2"></i>
                                         </span>
                                         <span class="menu-title">
-                                            Locations
+                                            ECG Codes
                                         </span>
                                     </span>
                             </a>
                         </div>
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+
+
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion hover show">
                             <span class="menu-link">
 										<span class="menu-icon">
 											<i class="ki-duotone ki-black-right fs-2"></i>

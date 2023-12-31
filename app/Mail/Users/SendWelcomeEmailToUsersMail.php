@@ -31,8 +31,8 @@ class SendWelcomeEmailToUsersMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('support@codency.com.sa', 'Codency'),
-            subject: 'Welcome to Condency',
+//            from: new Address('support@codency.com.sa', 'Codency'),
+            subject: 'Welcome to Codency',
         );
     }
 
