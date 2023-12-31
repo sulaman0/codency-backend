@@ -26,8 +26,8 @@
                         </ul>
 
                         <p class="m_-4742265021905027275option-text m_-4742265021905027275option-text--variant-2"
-                           style="padding-top:16px;margin:0;color:#ffffffdb;font-weight:400;font-size:16px;line-height:1.25">
-                            Login details</p>
+                           style="padding-top:16px;margin:0;color:rgb(255,255,255);font-weight:400;font-size:16px;line-height:1.25">
+                            Your Login Details:</p>
                         <ul>
                             <li style="color: #ffffffdb !important;">Email: <a
                                     style="color: #ffffffdb !important; text-decoration: none "

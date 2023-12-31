@@ -89,7 +89,7 @@
                         <div class="modal-content">
                             <form class="form" action="#" id="kt_modal_add_customer_form"
                                   data-kt-redirect="{{ route('staff.store') }}">
-                                <input type="text" name="id">
+                                <input type="text" class="d-none" name="id">
                                 <div class="modal-header" id="kt_modal_add_customer_header">
 
                                     <h2 class="fw-bold">Staff

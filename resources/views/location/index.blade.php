@@ -69,7 +69,7 @@
                         <div class="modal-content">
                             <form class="form" action="#" id="kt_modal_add_customer_form"
                                   data-kt-redirect="{{ route('locations.store') }}">
-                                <input type="hidden" name="id">
+                                <input type="text" class="d-none" name="id">
                                 <div class="modal-header" id="kt_modal_add_customer_header">
                                     <h2 class="fw-bold">Location
                                         <div class="loading-progress-div d-none">

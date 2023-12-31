@@ -154,7 +154,9 @@ class User extends Authenticatable
         }
         $M->save();
 
-        $M->notify(new SendWelcomeEmailToUsersNotifications($password));
+        if ($isNewUser) {
+            $M->notify(new SendWelcomeEmailToUsersNotifications($password));
+        }
         return true;
     }
 

@@ -85,8 +85,8 @@
                         <form class="form w-100" id="kt_sign_in_form"
                               method="POST"
                               data-kt-redirect-url="{{ route('login') }}" action="{{ route('login') }}">
-                            <input type="hidden" name="fcm_token" value="fcm_token">
-                            <input type="hidden" name="device_type" value="web">
+                            <input type="text" class="d-none" name="fcm_token" value="fcm_token">
+                            <input type="text" class="d-none" name="device_type" value="web">
                             <div class="text-center mb-11">
                                 <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
                                 <div class="text-gray-500 fw-semibold fs-6">Every emergency has code</div>

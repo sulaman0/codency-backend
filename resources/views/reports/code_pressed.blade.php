@@ -51,7 +51,7 @@
                             <form class="form" action="{{ route('reports.code_pressed_table') }}"
                                   id="kt_modal_add_customer_form">
 
-                                <input type="hidden" name="date_range">
+                                <input type="text" class="d-none" name="date_range">
                                 <div class="modal-header" id="kt_modal_add_customer_header">
                                     <h2 class="fw-bold">Filter Ecg Alerts
                                         <div class="loading-progress-div d-none">
