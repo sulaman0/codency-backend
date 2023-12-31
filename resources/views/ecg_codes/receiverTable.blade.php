@@ -21,5 +21,5 @@
     @endforeach
     </tbody>
 </table>
-{{ $receiverTable->links() }}
+{{ $receiverTable->appends(request()->query())->links() }}
 

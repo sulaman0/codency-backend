@@ -39,43 +39,24 @@
                                        class="form-control form-control-solid w-250px ps-13 search-user"
                                        placeholder="Search Staff"/>
                             </div>
-                            <!--end::Search-->
                         </div>
-                        <!--begin::Card title-->
-                        <!--begin::Card toolbar-->
                         <div class="card-toolbar">
-                            <!--begin::Toolbar-->
                             <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                                 <div class="w-150px me-3">
-                                    <!--begin::Select2-->
                                     <select class="form-select form-select-solid user-status" data-control="select2"
                                             data-hide-search="true" data-placeholder="Status"
                                             data-kt-ecommerce-order-filter="status">
                                         <option></option>
                                         <option value="all">All</option>
-                                        <option value="active">Active</option>
-                                        <option value="blocked">Locked</option>
+                                        <option selected value="active">Active</option>
+                                        <option value="blocked">In-Active</option>
                                     </select>
-                                    <!--end::Select2-->
                                 </div>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_add_customer">Add Staff
                                 </button>
                             </div>
-                            <!--end::Toolbar-->
-                            <!--begin::Group actions-->
-                            <div class="d-flex justify-content-end align-items-center d-none"
-                                 data-kt-customer-table-toolbar="selected">
-                                <div class="fw-bold me-5">
-                                    <span class="me-2" data-kt-customer-table-select="selected_count"></span>Selected
-                                </div>
-                                <button type="button" class="btn btn-danger"
-                                        data-kt-customer-table-select="delete_selected">Delete Selected
-                                </button>
-                            </div>
-                            <!--end::Group actions-->
                         </div>
-                        <!--end::Card toolbar-->
                     </div>
                     <div class="card-body pt-0" id="main-content" data-href="{{ route('staff_table') }}">
                         <div class="loading-progress-div">

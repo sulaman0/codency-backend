@@ -117,15 +117,15 @@
                                 @enderror
                             </div>
 
-                            @if (Route::has('password.request'))
-                                <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                                    <div></div>
-                                    <a href="{{ route('password.request') }}"
-                                       class="link-primary">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                </div>
-                            @endif
+                            {{--                            @if (Route::has('password.request'))--}}
+                            {{--                                <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">--}}
+                            {{--                                    <div></div>--}}
+                            {{--                                    <a href="{{ route('password.request') }}"--}}
+                            {{--                                       class="link-primary">--}}
+                            {{--                                        {{ __('Forgot Your Password?') }}--}}
+                            {{--                                    </a>--}}
+                            {{--                                </div>--}}
+                            {{--                            @endif--}}
 
 
                             <div class="d-grid mb-10">

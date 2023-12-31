@@ -16,7 +16,15 @@ class EcgCodesCollection extends ResourceCollection
     #[ArrayShape(['data' => "\Illuminate\Support\Collection", 'meta' => "array"])] public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
+            'data' => $this->collection->map(function ($item, $key) {
+                return [
+                    'serial_no' => $key + 1,
+                    'id' => (int)$item->id,
+                    'name' => (string)$item->name,
+                    'code' => (string)$item->code,
+                    'clr_code' => (string)$item->color_code,
+                ];
+            })->toArray(),
             'meta' => [
                 'total_records' => $this->total(),
                 'current_records' => $this->count(),

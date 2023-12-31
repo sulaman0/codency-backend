@@ -5,6 +5,7 @@
         <th class="min-w-125px">Room</th>
         <th class="min-w-125px">Floor</th>
         <th class="min-w-125px">Building</th>
+        <th class="min-w-125px">Status</th>
         <th class="text-end min-w-70px">Actions</th>
     </tr>
     </thead>
@@ -23,6 +24,13 @@
             <td>
                 {{ $location->building_nme }}
             </td>
+            <td>
+                @if($location->status == "active")
+                    <div class="badge badge-light-success">Active</div>
+                @else
+                    <div class="badge badge-light-danger">In-Active</div>
+                @endif
+            </td>
             <td class="text-end">
                 <a href="#"
                    class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary"
@@ -36,9 +44,15 @@
                            class="menu-link px-3 edit-link">Edit</a>
                     </div>
                     <div class="menu-item px-3">
-                        <a href="{{ route('delete_model', ['model' => 'location', 'ref'=> $location->id]) }}"
+                        <a href="{{ route('delete_model', ['model' => 'location', 'ref'=> $location->id, 'status'  => $location->status == 'active']) }}"
                            class="menu-link px-3 delete-link"
-                           data-kt-customer-table-filter="delete_row">Delete</a>
+                           data-kt-customer-table-filter="delete_row">
+                            @if($location->status == 'active')
+                                In-Active
+                            @else
+                                Active
+                            @endif
+                        </a>
                     </div>
                 </div>
             </td>
@@ -46,4 +60,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $locations->links() }}
+{{ $locations->appends(request()->query())->links() }}

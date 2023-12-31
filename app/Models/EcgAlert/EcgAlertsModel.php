@@ -95,11 +95,7 @@ class EcgAlertsModel extends Model
                 }
 
                 if ($request->locations_list) {
-                    $query->whereIn('ecg_codes.location_id', $request->locations_list);
-                }
-
-                if ($request->locations_list) {
-                    $query->whereIn('ecg_codes.location_id', $request->locations_list);
+                    $query->whereIn('ecg_alerts.location_id', $request->locations_list);
                 }
 
                 if (!empty($request->date_range)) {
@@ -112,6 +108,7 @@ class EcgAlertsModel extends Model
 
 
             })->orderByDesc('id');
+
 
         if ($limit) {
             return $query->limit($limit)->get();

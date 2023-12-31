@@ -29,7 +29,7 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
 
     function deleteCodesByCodeId($codeId)
     {
-        return EcgCodesAlertsAssignedToUsersModel::where('ecg_code_id', $codeId)->first();
+        return EcgCodesAlertsAssignedToUsersModel::where('ecg_code_id', $codeId)->delete();
     }
 
     function assignedCodesAlertsToUser($userId, $codeId)

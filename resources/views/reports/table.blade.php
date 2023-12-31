@@ -76,4 +76,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $alerts->links() }}
+{{ $alerts->appends(request()->query())->links() }}

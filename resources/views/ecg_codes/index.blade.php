@@ -54,8 +54,8 @@
                                     <select class="form-select form-select-solid ecg-code-status" data-control="select2"
                                             data-hide-search="true" data-placeholder="Status"
                                             data-kt-ecommerce-order-filter="status">
-                                        <option selected="selected" value="all">All</option>
-                                        <option value="active">Active</option>
+                                        <option value="all">All</option>
+                                        <option selected value="active">Active</option>
                                         <option value="blocked">Disabled</option>
                                     </select>
                                     <!--end::Select2-->

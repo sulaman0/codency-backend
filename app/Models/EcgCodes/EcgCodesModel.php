@@ -13,11 +13,14 @@ class EcgCodesModel extends Model
     use HasFactory;
 
     protected $table = 'ecg_codes';
+    protected $fillable = [
+        'status'
+    ];
 
     public function getAllCodes($loggedInUserId)
     {
         return EcgCodesAssignedToUsersModel::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
-            ->where('ecg_codes_assigned_users.user_id', $loggedInUserId)->orderBy('ecg_codes.id', 'asc')->paginate();
+            ->where('ecg_codes_assigned_users.user_id', $loggedInUserId)->where('status', 'active')->orderBy('ecg_codes.id', 'asc')->paginate();
     }
 
     ## This one is for Admin Panel

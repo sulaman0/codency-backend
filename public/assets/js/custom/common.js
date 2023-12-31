@@ -45,7 +45,7 @@ $(function () {
         getPageData($(this).attr('href'), null, (res) => {
             if (res.status) {
                 Swal.fire({
-                    text: "Item has been deleted!",
+                    text: "Changes has been saved successfully",
                     icon: "success",
                     buttonsStyling: !1,
                     confirmButtonText: "Ok, got it!",

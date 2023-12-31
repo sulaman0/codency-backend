@@ -90,15 +90,16 @@ class Controller extends BaseController
     function deleteModel(Request $request)
     {
         try {
+            $status = $request->status == 0 ? 'active' : 'blocked';
             switch ($request->model) {
                 case 'location':
-                    LocationModel::find($request->ref)->delete();
+                    LocationModel::find($request->ref)->update(['status' => $status]);
                     break;
                 case 'ecgCode':
-                    EcgCodesModel::find($request->ref)->delete();
+                    EcgCodesModel::find($request->ref)->update(['status' => $status]);
                     break;
                 case 'user':
-                    User::find($request->ref)->delete();
+                    User::find($request->ref)->update(['status' => $status]);
                     break;
             }
             return AppHelper::sendSuccessResponse();

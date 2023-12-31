@@ -21,4 +21,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $senderTable->links() }}
+{{ $senderTable->appends(request()->query())->links() }}

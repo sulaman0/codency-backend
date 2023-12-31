@@ -74,8 +74,14 @@
                            data-kt-customer-table-filter="delete_row">Edit</a>
                     </div>
                     <div class="menu-item px-3">
-                        <a href="{{ route('delete_model', ['model' => 'ecgCode', 'ref'=> $ecgCode->id]) }}"
-                           class="menu-link px-3 delete-link">Delete</a>
+                        <a href="{{ route('delete_model', ['model' => 'ecgCode', 'ref'=> $ecgCode->id, 'status'  => $ecgCode->status == 'active']) }}"
+                           class="menu-link px-3 delete-link">
+                            @if($ecgCode->status == 'active')
+                                In-Active
+                            @else
+                                Active
+                            @endif
+                        </a>
                     </div>
                 </div>
             </td>
@@ -83,4 +89,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $ecg_codes->links() }}
+{{ $ecg_codes->appends(request()->query())->links() }}

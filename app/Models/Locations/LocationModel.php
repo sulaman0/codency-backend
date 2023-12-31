@@ -13,8 +13,16 @@ class LocationModel extends Model
     use HasFactory;
 
     protected $table = 'locations';
+    protected $fillable = [
+        'status'
+    ];
 
     public function getAllLocations(): Collection
+    {
+        return LocationModel::where('status', 'active')->get();
+    }
+
+    public function getAllLocationsForFilters(): Collection
     {
         return LocationModel::all();
     }
@@ -27,6 +35,10 @@ class LocationModel extends Model
                 $query->orWhere('loc_nme', 'LIKE', '%' . $request->search . '%')
                     ->orWhere('building_nme', 'LIKE', '%' . $request->search . '%');
             });
+        }
+
+        if ($request->status && $request->status <> 'all') {
+            $M->where('status', $request->status);
         }
 
         return $M->orderBy('id', 'desc')->paginate(10);

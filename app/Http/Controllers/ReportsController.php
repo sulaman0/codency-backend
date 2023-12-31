@@ -33,7 +33,7 @@ class ReportsController extends Controller
         return view('reports.code_pressed', [
             'users' => $this->user->getAllUsersForSearch(),
             'codes' => $this->ecgCodesModel->getAllCodesForSearch(),
-            'locations' => $this->locationModel->getAllLocations()
+            'locations' => $this->locationModel->getAllLocationsForFilters()
         ]);
     }
 

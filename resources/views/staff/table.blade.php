@@ -46,8 +46,14 @@
                            class="edit-link menu-link px-3">Edit</a>
                     </div>
                     <div class="menu-item px-3">
-                        <a href="{{ route('delete_model', ['model' => 'user', 'ref'=> $user->id]) }}"
-                           class="menu-link px-3 delete-link">Delete</a>
+                        <a href="{{ route('delete_model', ['model' => 'user', 'ref'=> $user->id, 'status'  => $user->status == 'active']) }}"
+                           class="menu-link px-3 delete-link">
+                            @if($user->status == 'active')
+                                In-Active
+                            @else
+                                Active
+                            @endif
+                        </a>
                     </div>
                 </div>
             </td>
@@ -55,4 +61,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $users->links() }}
+{{ $users->appends(request()->query())->links() }}
