@@ -57,7 +57,7 @@ class LoginController extends Controller
      *
      * @throws ValidationException
      */
-    public function login(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
+    public function login(LoginRequest $request)
     {
         $this->validateLogin($request);
 
@@ -77,6 +77,9 @@ class LoginController extends Controller
 
             // Save user login device, Information.
             $loggedInUser = AppHelper::getUserFromRequest($request);
+            if ($loggedInUser->status == 'blocked') {
+                return AppHelper::sendSuccessResponse(false, 'Your account is locked please contact to Admin');
+            }
             UserDeviceModel::storeUserDeviceInformation($loggedInUser->id, $request->fcm_token, $request->device_type);
 
             return $this->sendLoginResponse($request);

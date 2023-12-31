@@ -91,13 +91,15 @@ var KTModalCustomersAdd = function () {
                     cancelButtonText: "No, return",
                     customClass: {confirmButton: "btn btn-primary", cancelButton: "btn btn-active-light"}
                 }).then((function (t) {
-                    t.value ? (r.reset(), i.hide()) : "cancel" === t.dismiss && Swal.fire({
-                        text: "Your form has not been cancelled!.",
-                        icon: "error",
-                        buttonsStyling: !1,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {confirmButton: "btn btn-primary"}
-                    })
+                    t.value ? (r.reset(), i.hide()) : ""
+                    // "cancel" === t.dismiss
+                    // && Swal.fire({
+                    // text: "Your form has not been cancelled!.",
+                    // icon: "error",
+                    // buttonsStyling: !1,
+                    // confirmButtonText: "Ok, got it!",
+                    // customClass: {confirmButton: "btn btn-primary"}
+                    // })
                 }))
             }))
         }
@@ -110,6 +112,7 @@ KTUtil.onDOMContentLoaded((function () {
         $('#kt_modal_add_customer').modal('show');
         $('.loading-progress-div').removeClass('d-none');
         getPageData($(this).attr('href'), null, function (res) {
+            $('.staff-active-dropdown').removeClass('d-none');
             let formElement = $('form#kt_modal_add_customer_form');
             $(formElement).find('input[name=id]').val(res.payload.id);
             $(formElement).find('input[name=name]').val(res.payload.name);
@@ -118,6 +121,7 @@ KTUtil.onDOMContentLoaded((function () {
             $(formElement).find('input[name=designation]').val(res.payload.designation);
             $(formElement).find('input[name=phone]').val(res.payload.phone);
             $(formElement).find('select[name=location]').val(res.payload.location_id);
+            $(formElement).find('select[name=status]').val(res.payload.status);
         }, 'GET', false, false, false, function () {
             $('.loading-progress-div').addClass('d-none');
         });

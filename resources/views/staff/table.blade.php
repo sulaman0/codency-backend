@@ -13,8 +13,7 @@
     @foreach($users as $user)
         <tr>
             <td>
-                <a href="{{ route('staff.show', 1) }}"
-                   class="text-gray-800 text-decoration-underline text-hover-primary mb-1">{{ $user->name }}</a>
+                {{ $user->name }}
             </td>
             <td>
                 {{ $user->designation }}

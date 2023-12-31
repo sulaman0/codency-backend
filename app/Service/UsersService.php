@@ -45,6 +45,7 @@ class UsersService
             $request->phone,
             $request->location,
             $request->password,
+            $request->status,
             $request->id
         ));
     }

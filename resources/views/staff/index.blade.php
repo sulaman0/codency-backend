@@ -54,7 +54,7 @@
                                         <option></option>
                                         <option value="all">All</option>
                                         <option value="active">Active</option>
-                                        <option value="locked">Locked</option>
+                                        <option value="blocked">Locked</option>
                                     </select>
                                     <!--end::Select2-->
                                 </div>
@@ -151,6 +151,13 @@
                                             <input type="number" maxlength="9" class="form-control form-control-solid"
                                                    placeholder="" name="phone"/>
                                         </div>
+                                        <div class="fv-row mb-5 d-none staff-active-dropdown">
+                                            <label class="required fs-6 fw-semibold mb-2">Status</label>
+                                            <Select class="form-control form-control-solid" name="status">
+                                                <option value="active">Active</option>
+                                                <option value="blocked">Locked</option>
+                                            </Select>
+                                        </div>
                                         <div class="fv-row mb-5">
                                             <label class="required fs-6 fw-semibold mb-2">Location</label>
                                             <Select class="form-control form-control-solid" name="location">
@@ -183,6 +190,6 @@
     </div>
 @endsection
 @section('js_files')
-    <script src="{{ asset('assets/js/custom/apps/ecommerce/customers/listing/add.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/apps/ecommerce/customers/listing/add.js?1.') }}"></script>
     <script src="{{ asset('assets/js/custom/staffs/listing.js?'.time()) }}"></script>
 @endsection

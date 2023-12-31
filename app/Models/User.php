@@ -146,10 +146,12 @@ class User extends Authenticatable
         }
     }
 
-    public function createOrUpdateStaff(mixed $name, mixed $email, mixed $designation, mixed $phone, mixed $location, $password, $id = null): bool
+    public function createOrUpdateStaff(mixed $name, mixed $email, mixed $designation, mixed $phone, mixed $location, $password, $status, $id = null): bool
     {
         $M = $this->findById($id);
+        $isNewUser = false;
         if (empty($M)) {
+            $isNewUser = true;
             $M = new User();
         }
 
@@ -158,9 +160,14 @@ class User extends Authenticatable
         $M->designation = $designation;
         $M->phone = $phone;
         $M->location_id = $location;
+        if ($isNewUser) {
+            $M->status = 'active';
+        } else {
+            $M->status = $status;
+        }
+
         if ($password != 'testing09') {
             $M->password = Hash::make($password);
-            $M->status = 'active';
         }
         $M->save();
         return true;
