@@ -23,6 +23,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\Print_;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 
 class EcgAlertsService
@@ -116,7 +117,7 @@ class EcgAlertsService
                 return true;
             }
         } else {
-            throw new \Exception("You're not allowed to Press this action.");
+            throw new BadRequestException("You're not allowed to Press this action.");
         }
     }
 
@@ -124,7 +125,11 @@ class EcgAlertsService
     {
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
-        return AppHelper::sendSuccessResponse(true, 'result', new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id, $request)));
+        return AppHelper::sendSuccessResponse(
+            true,
+            'result',
+            new EcgAlertsCollection($this->ecgAlertsModel->getAllAlerts($loggedInUserId->id, $request))
+        );
     }
 
     public function getAlertsAdmin(Request $request): string
@@ -151,13 +156,29 @@ class EcgAlertsService
 
     public function getUnPlayedAlarmToAmplifier(Request $request): JsonResponse
     {
-        $this->ecgAmplifierStatusModel->saveAmplifierStatus($request->header('header-x-unique'), $request->header('header-x-battery-health'));
-        return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
+        try {
+            $this->ecgAmplifierStatusModel->saveAmplifierStatus($request->header('header-x-unique'), $request->header('header-x-battery-health'));
+            return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
+        } catch (\Exception $exception) {
+            Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
+                'exception' => $exception,
+                'exception_msg' => $exception->getMessage(),
+            ]);
+            return AppHelper::sendSuccessResponse(false, "failed to get notifications");
+        }
     }
 
     public function markAlarmPlayed($id): JsonResponse
     {
-        Log::info("AMPLIFIER PLAYED TO SERVER UPDATE");
-        return AppHelper::sendSuccessResponse(true, 'played', $this->ecgAlertsModel->playedToAmplifier($id));
+        try {
+            return AppHelper::sendSuccessResponse(true, 'played', $this->ecgAlertsModel->playedToAmplifier($id));
+        } catch (\Exception $exception) {
+            Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
+                'exception' => $exception,
+                'exception_msg' => $exception->getMessage(),
+                'amplifierId' => $id
+            ]);
+            return AppHelper::sendSuccessResponse(false, "failed to Played");
+        }
     }
 }

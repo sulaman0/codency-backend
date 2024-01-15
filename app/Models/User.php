@@ -89,17 +89,17 @@ class User extends Authenticatable
         return User::findOrFail($userId);
     }
 
-    function getAllUsersForSearch($search = null)
+    public function getAllUsersForSearch($request = null, $all = false)
     {
         $users = User::where('id', '<>', 0);
-        if ($search) {
-            $users = $users->where('name', 'LIKE', '%' . $search . '%');
+        if (!empty($request->search)) {
+            $users = $users->where('name', 'LIKE', '%' . $request->search . '%');
         }
-        return $users->get();
+        return $all ? $users->get() : $users->paginate();
     }
 
 
-    function getAllUsersAdmin(Request $request)
+    public function getAllUsersAdmin(Request $request)
     {
         $users = User::where('id', '<>', 0);
         if ($request->search) {
@@ -114,12 +114,12 @@ class User extends Authenticatable
     }
 
 
-    function userDeviceInformation()
+    public function userDeviceInformation()
     {
         return $this->hasOne(UserDeviceModel::class, 'user_id', 'id')->first();
     }
 
-    function fcmToken(): string
+    public function fcmToken(): string
     {
         $deviceInformation = $this->userDeviceInformation();
         if ($deviceInformation instanceof UserDeviceModel) {
@@ -129,7 +129,12 @@ class User extends Authenticatable
         }
     }
 
-    public function createOrUpdateStaff(mixed $name, mixed $email, mixed $designation, mixed $phone, mixed $location, $password, $status, $id = null): bool
+    public function createOrUpdateStaff(
+        mixed $name, mixed $email,
+        mixed $designation, mixed $phone,
+        mixed $location, $password,
+              $status, $id = null
+    ): bool
     {
         $M = $this->findById($id);
         $isNewUser = false;

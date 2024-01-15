@@ -92,6 +92,7 @@
                                     </span>
                             </a>
                         </div>
+
                         <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
                             <a class="menu-parent-link" href="{{ route('locations.index') }}">
                                     <span class="menu-link">
@@ -104,17 +105,32 @@
                                     </span>
                             </a>
                         </div>
-                        <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
-                            <a class="menu-parent-link" href="{{ route('staff.index') }}">
-                                    <span class="menu-link">
-                                        <span class="menu-icon">
-                                            <i class="ki-duotone ki-black-right fs-2"></i>
-                                        </span>
-                                        <span class="menu-title">
-                                            Staff
-                                        </span>
-                                    </span>
-                            </a>
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                            <span class="menu-link">
+										<span class="menu-icon">
+											<i class="ki-duotone ki-black-right fs-2"></i>
+										</span>
+										<span class="menu-title">Staff</span>
+										<span class="menu-arrow"></span>
+									</span>
+                            <div class="menu-sub menu-sub-accordion">
+                                <div class="menu-item">
+                                    <a class="menu-link"
+                                       href="{{ route('groups.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                        <span class="menu-title">Groups</span>
+                                    </a>
+                                    <a class="menu-link"
+                                       href="{{ route('staff.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                        <span class="menu-title">Staff</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
                             <a class="menu-parent-link" href="{{ route('ecg-codes.index') }}">
@@ -128,9 +144,7 @@
                                     </span>
                             </a>
                         </div>
-
-
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion hover show">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                             <span class="menu-link">
 										<span class="menu-icon">
 											<i class="ki-duotone ki-black-right fs-2"></i>

@@ -1,34 +1,23 @@
 <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
     <thead>
     <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-        <th class="min-w-125px">Staff Name</th>
-        <th class="min-w-125px">Designation</th>
-        <th class="min-w-125px">Status</th>
-        <th class="min-w-125px">Email</th>
-        <th class="min-w-125px">Phone</th>
+        <th class="min-w-125px">Group Name</th>
+        <th class="min-w-125px">Description</th>
+        <th class="min-w-125px">Users</th>
         <th class="text-end min-w-70px">Actions</th>
     </tr>
     </thead>
     <tbody class="fw-semibold text-black-600">
-    @foreach($users as $user)
+    @foreach($groups as $group)
         <tr>
             <td>
-                {{ $user->name }}
+                {{ $group->name }}
             </td>
             <td>
-                {{ $user->designation }}
+                {{ $group->description }}
             </td>
             <td>
-                @if($user->status == "active")
-                    <div class="badge badge-light-success">Active</div>
-                @else
-                    <div class="badge badge-light-danger">Blocked</div>
-                @endif
             </td>
-            <td>
-                <a href="mailto:{{ $user->email }}" class="text-gray-600 text-hover-primary mb-1">{{ $user->email }}</a>
-            </td>
-            <td>{{ \App\AppHelper\AppHelper::getPhoneNumberFormated($user->phone) }}</td>
             <td class="text-end">
                 <a href="#"
                    class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary"
@@ -61,4 +50,4 @@
     @endforeach
     </tbody>
 </table>
-{{ $users->appends(request()->query())->links() }}
+{{ $groups->appends(request()->query())->links() }}

@@ -35,14 +35,15 @@
                     <div class="menu-content d-flex align-items-center px-3">
                         <!--begin::Avatar-->
                         <div class="symbol symbol-50px me-5">
-                            <img alt="Logo" src="{{asset('assets/media/avatars/300-1.jpg')}}">
+                            {{--                            <img alt="Logo" src="{{asset('assets/media/avatars/300-1.jpg')}}">--}}
                         </div>
                         <!--end::Avatar-->
                         <!--begin::Username-->
                         <div class="d-flex flex-column">
-                            <div class="fw-bold d-flex align-items-center fs-5">Qaiser Khan</div>
+                            <div
+                                class="fw-bold d-flex align-items-center fs-5">{{ $loggedInUser->name }}</div>
                             <a href="#"
-                               class="fw-semibold text-muted text-hover-primary fs-7">qkhan.it@gmail.com</a>
+                               class="fw-semibold text-muted text-hover-primary fs-7">{{ $loggedInUser->email  }}</a>
                         </div>
                         <!--end::Username-->
                     </div>

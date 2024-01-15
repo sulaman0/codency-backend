@@ -35,7 +35,8 @@ class ECGCodesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Factory|Application|View|EcgCodesCollection|JsonResponse|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request):
+    Factory|Application|View|EcgCodesCollection|JsonResponse|\Illuminate\Contracts\Foundation\Application
     {
         if ($request->wantsJson()) {
             return $this->indexJson($request);

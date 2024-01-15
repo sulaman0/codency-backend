@@ -76,9 +76,9 @@ class EcgCodesService
 
     public function getAlLCodesForSearch($request): JsonResponse
     {
-        return AppHelper::sendSuccessResponse(true, 'found', [
-            'data' => new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch($request->search))
-        ]);
+        return AppHelper::sendSuccessResponse(true, 'found',
+            new EcgCodesSearchListCollection($this->ecgCodesModel->getAllCodesForSearch($request->search))
+        );
     }
 
     public function createEcgCode(CreateNewEcgCodeRequest $request): JsonResponse

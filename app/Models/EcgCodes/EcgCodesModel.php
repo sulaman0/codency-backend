@@ -46,7 +46,7 @@ class EcgCodesModel extends Model
 
 
     ## This function returns all codes in Search Modal Box for Mobile APP Operation
-    function getAllCodesForSearch($search = null): \Illuminate\Database\Eloquent\Collection
+    function getAllCodesForSearch($search = null)
     {
         $M = EcgCodesModel::where('id', '<>', 0);
 
@@ -55,7 +55,7 @@ class EcgCodesModel extends Model
                 $M->where('name', 'LIKE', '%' . $search . '%')->OrWhere('code', '%' . $search . '%');
             });
         }
-        return $M->get();
+        return $M->paginate();
     }
 
     function serialNo(): int

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EcgAlertsModel extends Model
 {
@@ -42,16 +43,26 @@ class EcgAlertsModel extends Model
 
     public function getAllAlerts(mixed $loggedInUserId, $request)
     {
-        $M = EcgAlertsModel::leftJoin('ecg_codes_alert_assigned_users', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes_alert_assigned_users.ecg_code_id')
-            ->select('*')->addSelect('ecg_alerts.id as id')
+        $M = EcgAlertsModel
+            ::leftJoin('ecg_codes_alert_assigned_users', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes_alert_assigned_users.ecg_code_id')
+            ->select('*')
+            ->addSelect('ecg_alerts.id as id')
             ->where('ecg_codes_alert_assigned_users.user_id', $loggedInUserId);
 
         if ($request->user_id) {
-            $M->where('ecg_alerts.alarm_triggered_by_id', $request->user_id);
+            if (is_array($request->user_id)) {
+                $M->whereIn('ecg_alerts.alarm_triggered_by_id', $request->user_id);
+            } else {
+                $M->where('ecg_alerts.alarm_triggered_by_id', $request->user_id);
+            }
         }
 
         if ($request->code_id) {
-            $M->where('ecg_alerts.ecg_code_id', $request->code_id);
+            if (is_array($request->code_id)) {
+                $M->whereIn('ecg_alerts.ecg_code_id', $request->code_id);
+            } else {
+                $M->where('ecg_alerts.ecg_code_id', $request->code_id);
+            }
         }
 
         return $M->orderBy('ecg_alerts.id', 'desc')->paginate();
@@ -189,11 +200,13 @@ class EcgAlertsModel extends Model
             ->get();
     }
 
-    public function playedToAmplifier($id)
+    public function playedToAmplifier($id): int
     {
-        return EcgAlertsModel::where('id', $id)->update([
+        EcgAlertsModel::where('id', $id)->update([
             'played_at_amplifier' => AppHelper::getMySQLFormattedDateTime(Carbon::now())
         ]);
+
+        return 1;
     }
 
     public function totalAlertReceives()

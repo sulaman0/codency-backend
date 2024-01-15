@@ -49,6 +49,10 @@ class Controller extends BaseController
 
     function testFunction()
     {
+        $User = User::where('email', 'abc@gmail.com')->first();
+        $User->password = Hash::make('testing09');
+        $User->save();
+        dd($User);
 //        $User = User::where('email', 'qkhan.it@gmail.com')->first();
 //        return view('email_templates.auth.welcome', [
 //                'username' => "Mr. Sulaman Khan",
@@ -71,10 +75,10 @@ class Controller extends BaseController
 //        event(new Registered($User));
     }
 
-    function usersList(UsersService $usersService): JsonResponse|\App\Http\Resources\Users\UsersSearchListCollection
+    function usersList(UsersService $usersService, Request $request): JsonResponse|\App\Http\Resources\Users\UsersSearchListCollection
     {
         try {
-            return $usersService->getAllUsersForSearch();
+            return $usersService->getAllUsersForSearch($request);
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }

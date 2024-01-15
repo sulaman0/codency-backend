@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ECGCodesController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\StaffController;
@@ -31,6 +32,9 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     });
     Route::resource('staff', StaffController::class);
     Route::get('ecg-staff', [StaffController::class, 'tableRecord'])->name('staff_table');
+    Route::resource('groups', GroupController::class);
+    Route::get('ecg-group', [GroupController::class, 'tableRecord'])->name('group_table');
+
     Route::resource('ecg-codes', ECGCodesController::class);
     Route::get('code-sender-table/{id}', [ECGCodesController::class, 'senderTableList'])->name('ecg_code_sender_table');
     Route::get('code-receiver-table/{id}', [ECGCodesController::class, 'receiverTableList'])->name('ecg_code_receiver_table');

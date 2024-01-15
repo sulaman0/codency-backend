@@ -24,12 +24,16 @@ class UsersService
     }
 
     ## This if for Mobile App Model box search
-    function getAllUsersForSearch(): \Illuminate\Http\JsonResponse
+    public function getAllUsersForSearch(Request $request): \Illuminate\Http\JsonResponse
     {
-        return AppHelper::sendSuccessResponse(true, 'found', ['data' => new UsersSearchListCollection($this->userModel->getAllUsersForSearch())]);
+        return AppHelper::sendSuccessResponse(
+            true,
+            'found',
+            new UsersSearchListCollection($this->userModel->getAllUsersForSearch($request))
+        );
     }
 
-    function getAllUsers(Request $request)
+    public function getAllUsers(Request $request)
     {
         return view('staff.table', [
             'users' => $this->userModel->getAllUsersAdmin($request)
