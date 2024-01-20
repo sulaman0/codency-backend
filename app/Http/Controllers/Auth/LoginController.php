@@ -82,7 +82,8 @@ class LoginController extends Controller
                 Auth::logout();
                 return AppHelper::sendSuccessResponse(false, 'Your account is locked please contact to Admin');
             }
-            UserDeviceModel::storeUserDeviceInformation($loggedInUser->id, $request->fcm_token, $request->device_type);
+            UserDeviceModel::storeUserDeviceInformation($loggedInUser->id,
+                $request->header('http-x-token', ''), $request->device_type);
 
             return $this->sendLoginResponse($request);
         }
@@ -94,6 +95,29 @@ class LoginController extends Controller
         return AppHelper::sendSuccessResponse(false, __('auth.failed'), [
             __('auth.failed')
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'logout'
+            ], 401);
+        }
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 401)
+            : redirect('/');
     }
 
     /**

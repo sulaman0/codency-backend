@@ -1,8 +1,9 @@
 <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
     <thead>
     <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-        <th class="min-w-125px">Staff Name</th>
+        <th class="min-w-125px">Name</th>
         <th class="min-w-125px">Designation</th>
+        <th class="min-w-125px">Group</th>
         <th class="min-w-125px">Status</th>
         <th class="min-w-125px">Email</th>
         <th class="min-w-125px">Phone</th>
@@ -17,6 +18,11 @@
             </td>
             <td>
                 {{ $user->designation }}
+            </td>
+            <td>
+                <div class="symbol-group symbol-hover mb-3">
+                    @include('user_icons_in_table', ['array' => $user->groupArray()])
+                </div>
             </td>
             <td>
                 @if($user->status == "active")

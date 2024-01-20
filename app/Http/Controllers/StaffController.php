@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\AppHelper\AppHelper;
 use App\Http\Requests\Staff\CreateStaffRequest;
+use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
+use App\Models\Users\GroupsModel;
 use App\Service\LocationsService;
 use App\Service\UsersService;
 use Illuminate\Contracts\View\Factory;
@@ -17,25 +19,38 @@ class StaffController extends Controller
     private UsersService $usersService;
     private LocationsService $locationsService;
     private User $user;
+    private GroupsModel $groupsModel;
+    private EcgCodesModel $ecgCodesModel;
 
     /**
      * @param UsersService $usersService
      * @param LocationsService $locationsService
      */
-    public function __construct(UsersService $usersService, LocationsService $locationsService, User $user)
+    public function __construct(
+        UsersService     $usersService,
+        LocationsService $locationsService, User $user,
+        GroupsModel      $groupsModel,
+        EcgCodesModel    $ecgCodesModel,
+    )
     {
         $this->usersService = $usersService;
         $this->locationsService = $locationsService;
         $this->user = $user;
+        $this->groupsModel = $groupsModel;
+        $this->ecgCodesModel = $ecgCodesModel;
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return view('staff.index', [
-            'locations' => $this->locationsService->getAllLocations()
+            'locations' => $this->locationsService->getAllLocations(),
+            'groups' => $this->groupsModel->getAllGroupsSearch(),
+            'selectedGroup' => $request->get('group', ''),
+            'selectedEcgCode' => $request->get('ecg_code', ''),
+            'ecgCodes' => $this->ecgCodesModel->getAllCodesForSearchNoPagination()
         ]);
     }
 
@@ -75,7 +90,11 @@ class StaffController extends Controller
     {
         try {
             if ($request->json == 1) {
-                return AppHelper::sendSuccessResponse(true, 'found', $this->user->findOrFail($id));
+                $user = $this->user->findOrFail($id);
+                return AppHelper::sendSuccessResponse(true, 'found', [
+                    'user' => $user,
+                    'group' => $user->groupArray(true),
+                ]);
             } else {
                 return view('staff.details');
             }

@@ -19,6 +19,7 @@ class EcgCodesSearchListResource extends JsonResource
             'name' => $this->name,
             'id' => $this->id,
             'code' => $this->code,
+            'occurrence' => '',
         ];
     }
 }

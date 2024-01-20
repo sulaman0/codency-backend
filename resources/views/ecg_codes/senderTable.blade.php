@@ -11,7 +11,8 @@
     @foreach($senderTable as $sender)
         <tr>
             <td>
-                {{  $sender['name'] }}
+                <a class="text-primary"
+                   href="{{ route('staff.index', ['group' => $sender['id']]) }}">{{  $sender['name'] }}</a>
             </td>
             <td>
                 {{ $sender['designation'] }}

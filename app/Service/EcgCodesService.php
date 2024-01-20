@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class EcgCodesService
@@ -51,7 +52,10 @@ class EcgCodesService
         /** @var $loggedInUserId User */
         $loggedInUserId = AppHelper::getUserFromRequest($request);
         if ($isApiCall) {
-            return AppHelper::sendSuccessResponse(true, 'result', new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id)));
+            return AppHelper::sendSuccessResponse(
+                true, 'result',
+                new EcgCodesCollection($this->ecgCodesModel->getAllCodes($loggedInUserId->id))
+            );
         } else {
             return view('ecg_codes.table', [
                 'ecg_codes' => $this->ecgCodesModel->getAllCodesAdmin($request)
@@ -83,42 +87,43 @@ class EcgCodesService
 
     public function createEcgCode(CreateNewEcgCodeRequest $request): JsonResponse
     {
+        DB::transaction(function () use ($request) {
+            // Ecg Code is created
+            $ecgCode = $this->ecgCodesModel->createEcgCode(
+                $request->code_nme,
+                $request->action,
+                $request->code,
+                $request->details,
+                $request->color_code,
+                $request->lang,
+            );
 
-        // Ecg Code is created
-        $ecgCode = $this->ecgCodesModel->createEcgCode(
-            $request->code_nme,
-            $request->action,
-            $request->code,
-            $request->details,
-            $request->color_code,
-            $request->lang,
-        );
+            // Assign Codes to Users
+            foreach ($request->senders_list as $senders) {
+                $this->ecgCodesAssignedToUsersModel->assignedCodesToUser($senders, $ecgCode->id);
+            }
 
-        // Assign Codes to Users
-        foreach ($request->senders_list as $senders) {
-            $this->ecgCodesAssignedToUsersModel->assignedCodesToUser($senders, $ecgCode->id);
-        }
+            // Assign Alerts to Users
+            foreach ($request->receivers_list as $senders) {
+                $this->ecgCodesAlertsAssignedToUsersModel->assignedCodesAlertsToUser($senders, $ecgCode->id);
+            }
 
-        // Assign Alerts to Users
-        foreach ($request->receivers_list as $senders) {
-            $this->ecgCodesAlertsAssignedToUsersModel->assignedCodesAlertsToUser($senders, $ecgCode->id);
-        }
+            // Now Uploading Tunes
+            $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
+            ## upload file English TUne
+            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
+            ## get full path
+            $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
 
-        // Now Uploading Tunes
-        $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
-        ## upload file English TUne
-        $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
-        ## get full path
-        $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
+            ## upload file English TUne
+            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
+            ## get full path
+            $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
 
-        ## upload file English TUne
-        $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
-        ## get full path
-        $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
-
-        $ecgCode->tune_en = $mediaUrlEnglish;
-        $ecgCode->tune_ar = $mediaUrlArabic;
-        $ecgCode->save();
+            $ecgCode->tune_en = $mediaUrlEnglish;
+            $ecgCode->tune_ar = $mediaUrlArabic;
+            $ecgCode->save();
+        });
 
         return AppHelper::sendSuccessResponse();
     }

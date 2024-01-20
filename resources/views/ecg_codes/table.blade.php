@@ -23,7 +23,7 @@
                     <div class="ms-5">
                         <!--begin::Title-->
                         <a href="{{ route('ecg-codes.show', $ecgCode->id) }}"
-                           class="text-gray-800 text-hover-primary fs-5 fw-bold text-decoration-underline"
+                           class=" fs-5 fw-bold text-primary"
                            data-kt-ecommerce-product-filter="product_name">{{ $ecgCode->code() }}</a>
                     </div>
                 </div>
@@ -44,15 +44,9 @@
             <td>{{ $ecgCode->notifyBy() }}</td>
             <td>
                 <div class="symbol-group symbol-hover mb-3">
-
-                    @foreach($ecgCode->assignedToUsers() as $user)
-                        <div class="symbol symbol-35px symbol-circle"
-                             data-bs-toggle="tooltip"
-                             data-bs-original-title="{{$user['name']}}" data-kt-initialized="1">
-                                                <span
-                                                    class="symbol-label bg-warning text-inverse-warning fw-bold">{{ substr($user['name'], 0, 1) }}</span>
-                        </div>
-                    @endforeach
+                    @include('user_icons_in_table', ['array' => $ecgCode->assignedToUsers(),
+                        'viewAllLink' => route('staff.index', ['ecg_code' => $ecgCode->id])
+                    ])
                 </div>
             </td>
             <td class="text-end">

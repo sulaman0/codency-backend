@@ -36,11 +36,16 @@ class LanguageChangerMiddleware
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
 
-        Log::info("REQUEST==LOGGING", [
-            'request' => $request->all(),
-            'request_file' => $request->allFiles(),
-            'response' => $response->getContent(),
-        ]);
+        if ($request->wantsJson()) {
+            Log::info("REQUEST==LOGGING", [
+                'route' => $request->route()->uri(),
+                'user' => empty($request->user()) ? "public-route" : $request->user()->id,
+                'headers' => $request->header('http-x-token'),
+                'request' => $request->all(),
+                'request_file' => $request->allFiles(),
+                'response' => $response->getContent(),
+            ]);
+        }
 
         return $response;
     }

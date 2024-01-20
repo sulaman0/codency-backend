@@ -8,6 +8,7 @@ use App\Http\Requests\EcgCodes\EditEcgCodeRequest;
 use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
+use App\Models\Users\GroupsModel;
 use App\Service\EcgCodesService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -21,15 +22,18 @@ class ECGCodesController extends Controller
     private EcgCodesService $ecgCodesService;
     private User $user;
     private EcgCodesModel $ecgCodesModel;
+    private GroupsModel $groupsModel;
 
     /**
      * @param EcgCodesService $ecgCodesService
      */
-    public function __construct(EcgCodesService $ecgCodesService, User $user, EcgCodesModel $ecgCodesModel)
+    public function __construct(EcgCodesService $ecgCodesService,
+                                User            $user, EcgCodesModel $ecgCodesModel, GroupsModel $groupsModel)
     {
         $this->ecgCodesService = $ecgCodesService;
         $this->user = $user;
         $this->ecgCodesModel = $ecgCodesModel;
+        $this->groupsModel = $groupsModel;
     }
 
     /**
@@ -95,7 +99,9 @@ class ECGCodesController extends Controller
      */
     public function create(): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        return \view('ecg_codes.create', ['users' => $this->user->getAllUsersForSearch()]);
+        return \view('ecg_codes.create', [
+            'groups' => $this->groupsModel->getAllGroupsSearch()
+        ]);
     }
 
     /**
@@ -134,7 +140,7 @@ class ECGCodesController extends Controller
         /** @var $ecgCode EcgCodesModel */
         $ecgCode = $this->ecgCodesModel->findById($id);
         return \view('ecg_codes.edit', [
-                'users' => $this->user->getAllUsersForSearch(),
+                'groups' => $this->groupsModel->getAllGroupsSearch(),
                 'codesToUsers' => $ecgCode->assignedToUsersIds(),
                 'alertsToUsers' => $ecgCode->alertAssignedToUsersIds(),
                 'ecgCode' => $ecgCode,

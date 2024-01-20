@@ -53,7 +53,11 @@
                                             target="_blank"
                                             data-saferedirecturl="https://www.google.com/url?q={{ url('/') }}">
                                             <p style="margin:0;font-weight:400"></p><span
-                                                style="word-wrap:break-word;color:#ffffff;word-break:break-word;font-weight:400;font-size:14px;line-height:1.429">Mr. {{ $username  }}</span>
+                                                style="word-wrap:break-word;
+                                                color:#ffffff;word-break:break-word;
+                                                font-family: Arial, Helvetica, sans-serif;
+                                                font-weight:400;font-size:14px;
+                                                line-height:1.429">Mr. {{ $username  }}</span>
                                             <table role="presentation" border="0" cellspacing="0" cellpadding="0"
                                                    width="100%">
                                                 <tbody>
@@ -117,7 +121,10 @@
                                                         <tr>
                                                             <td align="left"
                                                                 style="padding:0;color:#000000;text-align:left"><p
-                                                                    style="margin:0;word-wrap:break-word;color:#000000;word-break:break-word;font-weight:400;font-size:12px;line-height:1.333">
+                                                                    style="margin:0;word-wrap:break-word;color:#000000;
+                                                                    word-break:break-word;
+                                                                    font-family: Arial, Helvetica, sans-serif;
+                                                                    font-weight:400;font-size:12px;line-height:1.333">
                                                                     This email was intended for {{$username}}.
 
                                                                     {{--                                                                    <a--}}
@@ -149,7 +156,9 @@
                                                         <tr>
                                                             <td align="left"
                                                                 style="padding:0;color:#000000;text-align:left"><p
-                                                                    style="margin:0;color:#000000;font-weight:400;font-size:12px;line-height:1.333">
+                                                                    style="margin:0;
+                                                                    font-family: Arial, Helvetica, sans-serif;
+                                                                    color:#000000;font-weight:400;font-size:12px;line-height:1.333">
                                                                     You're receiving this email because you (or someone
                                                                     using this email) created an account on Codency
                                                                     using this address.</p>
@@ -174,7 +183,9 @@
                                                         <tr>
                                                             <td align="left"
                                                                 style="padding:0;color:#000000;text-align:left"><p
-                                                                    style="margin:0;color:#000000;font-weight:400;font-size:12px;line-height:1.333">
+                                                                    style="margin:0;
+                                                                    font-family: Arial, Helvetica, sans-serif;
+                                                                    color:#000000;font-weight:400;font-size:12px;line-height:1.333">
                                                                     © 2024 Codency Saudi Arabia Company.</p></td>
                                                         </tr>
                                                         <tr>

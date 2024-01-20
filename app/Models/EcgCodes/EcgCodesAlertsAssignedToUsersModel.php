@@ -3,6 +3,7 @@
 namespace App\Models\EcgCodes;
 
 use App\Models\User;
+use App\Models\Users\GroupUserModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,9 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
 
     function isUserAllowToRespondEcgCode($userId, $ecgCodeId)
     {
-        return EcgCodesAlertsAssignedToUsersModel::where('user_id', $userId)->where('ecg_code_id', $ecgCodeId)->first();
+        $groupIds = User::groupsIds($userId);
+        return EcgCodesAlertsAssignedToUsersModel::whereIn('group_id', $groupIds)
+            ->where('ecg_code_id', $ecgCodeId)->first();
     }
 
     function user()
@@ -22,9 +25,9 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
         return $this->hasOne(User::class, 'id', 'user_id')->first();
     }
 
-    function findCodesByIdAndCodeId($userId, $codeId)
+    function findCodesByIdAndCodeId($groupId, $codeId)
     {
-        return EcgCodesAlertsAssignedToUsersModel::where('user_id', $userId)->where('ecg_code_id', $codeId)->first();
+        return EcgCodesAlertsAssignedToUsersModel::where('group_id', $groupId)->where('ecg_code_id', $codeId)->first();
     }
 
     function deleteCodesByCodeId($codeId)
@@ -38,7 +41,7 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
         if (empty($M)) {
             $M = new EcgCodesAlertsAssignedToUsersModel();
         }
-        $M->user_id = $userId;
+        $M->group_id = $userId;
         $M->ecg_code_id = $codeId;
         $M->save();
     }

@@ -9,7 +9,7 @@
     <meta name="keywords" content="Codency, Emergency,Code App"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta itemprop="image" content="{{ asset('assets/media/logos/withoutShadow.png') }}">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:locale" content="en_US"/>
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="Codency - Every emergency has code"/>
@@ -184,8 +184,82 @@
         <span class="path2"></span>
     </i>
 </div>
-
 <script>var hostUrl = "assets/";</script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import {getAnalytics} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCOy_SWpB3H0XYFbt35ACFxoDSLawffoc",
+        authDomain: "codency-a6782.firebaseapp.com",
+        projectId: "codency-a6782",
+        storageBucket: "codency-a6782.appspot.com",
+        messagingSenderId: "884169670185",
+        appId: "1:884169670185:web:5e50eeddeecd99dae36638",
+        measurementId: "G-LCCC0GVH6G"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    function startFCM() {
+        messaging
+            .requestPermission()
+            .then(function () {
+                return messaging.getToken()
+            })
+            .then(function (response) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '{{ route("store.token") }}',
+                    type: 'POST',
+                    data: {
+                        token: response
+                    },
+                    dataType: 'JSON',
+                    success: function (response) {
+                    },
+                    error: function (error) {
+                    },
+                });
+            }).catch(function (error) {
+
+        });
+    }
+
+    messaging.onMessage(function (payload) {
+        console.log(payload, "payload is here")
+        console.log(payload.notification, "payload notification is here")
+        {{--let audio = new Audio("{{url('/')}}/assets/media/sounds/notification.mp3");--}}
+        {{--audio.play();--}}
+        const title = payload.notification.title;
+        const options = {
+            body: payload.notification.body,
+            icon: "{{ asset('assets/media/logos/withoutShadow.png') }}",
+            data: {
+                url: payload.data.web_url,
+            }
+        };
+        console.log(options, "=== OPTIONS ===")
+        let NotificationLocal = new Notification(title, options);
+        NotificationLocal.onclick = function (event) {
+            if (event.currentTarget.data.url) {
+                window.location.href = event.currentTarget.data.url;
+            }
+        }
+    });
+    startFCM();
+</script>
 <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 <script src="{{ asset('src/js/components/app.js') }}"></script>

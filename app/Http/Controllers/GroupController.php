@@ -6,6 +6,7 @@ use App\AppHelper\AppHelper;
 use App\Http\Requests\Group\CreateGroupRequest;
 use App\Http\Requests\Staff\CreateStaffRequest;
 use App\Models\User;
+use App\Models\Users\GroupsModel;
 use App\Service\GroupsService;
 use App\Service\LocationsService;
 use App\Service\UsersService;
@@ -18,20 +19,23 @@ use Illuminate\Http\Request;
 class GroupController extends Controller
 {
     private GroupsService $groupsService;
-    private LocationsService $locationsService;
     private User $user;
+    private GroupsModel $groupsModel;
 
     /**
      * @param GroupsService $groupsService
      * @param LocationsService $locationsService
      * @param User $user
      */
-    public function __construct(GroupsService    $groupsService,
-                                LocationsService $locationsService, User $user)
+    public function __construct(
+        GroupsService $groupsService,
+        User          $user,
+        GroupsModel   $groupsModel,
+    )
     {
         $this->groupsService = $groupsService;
-        $this->locationsService = $locationsService;
         $this->user = $user;
+        $this->groupsModel = $groupsModel;
     }
 
     /**
@@ -71,6 +75,19 @@ class GroupController extends Controller
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }
+    }
+
+    public function show($id)
+    {
+        $group = $this->groupsModel->findById($id);
+        return AppHelper::sendSuccessResponse(
+            true,
+            'found',
+            [
+                'group' => $group,
+                'user' => $group->usersArray(true)
+            ]
+        );
     }
 
     /**

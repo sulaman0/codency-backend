@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([LanguageChangerMiddleware::class])->group(function () {
     Route::post('login', [LoginController::class, 'login']);
+    Route::get('logout', [LoginController::class, 'logout']);
     Route::post('request-reset-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('verify-reset-password-code', [ForgotPasswordController::class, 'verifyResetPasswordCode']);
 

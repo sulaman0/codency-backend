@@ -34,6 +34,7 @@ var KTModalCustomersAdd = function () {
                         if (e.data.status) {
                             i.hide();
                             r.reset();
+                            $('select').val('').trigger('change');
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",
@@ -115,14 +116,15 @@ KTUtil.onDOMContentLoaded((function () {
         getPageData($(this).attr('href'), null, function (res) {
             $('.staff-active-dropdown').removeClass('d-none');
             let formElement = $('form#kt_modal_add_customer_form');
-            $(formElement).find('input[name=id]').val(res.payload.id);
-            $(formElement).find('input[name=name]').val(res.payload.name);
-            $(formElement).find('input[name=email]').val(res.payload.email);
+            $(formElement).find('input[name=id]').val(res.payload.user.id);
+            $(formElement).find('input[name=name]').val(res.payload.user.name);
+            $(formElement).find('input[name=email]').val(res.payload.user.email);
             $(formElement).find('input[name=password]').val('testing09');
-            $(formElement).find('input[name=designation]').val(res.payload.designation);
-            $(formElement).find('input[name=phone]').val(res.payload.phone);
-            $(formElement).find('select[name=location]').val(res.payload.location_id);
-            $(formElement).find('select[name=status]').val(res.payload.status);
+            $(formElement).find('input[name=designation]').val(res.payload.user.designation);
+            $(formElement).find('input[name=phone]').val(res.payload.user.phone);
+            $(formElement).find('select[name=location]').val(res.payload.user.location_id);
+            $(formElement).find('select[name=status]').val(res.payload.user.status);
+            $(formElement).find('select[name="group[]"]').val(res.payload.group).trigger('change');
         }, 'GET', false, false, false, function () {
             $('.loading-progress-div').addClass('d-none');
         });

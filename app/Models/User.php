@@ -8,9 +8,12 @@ use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Users\GroupsModel;
+use App\Models\Users\GroupUserModel;
 use App\Models\Users\UserDeviceModel;
 use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
@@ -110,6 +113,14 @@ class User extends Authenticatable
             $users = $users->where('status', $request->status);
         }
 
+        if ($request->group && $request->group != 'all') {
+            $users = $users->whereIn('id', GroupUserModel::getStaffIds($request->group));
+        }
+
+        if ($request->ecg_code && $request->ecg_code != 'all') {
+            $users = $users->whereIn('id', EcgCodesAssignedToUsersModel::getStaffIds($request->ecg_code));
+        }
+
         return $users->orderBy('id', 'desc')->paginate(10);
     }
 
@@ -133,7 +144,8 @@ class User extends Authenticatable
         mixed $name, mixed $email,
         mixed $designation, mixed $phone,
         mixed $location, $password,
-              $status, $id = null
+              $status, $id = null,
+              $group = null
     ): bool
     {
         $M = $this->findById($id);
@@ -161,6 +173,12 @@ class User extends Authenticatable
 
         if ($isNewUser) {
             $M->notify(new SendWelcomeEmailToUsersNotifications($password));
+        } else {
+            GroupUserModel::deleteByUserId($M->id);
+        }
+
+        if (!empty($group)) {
+            GroupUserModel::saveUserGroupBulkInverse($group, $M->id);
         }
         return true;
     }
@@ -168,5 +186,23 @@ class User extends Authenticatable
     function findById($id)
     {
         return User::find($id);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(GroupsModel::class, 'group_user', 'user_id', 'group_id');
+    }
+
+    public function groupArray($onlyIds = false)
+    {
+        if ($onlyIds) {
+            return $this->groups()->pluck('group_id')->toArray();
+        }
+        return $this->groups()->get()->toArray();
+    }
+
+    public static function groupsIds($userId)
+    {
+        return GroupUserModel::where('user_id', $userId)->pluck('group_id')->toArray();
     }
 }

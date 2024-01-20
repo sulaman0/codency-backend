@@ -50,7 +50,8 @@ class UsersService
             $request->location,
             $request->password,
             $request->status,
-            $request->id
+            $request->id,
+            $request->group
         ));
     }
 }

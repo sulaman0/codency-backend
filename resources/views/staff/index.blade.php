@@ -52,6 +52,30 @@
                                         <option value="blocked">In-Active</option>
                                     </select>
                                 </div>
+                                <div class="w-150px me-3">
+                                    <select class="form-select form-select-solid group-status" data-control="select2"
+                                            data-hide-search="true" data-placeholder="Group"
+                                            data-kt-ecommerce-order-filter="status">
+                                        <option value="all">All</option>
+                                        @foreach($groups as $group)
+                                            <option
+                                                {{ $selectedGroup == $group->id ? 'selected' : '' }}
+                                                value="{{ $group->id }}">{{ $group->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="w-150px me-3">
+                                    <select class="form-select form-select-solid ecg-code" data-control="select2"
+                                            data-hide-search="true" data-placeholder="Group"
+                                            data-kt-ecommerce-order-filter="status">
+                                        <option value="all">All</option>
+                                        @foreach($ecgCodes as $ecgCode)
+                                            <option
+                                                {{ $selectedEcgCode == $ecgCode->id ? 'selected' : '' }}
+                                                value="{{ $ecgCode->id }}">{{ $ecgCode->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_add_customer">Add Staff
                                 </button>
@@ -145,6 +169,18 @@
                                                 @foreach($locations as $location)
                                                     <option
                                                         value="{{ $location->id }}">{{ $location->locationName() }}</option>
+                                                @endforeach
+                                            </Select>
+                                        </div>
+                                        <div class="fv-row mb-5">
+                                            <label class="fs-6 fw-semibold mb-2">Group</label>
+                                            <Select class="form-control form-control-solid select2"
+                                                    data-control="select2"
+                                                    name="group[]"
+                                                    multiple="multiple">
+                                                @foreach($groups as $group)
+                                                    <option
+                                                        value="{{ $group->id }}">{{ $group->name }}</option>
                                                 @endforeach
                                             </Select>
                                         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AppHelper\AppHelper;
+use App\AppHelper\FirebaseNotification;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Http\Requests\CallOnHomeRequest;
 use App\Http\Resources\User\UserResource;
@@ -10,6 +11,7 @@ use App\Listeners\Registered\SendWelcomeEmailListener;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\User;
+use App\Models\Users\GroupsModel;
 use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
 use App\Service\Misc\DashboardService;
 use App\Service\UsersService;
@@ -22,6 +24,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use Pusher\Pusher;
 
 class Controller extends BaseController
@@ -49,6 +54,56 @@ class Controller extends BaseController
 
     function testFunction()
     {
+
+        FirebaseNotification::sendNotification([
+            'eipdMQKKFSogNArX8naDgi:APA91bFddd2meYAYMbCCCWr4U8fAZmmpCnTcQGp7G-bvJLFuUSSMAthzvTnSWy8m-lJ1Gxnfd3GXL4QEI5z__S9k8EU--RrLFEh3uMeaG4vBbNv7WJ1W_u9kH-nn03IC_Gl_NS3ZPC73'
+        ], [
+            'head' => 'Fire Alarm ' . time(),
+            'body' => 'Building 09 Hurry Up',
+            'extra' => [
+                'module' => 'ecg_alert',
+                'ref' => 1,
+                'web_url' => route('reports.code_pressed'),
+            ]
+        ]);
+
+        dd("END");
+        $messaging = app('firebase.messaging');
+        $deviceToken = "";
+        $message = CloudMessage::withTarget('token', $deviceToken)
+            ->withNotification(Notification::create('TitleNew', 'BodyNew'))
+            ->withDefaultSounds()
+            ->withData(['key' => 'value']);
+
+        $messages = [$message];
+
+        $s = $messaging->sendAll($messages);
+        dd($s);
+
+        $message = CloudMessage::fromArray([
+            'token' => $deviceToken,
+            'notification' => [/* Notification data as array */], // optional
+            'data' => [/* data array */], // optional
+        ]);
+
+        $messaging->send($message);
+
+
+        dd($messaging);
+
+
+        $factory = (new Factory)
+            ->withServiceAccount(__DIR__ . '/codency_admin_firebase_sdk.json');
+        $cloudMessaging = $factory->createMessaging();
+
+        $message = CloudMessage::withTarget('topic', 'topic-1')
+            ->withNotification(Notification::create('Title', 'Body'))
+            ->withData(['key' => 'value']);
+
+        $cloudMessaging->send($message);
+
+        dd($cloudMessaging);
+
         $User = User::where('email', 'abc@gmail.com')->first();
         $User->password = Hash::make('testing09');
         $User->save();
@@ -86,12 +141,16 @@ class Controller extends BaseController
 
     function authorizePusherChannel(Request $request)
     {
-        $pusher = new Pusher(env('PUSHER_APP_KEY', 'f0c4b5800196a5c61a74'), env('PUSHER_APP_SECRET', 'ea4dbdb5a749ae44d02c'), env('PUSHER_APP_ID', '1502051'));
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY', '2e90000284a3902c8da3'),
+            env('PUSHER_APP_SECRET', '97d38e63930668cd77e5'),
+            env('PUSHER_APP_ID', '1742362')
+        );
         echo $pusher->authorizeChannel($request->channel_name, $request->socket_id);
         exit();
     }
 
-    function deleteModel(Request $request)
+    public function deleteModel(Request $request)
     {
         try {
             $status = $request->status == 0 ? 'active' : 'blocked';
@@ -104,6 +163,10 @@ class Controller extends BaseController
                     break;
                 case 'user':
                     User::find($request->ref)->update(['status' => $status]);
+                case 'group':
+                    GroupsModel::find($request->ref)->delete();
+                    break;
+                case 'default':
                     break;
             }
             return AppHelper::sendSuccessResponse();
@@ -119,5 +182,14 @@ class Controller extends BaseController
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }
+    }
+
+    public function saveFcmToken(Request $request)
+    {
+        \App\Models\Users\UserDeviceModel::storeUserDeviceInformation(
+            AppHelper::getLoggedInWebUser()->id,
+            $request->token,
+            'web'
+        );
     }
 }

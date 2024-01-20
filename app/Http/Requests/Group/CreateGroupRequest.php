@@ -24,8 +24,8 @@ class CreateGroupRequest extends ApiFormRequest
     {
         return [
             'name' => 'required',
-            'users' => 'required|array',
-            'users.*' => 'required'
+            'staff' => 'required|array',
+            'staff.*' => 'required'
         ];
     }
 }

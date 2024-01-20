@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+// Pusher Implementation.
 class EcgAlertEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -33,7 +34,12 @@ class EcgAlertEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('ecg-alert'),
+            new PrivateChannel('ecg-alert-update'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'ecg-alert-update';
     }
 }

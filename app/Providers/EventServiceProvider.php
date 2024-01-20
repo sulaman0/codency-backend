@@ -24,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
             SendWelcomeEmailListener::class
         ],
 
+        // WebSocket || Pusher Implementation.
         EcgAlertEvent::class => [],
+
+        // Firebase & Push Notification
         EcgAlertNotificationEvent::class => [
             EcgAlertNotifyToOtherListener::class
         ],

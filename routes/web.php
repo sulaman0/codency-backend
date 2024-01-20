@@ -1,5 +1,6 @@
 <?php
 
+use App\AppHelper\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ECGCodesController;
@@ -45,11 +46,14 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     Route::prefix('reports')->group(function () {
         Route::get('/code-pressed', [ReportsController::class, 'index'])->name('reports.code_pressed');
         Route::any('/ecg-alert-pressed', [ReportsController::class, 'tableRecord'])->name('reports.code_pressed_table');
-        Route::get('/amplifier-status', [ReportsController::class, 'amplifierStatus'])->name('reports.amplifier_status');
-        Route::get('/amplifier-json-status', [ReportsController::class, 'amplifierStatusTableRecord'])->name('reports.amplifier_status_json');
+        Route::get('/amplifier-status', [ReportsController::class, 'amplifierStatus'])
+            ->name('reports.amplifier_status');
+        Route::get('/amplifier-json-status', [ReportsController::class, 'amplifierStatusTableRecord'])
+            ->name('reports.amplifier_status_json');
     });
     Route::get('privacy-policy', [Controller::class, 'privacy_policy'])->name('privacy_policy');
     Route::get('delete_model', [Controller::class, 'deleteModel'])->name('delete_model');
     Route::get('load-dashboard-content', [Controller::class, 'loadDashboardContent'])->name('load_dashboard_content');
+    Route::any('store-token', [Controller::class, 'saveFcmToken'])->name('store.token');
 });
 Route::get('test', [Controller::class, 'testFunction']);

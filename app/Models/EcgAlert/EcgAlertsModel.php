@@ -43,11 +43,14 @@ class EcgAlertsModel extends Model
 
     public function getAllAlerts(mixed $loggedInUserId, $request)
     {
+
+        $groupIds = User::groupsIds($loggedInUserId);
+
         $M = EcgAlertsModel
             ::leftJoin('ecg_codes_alert_assigned_users', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes_alert_assigned_users.ecg_code_id')
             ->select('*')
             ->addSelect('ecg_alerts.id as id')
-            ->where('ecg_codes_alert_assigned_users.user_id', $loggedInUserId);
+            ->whereIn('ecg_codes_alert_assigned_users.group_id', $groupIds);
 
         if ($request->user_id) {
             if (is_array($request->user_id)) {

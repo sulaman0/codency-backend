@@ -63,10 +63,12 @@ class EcgAlertsService
             $loggedInUser->id,
             AppHelper::getMySQLFormattedDateTime(Carbon::now())
         );
-
         if ($ecgAlertModel) {
             ## Send this notification to all other apps.
+            // Doing this with PUSHER
             EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+
+            // Doing firebase notification.
             EcgAlertNotificationEvent::dispatch($ecgAlertModel);
 
             if ($ecgCodeModel->action == "sent_to_amplifier_directly") {
@@ -75,7 +77,7 @@ class EcgAlertsService
             }
 
         } else {
-            throw new \Exception("Failed to Save the Alert");
+            throw new BadRequestException("Failed to Save the Alert");
         }
     }
 
@@ -92,18 +94,18 @@ class EcgAlertsService
         $ecgCode = $ecgAlertModel->ecgCode();
 
         ## Validate is allow  user to  press this option.
-        if (!$ecgAlertModel->shouldShowActionBtn($ecgCode->action)) {
+        if (!$ecgAlertModel->shouldShowActionBtn($ecgAlertModel->played_type)) {
             throw new \Exception("You're not allowed to Press this action.");
         }
 
         ## Validate Is this user is valid to respond this Alert.
-        $isValidToRespond = $this->ecgCodesAlertsAssignedToUsersModel->isUserAllowToRespondEcgCode($loggedInUser->id, $ecgAlertModel->ecg_code_id);
-
+        $isValidToRespond = $this->ecgCodesAlertsAssignedToUsersModel
+            ->isUserAllowToRespondEcgCode($loggedInUser->id, $ecgAlertModel->ecg_code_id);
 
         if (
             $ecgAlertModel instanceof EcgAlertsModel
             && $isValidToRespond instanceof EcgCodesAlertsAssignedToUsersModel
-            && $ecgCode->action == "sent_to_manager"
+            && $ecgAlertModel->played_type == "sent_to_manager"
         ) {
             ## Update status of responding
             $this->ecgAlertsModel->updateAlertResponded($ecgAlertModel,
@@ -157,8 +159,15 @@ class EcgAlertsService
     public function getUnPlayedAlarmToAmplifier(Request $request): JsonResponse
     {
         try {
-            $this->ecgAmplifierStatusModel->saveAmplifierStatus($request->header('header-x-unique'), $request->header('header-x-battery-health'));
-            return AppHelper::sendSuccessResponse(true, 'un-played', new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier()));
+            $this->ecgAmplifierStatusModel->saveAmplifierStatus(
+                $request->header('header-x-unique'),
+                $request->header('header-x-battery-health')
+            );
+            return AppHelper::sendSuccessResponse(
+                true,
+                'un-played',
+                new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier())
+            );
         } catch (\Exception $exception) {
             Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
                 'exception' => $exception,

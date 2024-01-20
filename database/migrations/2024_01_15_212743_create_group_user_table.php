@@ -12,13 +12,13 @@ return new class extends Migration {
     {
         Schema::create('group_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('group_user');
+            $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
 
         Schema::table('group_user', function (Blueprint $table) {
-            $table->foreign('group_user')->references('id')->on('groups');
+            $table->foreign('group_id')->references('id')->on('groups');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

@@ -39,7 +39,8 @@ class GroupsService
             $this->group->createUpdateGroup(
                 $request->name,
                 $request->description,
-                $request->users
+                $request->staff,
+                $request->id
             ));
     }
 }

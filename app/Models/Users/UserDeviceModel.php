@@ -13,7 +13,11 @@ class UserDeviceModel extends Model
 
     static function storeUserDeviceInformation(int $userId, string $fcmToken, string $deviceType)
     {
-        $M = new UserDeviceModel();
+        $M = self::getByUserId($userId);
+        if (empty($M)) {
+            $M = new UserDeviceModel();
+        }
+
         $M->user_id = $userId;
         $M->fcm_token = $fcmToken;
         $M->device_type = $deviceType;
@@ -23,5 +27,10 @@ class UserDeviceModel extends Model
     function fcm_token()
     {
         return $this->fcm_token;
+    }
+
+    public static function getByUserId($userId)
+    {
+        return UserDeviceModel::where('user_id', $userId)->first();
     }
 }

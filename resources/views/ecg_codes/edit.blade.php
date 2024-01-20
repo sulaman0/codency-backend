@@ -100,9 +100,9 @@
                                     data-placeholder="Select a Team Member"
                                     multiple="multiple"
                                     name="senders_list[]">
-                                @foreach($users as $user)
+                                @foreach($groups as $group)
                                     <option
-                                        {{ in_array($user->id, $codesToUsers) ? 'selected=selected' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
+                                        {{ in_array($group->id, $codesToUsers) ? 'selected=selected' : '' }} value="{{ $group->id }}">{{ $group->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -123,10 +123,10 @@
                                     data-placeholder="Select a Team Member"
                                     multiple="multiple"
                                     name="receivers_list[]">
-                                @foreach($users as $user)
+                                @foreach($groups as $group)
                                     <option
-                                        {{ in_array($user->id, $alertsToUsers) ? 'selected=selected' : '' }}
-                                        value="{{ $user->id }}">{{ $user->name }}</option>
+                                        {{ in_array($group->id, $alertsToUsers) ? 'selected=selected' : '' }}
+                                        value="{{ $group->id }}">{{ $group->name }}</option>
                                 @endforeach
                             </select>
                         </div>

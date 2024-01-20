@@ -2,6 +2,7 @@
 
 namespace App\Models\Users;
 
+use App\AppHelper\AppHelper;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,19 +16,25 @@ class GroupsModel extends Model
 
     protected $table = 'groups';
 
-    public function createUpdateGroup($name, $description, $users, $id): bool
+    public function createUpdateGroup($name, $description, $users, $id = null): bool
     {
         $groupModel = $this->findGroupById($id);
+        $isEdit = true;
         if (empty($groupModel)) {
             $groupModel = new GroupsModel();
+            $isEdit = false;
         }
 
         $groupModel->name = $name;
         $groupModel->description = $description;
+        $groupModel->created_by_id = AppHelper::getLoggedInWebUser()->id;
         $groupModel->save();
 
-        $users = User::whereIn($users)->get();
-        $groupModel->users()->attach($users);
+        if ($isEdit) {
+            GroupUserModel::deleteByGroupId($groupModel->id);
+        }
+
+        GroupUserModel::saveUserGroupBulk($users, $groupModel->id);
         return true;
     }
 
@@ -43,7 +50,15 @@ class GroupsModel extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'group_user', 'group_id');
+    }
+
+    public function usersArray($onlyIds = false): array
+    {
+        if ($onlyIds) {
+            return $this->users()->pluck('group_user.user_id')->toArray();
+        }
+        return $this->users()->get()->toArray();
     }
 
     public function getAllGroups(Request $request)
@@ -53,6 +68,16 @@ class GroupsModel extends Model
             $groupModel->where('name', 'LIKE', '%' . $request->search . '%');
         }
         return $groupModel->paginate(10);
+    }
+
+    public function findById($id)
+    {
+        return GroupsModel::find($id);
+    }
+
+    public function getAllGroupsSearch()
+    {
+        return GroupsModel::all();
     }
 
 }

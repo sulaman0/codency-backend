@@ -2,6 +2,7 @@
 
 namespace App\Listeners\ECGAlert;
 
+use App\AppHelper\FirebaseNotification;
 use App\Events\EcgAlertNotificationEvent;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\User;
@@ -26,11 +27,35 @@ class EcgAlertNotifyToOtherListener
         /** @var $ecgAlertModel EcgAlertsModel */
         $ecgAlertModel = $event->ecgAlertsModel;
         $ecgAlertAssignedUsers = $ecgAlertModel->assignedUsers();
+        $fcmAr = [];
         foreach ($ecgAlertAssignedUsers as $ecgAlertAssignedUser) {
             $userModel = $ecgAlertAssignedUser->user();
             if ($userModel instanceof User) {
-                $userModel->notify(new EcgAlertNotification($ecgAlertModel->id, $userModel->fcmToken(), $ecgAlertModel->ecg_code_nme));
+                $fcmAr[] = $userModel->fcmToken();
+                $userModel->notify(new EcgAlertNotification(
+                    $ecgAlertModel->id,
+                    $ecgAlertModel->ecg_code_nme,
+                    $ecgAlertModel->locationNME(),
+                ));
             }
         }
+
+        $this->sendMobileNotification($fcmAr,
+            $ecgAlertModel->ecg_code_nme,
+            $ecgAlertModel->locationNME(),
+            $ecgAlertModel->id
+        );
+    }
+
+    private function sendMobileNotification($fcmAr, $name, $loc, $id)
+    {
+        FirebaseNotification::sendNotification($fcmAr, [
+            'head' => $name,
+            'body' => 'Location: ' . $loc,
+            'extra' => [
+                'module' => 'ecg_alert',
+                'ref' => $id
+            ]
+        ]);
     }
 }

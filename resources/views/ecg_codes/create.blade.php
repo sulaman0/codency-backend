@@ -91,11 +91,11 @@
 									</span>
                             </label>
                             <select class="form-select form-select-solid" data-control="select2"
-                                    data-placeholder="Select a Team Member"
+                                    data-placeholder="Select a Group"
                                     multiple="multiple"
                                     name="senders_list[]">
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @foreach($groups as $group)
+                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -113,11 +113,11 @@
 									</span>
                             </label>
                             <select class="form-select form-select-solid" data-control="select2"
-                                    data-placeholder="Select a Team Member"
+                                    data-placeholder="Select a Group"
                                     multiple="multiple"
                                     name="receivers_list[]">
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @foreach($groups as $group)
+                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
                                 @endforeach
                             </select>
                         </div>

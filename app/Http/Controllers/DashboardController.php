@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AppHelper\AppHelper;
+use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -17,8 +19,11 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    function sign_in(): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    function sign_in()
     {
+        if (AppHelper::getLoggedInWebUser() instanceof User) {
+            return redirect(route('dashboard.index'));
+        }
         return view('auth.login');
     }
 

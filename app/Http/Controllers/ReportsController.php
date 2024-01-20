@@ -19,7 +19,11 @@ class ReportsController extends Controller
      * @param EcgAlertsService $ecgAlertsService
      * @param User $user
      */
-    public function __construct(EcgAlertsService $ecgAlertsService, User $user, EcgCodesModel $ecgCodesModel, LocationModel $locationModel)
+    public function __construct(
+        EcgAlertsService $ecgAlertsService,
+        User             $user, EcgCodesModel $ecgCodesModel,
+        LocationModel    $locationModel
+    )
     {
         $this->ecgAlertsService = $ecgAlertsService;
         $this->user = $user;
@@ -32,7 +36,7 @@ class ReportsController extends Controller
     {
         return view('reports.code_pressed', [
             'users' => $this->user->getAllUsersForSearch(),
-            'codes' => $this->ecgCodesModel->getAllCodesForSearch(),
+            'codes' => $this->ecgCodesModel->getAllCodesForSearchNoPagination(),
             'locations' => $this->locationModel->getAllLocationsForFilters()
         ]);
     }

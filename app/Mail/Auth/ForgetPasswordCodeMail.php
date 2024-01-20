@@ -39,6 +39,6 @@ class ForgetPasswordCodeMail extends Mailable
         return $this->view('email_templates.auth.forget_password_code', [
             'username' => $user->name,
             'verificationCode' => $this->code,
-        ])->subject(__('notification.user.reset_password_code'));
+        ])->subject(__('mail.reset_password_code'));
     }
 }
