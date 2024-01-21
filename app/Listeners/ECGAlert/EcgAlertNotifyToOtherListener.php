@@ -29,7 +29,6 @@ class EcgAlertNotifyToOtherListener
         /** @var $ecgAlertModel EcgAlertsModel */
         $ecgAlertModel = $event->ecgAlertsModel;
         $action = $event->action;
-        $loggedInUserId = $event->loggedInUserId;
         $alarmTriggeredById = $ecgAlertModel->alarm_triggered_by_id;
 
         $ecgAlertAssignedGroups = $ecgAlertModel->assignedUsers();
@@ -38,18 +37,38 @@ class EcgAlertNotifyToOtherListener
             $users = GroupUserModel::getStaffIds($ecgAlertAssignedGroup->group_id);
             foreach ($users as $user) {
                 $userModel = User::findById($user);
+                if ($userModel instanceof User) {
 
-                if ($userModel instanceof User && $alarmTriggeredById <> $loggedInUserId) {
-                    $fcmToken = $userModel->fcmToken();
-                    if (!empty($fcmToken)) {
-                        $fcmAr[] = $fcmToken;
-                    }
                     if ($action == 'created') {
-                        $userModel->notify(new EcgAlertNotification(
-                            $ecgAlertModel->id,
-                            $ecgAlertModel->ecg_code_nme,
-                            $ecgAlertModel->locationNME(),
-                        ));
+
+                        // User id is not equal.
+                        if ($alarmTriggeredById <> $userModel->id) {
+                            $fcmToken = $userModel->fcmToken();
+                            if (!empty($fcmToken)) {
+                                $fcmAr[] = $fcmToken;
+                            }
+                            // On Action Created
+                            $userModel->notify(new EcgAlertNotification(
+                                $ecgAlertModel->id,
+                                $ecgAlertModel->ecg_code_nme,
+                                $ecgAlertModel->locationNME(),
+                            ));
+                        }
+
+                    } elseif ($action == 'manager_accepted' || $action == 'manager_rejected') {
+                        // User id is not equal.
+                        if ($ecgAlertModel->respond_by_id <> $userModel->id) {
+                            $fcmToken = $userModel->fcmToken();
+                            if (!empty($fcmToken)) {
+                                $fcmAr[] = $fcmToken;
+                            }
+                        }
+                    } elseif ($action == 'alarm_played') {
+                        // Sent to all
+                        $fcmToken = $userModel->fcmToken();
+                        if (!empty($fcmToken)) {
+                            $fcmAr[] = $fcmToken;
+                        }
                     }
 
                 }

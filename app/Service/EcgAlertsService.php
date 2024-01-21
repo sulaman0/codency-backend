@@ -61,7 +61,8 @@ class EcgAlertsService
             $loggedInUser->location_id,
             $loggedInUser->locationNme(),
             $loggedInUser->id,
-            AppHelper::getMySQLFormattedDateTime(Carbon::now())
+            AppHelper::getMySQLFormattedDateTime(Carbon::now()),
+            $ecgCodeModel->action
         );
         if ($ecgAlertModel) {
             $this->sentToDevices($ecgAlertModel);
@@ -84,7 +85,6 @@ class EcgAlertsService
         EcgAlertNotificationEvent::dispatch(
             $ecgAlertModel,
             $responseAction,
-            AppHelper::getLoginInUser()->id
         );
     }
 
@@ -163,7 +163,6 @@ class EcgAlertsService
     private function sendToAmplifier(EcgAlertsModel $ecgAlertsModel, EcgCodesModel $ecgCode): bool
     {
         $ecgAlertsModel->should_play_to_amplifier = 1;
-        $ecgAlertsModel->played_type = $ecgCode->action;
         $ecgAlertsModel->save();
         return true;
     }

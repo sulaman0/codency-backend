@@ -252,7 +252,7 @@
         let NotificationLocal = new Notification(title, options);
         NotificationLocal.onclick = function (event) {
             if (event.currentTarget.data.url) {
-                window.location.href = event.currentTarget.data.url;
+                window.location.href = '{{ route('reports.code_pressed') }}';
             }
         }
     });

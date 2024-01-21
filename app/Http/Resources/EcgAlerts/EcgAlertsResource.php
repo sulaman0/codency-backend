@@ -63,7 +63,6 @@ class EcgAlertsResource extends JsonResource
             }
         }
 
-
         return [
             'id' => (int)$this->id,
             'name' => (string)$this->ecg_code_nme,

@@ -21,7 +21,7 @@ class EcgAlertsModel extends Model
 
     protected $table = 'ecg_alerts';
 
-    function saveAlert($ecgCodeId, $ecgCodeNme, $locationId, $locationNme, $triggeredById, $triggeredAt)
+    function saveAlert($ecgCodeId, $ecgCodeNme, $locationId, $locationNme, $triggeredById, $triggeredAt, $playedType)
     {
         $M = new EcgAlertsModel();
         $M->ecg_code_id = $ecgCodeId;
@@ -30,6 +30,7 @@ class EcgAlertsModel extends Model
         $M->location_nme = $locationNme;
         $M->alarm_triggered_by_id = $triggeredById;
         $M->alarm_triggered_at = $triggeredAt;
+        $M->played_type = $playedType;
         $M->save();
         return $M;
     }
