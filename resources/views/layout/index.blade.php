@@ -245,15 +245,16 @@
         const options = {
             body: payload.notification.body,
             icon: "{{ asset('assets/media/logos/withoutShadow.png') }}",
+            vibrate: [200, 100, 200],
+            silent: false,
             data: {
                 url: payload.data.web_url,
             }
         };
         let NotificationLocal = new Notification(title, options);
         NotificationLocal.onclick = function (event) {
-            if (event.currentTarget.data.url) {
-                window.location.href = '{{ route('reports.code_pressed') }}';
-            }
+            window.location.href = '{{ route('reports.code_pressed') }}';
+            // if (event.currentTarget.data.url) {}
         }
     });
     startFCM();
