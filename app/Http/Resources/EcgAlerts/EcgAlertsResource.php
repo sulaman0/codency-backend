@@ -71,7 +71,7 @@ class EcgAlertsResource extends JsonResource
             'ecg_color_code' => (string)$ecgCode->color_code,
             'details' => $detailsAr,
             'responded_action' => (string)$this->respond_action,
-            'should_show_action_btn' => (boolean)$this->shouldShowActionBtn($ecgCode->action),
+            'should_show_action_btn' => (boolean)$this->shouldShowActionBtn($this->played_type),
         ];
     }
 }

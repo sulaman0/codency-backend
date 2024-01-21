@@ -184,6 +184,7 @@
         <span class="path2"></span>
     </i>
 </div>
+
 <script>var hostUrl = "assets/";</script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script type="module">
@@ -238,8 +239,6 @@
     }
 
     messaging.onMessage(function (payload) {
-        console.log(payload, "payload is here")
-        console.log(payload.notification, "payload notification is here")
         {{--let audio = new Audio("{{url('/')}}/assets/media/sounds/notification.mp3");--}}
         {{--audio.play();--}}
         const title = payload.notification.title;
@@ -250,7 +249,6 @@
                 url: payload.data.web_url,
             }
         };
-        console.log(options, "=== OPTIONS ===")
         let NotificationLocal = new Notification(title, options);
         NotificationLocal.onclick = function (event) {
             if (event.currentTarget.data.url) {

@@ -25,6 +25,8 @@
                     <div class="ms-5">
                         <a href="{{ route('ecg-codes.show', [ 'ecg_code' => $alert->ecg_code_id]) }}"
                            class="text-primary fs-5 fw-bold">{{ $alert->code }}</a>
+                        <br>
+                        <small>Sr: {{ $alert->id }}</small>
                     </div>
                 </div>
             </td>

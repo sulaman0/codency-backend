@@ -5,24 +5,21 @@ namespace App\Service;
 use App\AppHelper\AppHelper;
 use App\Events\EcgAlert\EcgAlertEvent;
 use App\Events\EcgAlertNotificationEvent;
-use App\Events\Space\SpaceDiscussion\SpaceNewMessageEvent;
 use App\Http\Requests\EcgCodes\NewEcgCodeAlertRequest;
 use App\Http\Requests\EcgCodes\RespondEcgCodeRequest;
 use App\Http\Resources\EcgAlerts\EcgAlertsCollection;
 use App\Http\Resources\EcgAlerts\EcgAlertsResource;
 use App\Http\Resources\EcgAlerts\UnPlayedAlarmCollection;
-use App\Http\Resources\EcgCodes\EcgCodesCollection;
 use App\Models\Amplifier\EcgAmplifierStatusModel;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Expr\Print_;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 
@@ -37,7 +34,10 @@ class EcgAlertsService
      * @param EcgCodesModel $ecgCodesModel
      * @param EcgAlertsModel $ecgAlertsModel
      */
-    public function __construct(EcgCodesModel $ecgCodesModel, EcgAlertsModel $ecgAlertsModel, EcgCodesAlertsAssignedToUsersModel $ecgCodesAlertsAssignedToUsersModel, EcgAmplifierStatusModel $ecgAmplifierStatusModel)
+    public function __construct(
+        EcgCodesModel                      $ecgCodesModel, EcgAlertsModel $ecgAlertsModel,
+        EcgCodesAlertsAssignedToUsersModel $ecgCodesAlertsAssignedToUsersModel,
+        EcgAmplifierStatusModel            $ecgAmplifierStatusModel)
     {
         $this->ecgCodesModel = $ecgCodesModel;
         $this->ecgAlertsModel = $ecgAlertsModel;
@@ -46,7 +46,7 @@ class EcgAlertsService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function pressCode(NewEcgCodeAlertRequest $request)
     {
@@ -81,24 +81,28 @@ class EcgAlertsService
         // Doing this with PUSHER
         EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
         // Doing firebase notification.
-        EcgAlertNotificationEvent::dispatch($ecgAlertModel, $responseAction);
+        EcgAlertNotificationEvent::dispatch(
+            $ecgAlertModel,
+            $responseAction,
+            AppHelper::getLoginInUser()->id
+        );
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function respondToCde(RespondEcgCodeRequest $request, $ecgAlertId)
     {
         ## User Model
         $loggedInUser = AppHelper::getUserFromRequest($request);
-
         ## EcgCode Model
         $ecgAlertModel = $this->ecgAlertsModel->getByIdFindFail($ecgAlertId);
         $ecgCode = $ecgAlertModel->ecgCode();
+        $message = '';
 
         ## Validate is allow  user to  press this option.
         if (!$ecgAlertModel->shouldShowActionBtn($ecgAlertModel->played_type)) {
-            throw new \Exception("You're not allowed to Press this action.");
+            throw new BadRequestException("You're not allowed to Press this action.");
         }
 
         ## Validate Is this user is valid to respond this Alert.
@@ -118,10 +122,13 @@ class EcgAlertsService
             if ($request->action == "accept") {
                 $this->sentToDevices($ecgAlertModel, 'manager_accepted');
                 ## Now send to Amplifier
-                return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
+                $message = $ecgAlertModel->ecg_code_nme . ' accepted to play on Amplifier';
+                $this->sendToAmplifier($ecgAlertModel, $ecgCode);
+                return $message;
             } else {
+                $message = $ecgAlertModel->ecg_code_nme . ' rejected to play on Amplifier';
                 $this->sentToDevices($ecgAlertModel, 'manager_rejected');
-                return true;
+                return $message;
             }
         } else {
             throw new BadRequestException("You're not allowed to Press this action.");
@@ -173,7 +180,7 @@ class EcgAlertsService
                 'un-played',
                 new UnPlayedAlarmCollection($this->ecgAlertsModel->unPlayedAlarmToAmplifier())
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
                 'exception' => $exception,
                 'exception_msg' => $exception->getMessage(),
@@ -188,7 +195,7 @@ class EcgAlertsService
             $response = $this->ecgAlertsModel->playedToAmplifier($id);
             $this->sentToDevices(EcgAlertsModel::getByIdFindFail($id), 'alarm_played');
             return AppHelper::sendSuccessResponse(true, 'played', $response);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
                 'exception' => $exception,
                 'exception_msg' => $exception->getMessage(),

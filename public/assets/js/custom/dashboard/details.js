@@ -1,6 +1,5 @@
 $(function () {
     getPageData(dashboardData, '', function (res) {
-        console.log(res, "response of graph data")
         if (res.status) {
             $('#ecg_code_receives').attr('data-kt-countup-value', res.payload.em_codes.receive);
             $('#total_emergency_calls').text(res.payload.em_codes.receive);
@@ -106,7 +105,7 @@ function initEmergencyCalls(callsCount, periodName) {
                     crosshairs: {show: !1, position: "front", stroke: {color: o, width: 1, dashArray: 3}},
                     tooltip: {enabled: !0, formatter: void 0, offsetY: 0, style: {fontSize: "12px"}}
                 },
-                yaxis: {min: 0, max: 20, labels: {show: !1, style: {colors: a, fontSize: "12px"}}},
+                yaxis: {min: 0, max: 60, labels: {show: !1, style: {colors: a, fontSize: "12px"}}},
                 states: {
                     normal: {filter: {type: "none", value: 0}},
                     hover: {filter: {type: "none", value: 0}},

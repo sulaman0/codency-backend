@@ -17,15 +17,17 @@ class EcgAlertNotificationEvent
 
     public EcgAlertsModel $ecgAlertsModel;
     public string $action;
+    public int $loggedInUserId;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(EcgAlertsModel $ecgAlertsModel, $action)
+    public function __construct(EcgAlertsModel $ecgAlertsModel, $action, $loggedInUserId)
     {
         //
         $this->ecgAlertsModel = $ecgAlertsModel;
         $this->action = $action;
+        $this->loggedInUserId = $loggedInUserId;
     }
 
     /**

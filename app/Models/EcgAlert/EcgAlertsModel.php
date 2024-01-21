@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class EcgAlertsModel extends Model
 {
@@ -53,16 +54,18 @@ class EcgAlertsModel extends Model
             ->whereIn('ecg_codes_alert_assigned_users.group_id', $groupIds);
 
         if ($request->user_id) {
-            if (is_array($request->user_id)) {
-                $M->whereIn('ecg_alerts.alarm_triggered_by_id', $request->user_id);
+            if (Str::contains($request->user_id, ',')) {
+                $userIdAr = explode(',', $request->user_id);
+                $M->whereIn('ecg_alerts.alarm_triggered_by_id', $userIdAr);
             } else {
                 $M->where('ecg_alerts.alarm_triggered_by_id', $request->user_id);
             }
         }
 
         if ($request->code_id) {
-            if (is_array($request->code_id)) {
-                $M->whereIn('ecg_alerts.ecg_code_id', $request->code_id);
+            if (Str::contains($request->code_id, ',')) {
+                $codesIdAr = explode(',', $request->code_id);
+                $M->whereIn('ecg_alerts.ecg_code_id', $codesIdAr);
             } else {
                 $M->where('ecg_alerts.ecg_code_id', $request->code_id);
             }

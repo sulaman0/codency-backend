@@ -2,6 +2,7 @@
 
 namespace App\Listeners\ECGAlert;
 
+use App\AppHelper\AppHelper;
 use App\AppHelper\FirebaseNotification;
 use App\Events\EcgAlertNotificationEvent;
 use App\Models\EcgAlert\EcgAlertsModel;
@@ -28,7 +29,8 @@ class EcgAlertNotifyToOtherListener
         /** @var $ecgAlertModel EcgAlertsModel */
         $ecgAlertModel = $event->ecgAlertsModel;
         $action = $event->action;
-
+        $loggedInUserId = $event->loggedInUserId;
+        $alarmTriggeredById = $ecgAlertModel->alarm_triggered_by_id;
 
         $ecgAlertAssignedGroups = $ecgAlertModel->assignedUsers();
         $fcmAr = [];
@@ -36,13 +38,13 @@ class EcgAlertNotifyToOtherListener
             $users = GroupUserModel::getStaffIds($ecgAlertAssignedGroup->group_id);
             foreach ($users as $user) {
                 $userModel = User::findById($user);
-                if ($userModel instanceof User) {
+
+                if ($userModel instanceof User && $alarmTriggeredById <> $loggedInUserId) {
                     $fcmToken = $userModel->fcmToken();
                     if (!empty($fcmToken)) {
                         $fcmAr[] = $fcmToken;
                     }
-
-                    if (empty($action == 'created')) {
+                    if ($action == 'created') {
                         $userModel->notify(new EcgAlertNotification(
                             $ecgAlertModel->id,
                             $ecgAlertModel->ecg_code_nme,
@@ -79,7 +81,8 @@ class EcgAlertNotifyToOtherListener
             'body' => $body,
             'extra' => [
                 'module' => 'ecg_alert',
-                'ref' => $ecgAlertsModel->id
+                'ref' => $ecgAlertsModel->id,
+                'web_url' => route('reports.code_pressed')
             ]
         ]);
     }

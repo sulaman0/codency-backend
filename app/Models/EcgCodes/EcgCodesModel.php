@@ -60,7 +60,7 @@ class EcgCodesModel extends Model
                 $M->where('name', 'LIKE', '%' . $search . '%')->OrWhere('code', '%' . $search . '%');
             });
         }
-        return $M->paginate();
+        return $M->paginate(50);
     }
 
     function serialNo(): int

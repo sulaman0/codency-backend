@@ -20,7 +20,6 @@ self.addEventListener('notificationclick', function (event) {
     if (typeof event.notification.data.FCM_MSG.data.url !== 'undefined') {
         clients.openWindow(event.notification.data.FCM_MSG.data.url);
     }
-    alert('test');
 })
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
