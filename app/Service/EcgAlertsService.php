@@ -64,13 +64,7 @@ class EcgAlertsService
             AppHelper::getMySQLFormattedDateTime(Carbon::now())
         );
         if ($ecgAlertModel) {
-            ## Send this notification to all other apps.
-            // Doing this with PUSHER
-            EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
-
-            // Doing firebase notification.
-            EcgAlertNotificationEvent::dispatch($ecgAlertModel);
-
+            $this->sentToDevices($ecgAlertModel);
             if ($ecgCodeModel->action == "sent_to_amplifier_directly") {
                 ## Send alert directly
                 return $this->sendToAmplifier($ecgAlertModel, $ecgCodeModel);
@@ -79,6 +73,15 @@ class EcgAlertsService
         } else {
             throw new BadRequestException("Failed to Save the Alert");
         }
+    }
+
+    public function sentToDevices($ecgAlertModel, $responseAction = 'created')
+    {
+        ## Send this notification to all other apps.
+        // Doing this with PUSHER
+        EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+        // Doing firebase notification.
+        EcgAlertNotificationEvent::dispatch($ecgAlertModel, $responseAction);
     }
 
     /**
@@ -113,9 +116,11 @@ class EcgAlertsService
 
             ## Check whether to sent to Amplifier or not.
             if ($request->action == "accept") {
+                $this->sentToDevices($ecgAlertModel, 'manager_accepted');
                 ## Now send to Amplifier
                 return $this->sendToAmplifier($ecgAlertModel, $ecgCode);
             } else {
+                $this->sentToDevices($ecgAlertModel, 'manager_rejected');
                 return true;
             }
         } else {
@@ -180,7 +185,9 @@ class EcgAlertsService
     public function markAlarmPlayed($id): JsonResponse
     {
         try {
-            return AppHelper::sendSuccessResponse(true, 'played', $this->ecgAlertsModel->playedToAmplifier($id));
+            $response = $this->ecgAlertsModel->playedToAmplifier($id);
+            $this->sentToDevices(EcgAlertsModel::getByIdFindFail($id), 'alarm_played');
+            return AppHelper::sendSuccessResponse(true, 'played', $response);
         } catch (\Exception $exception) {
             Log::error("FAILED_TO_MARK_ALARM_PLAYED", [
                 'exception' => $exception,

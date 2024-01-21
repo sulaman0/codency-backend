@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\AppHelper\AppHelper;
 use App\AppHelper\FirebaseNotification;
+use App\Events\EcgAlert\EcgAlertEvent;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 use App\Http\Requests\CallOnHomeRequest;
+use App\Http\Resources\EcgAlerts\EcgAlertsResource;
 use App\Http\Resources\User\UserResource;
 use App\Listeners\Registered\SendWelcomeEmailListener;
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\User;
@@ -54,6 +57,13 @@ class Controller extends BaseController
 
     function testFunction()
     {
+
+        $ecgAlertModel = EcgAlertsModel::find(125);
+        ## Send this notification to all other apps.
+        // Doing this with PUSHER
+        EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+        //dump(new EcgAlertsResource($ecgAlertModel));
+        dd("Sent This ONe.");
 
         FirebaseNotification::sendNotification([
             'eipdMQKKFSogNArX8naDgi:APA91bFddd2meYAYMbCCCWr4U8fAZmmpCnTcQGp7G-bvJLFuUSSMAthzvTnSWy8m-lJ1Gxnfd3GXL4QEI5z__S9k8EU--RrLFEh3uMeaG4vBbNv7WJ1W_u9kH-nn03IC_Gl_NS3ZPC73'

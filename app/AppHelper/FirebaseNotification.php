@@ -23,7 +23,6 @@ class FirebaseNotification
         }
 
         $response = $messaging->sendAll($messageAr);
-        dd($response);
         Log::info("Firebase_Push_Notification", [
             'response' => $response
         ]);

@@ -209,6 +209,7 @@ class EcgAlertsModel extends Model
             'played_at_amplifier' => AppHelper::getMySQLFormattedDateTime(Carbon::now())
         ]);
 
+
         return 1;
     }
 

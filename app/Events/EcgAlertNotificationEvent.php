@@ -16,14 +16,16 @@ class EcgAlertNotificationEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public EcgAlertsModel $ecgAlertsModel;
+    public string $action;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(EcgAlertsModel $ecgAlertsModel)
+    public function __construct(EcgAlertsModel $ecgAlertsModel, $action)
     {
         //
         $this->ecgAlertsModel = $ecgAlertsModel;
+        $this->action = $action;
     }
 
     /**

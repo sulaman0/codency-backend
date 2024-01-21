@@ -183,7 +183,7 @@ class User extends Authenticatable
         return true;
     }
 
-    function findById($id)
+    static function findById($id)
     {
         return User::find($id);
     }

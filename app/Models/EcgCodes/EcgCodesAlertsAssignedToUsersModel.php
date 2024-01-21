@@ -4,6 +4,7 @@ namespace App\Models\EcgCodes;
 
 use App\Models\User;
 use App\Models\Users\GroupUserModel;
+use App\Models\Users\UserGroupModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,9 +21,9 @@ class EcgCodesAlertsAssignedToUsersModel extends Model
             ->where('ecg_code_id', $ecgCodeId)->first();
     }
 
-    function user()
+    function groupUser()
     {
-        return $this->hasOne(User::class, 'id', 'user_id')->first();
+        return GroupUserModel::where('group_id', $this->group_id)->get();
     }
 
     function findCodesByIdAndCodeId($groupId, $codeId)

@@ -34,6 +34,7 @@ var KTModalCustomersAdd = function () {
                         if (e.data.status) {
                             i.hide();
                             r.reset();
+                            $('select').val('').trigger('change');
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",

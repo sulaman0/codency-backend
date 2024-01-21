@@ -11,7 +11,7 @@ class UserDeviceModel extends Model
 
     protected $table = 'user_devices';
 
-    static function storeUserDeviceInformation(int $userId, string $fcmToken, string $deviceType)
+    static function storeUserDeviceInformation(int $userId, string $fcmToken, string $deviceType = '')
     {
         $M = self::getByUserId($userId);
         if (empty($M)) {
@@ -20,7 +20,7 @@ class UserDeviceModel extends Model
 
         $M->user_id = $userId;
         $M->fcm_token = $fcmToken;
-        $M->device_type = $deviceType;
+        $M->device_type = empty($M->device_type) ? (empty($deviceType) ? 'web' : $deviceType) : $M->device_type;
         $M->save();
     }
 

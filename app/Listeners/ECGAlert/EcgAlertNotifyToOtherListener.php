@@ -6,6 +6,7 @@ use App\AppHelper\FirebaseNotification;
 use App\Events\EcgAlertNotificationEvent;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\User;
+use App\Models\Users\GroupUserModel;
 use App\Notifications\EcgAlert\EcgAlertNotification;
 
 
@@ -26,35 +27,59 @@ class EcgAlertNotifyToOtherListener
     {
         /** @var $ecgAlertModel EcgAlertsModel */
         $ecgAlertModel = $event->ecgAlertsModel;
-        $ecgAlertAssignedUsers = $ecgAlertModel->assignedUsers();
+        $action = $event->action;
+
+
+        $ecgAlertAssignedGroups = $ecgAlertModel->assignedUsers();
         $fcmAr = [];
-        foreach ($ecgAlertAssignedUsers as $ecgAlertAssignedUser) {
-            $userModel = $ecgAlertAssignedUser->user();
-            if ($userModel instanceof User) {
-                $fcmAr[] = $userModel->fcmToken();
-                $userModel->notify(new EcgAlertNotification(
-                    $ecgAlertModel->id,
-                    $ecgAlertModel->ecg_code_nme,
-                    $ecgAlertModel->locationNME(),
-                ));
+        foreach ($ecgAlertAssignedGroups as $ecgAlertAssignedGroup) {
+            $users = GroupUserModel::getStaffIds($ecgAlertAssignedGroup->group_id);
+            foreach ($users as $user) {
+                $userModel = User::findById($user);
+                if ($userModel instanceof User) {
+                    $fcmToken = $userModel->fcmToken();
+                    if (!empty($fcmToken)) {
+                        $fcmAr[] = $fcmToken;
+                    }
+
+                    if (empty($action == 'created')) {
+                        $userModel->notify(new EcgAlertNotification(
+                            $ecgAlertModel->id,
+                            $ecgAlertModel->ecg_code_nme,
+                            $ecgAlertModel->locationNME(),
+                        ));
+                    }
+
+                }
+
             }
         }
 
-        $this->sendMobileNotification($fcmAr,
-            $ecgAlertModel->ecg_code_nme,
-            $ecgAlertModel->locationNME(),
-            $ecgAlertModel->id
+        $this->sendMobileNotification(
+            $fcmAr,
+            $ecgAlertModel,
+            $action
         );
     }
 
-    private function sendMobileNotification($fcmAr, $name, $loc, $id)
+    private function sendMobileNotification($fcmAr, EcgAlertsModel $ecgAlertsModel, $action = null)
     {
+        $head = $ecgAlertsModel->ecg_code_nme;
+        $body = 'Location: ' . $ecgAlertsModel->locationNME();
+        if (!empty($action) && $action == 'manager_accepted') {
+            $head = $ecgAlertsModel->ecg_code_nme . ' Accepted By ' . $ecgAlertsModel->respondedBy()->name;
+        } elseif (!empty($action) && $action == 'manager_rejected') {
+            $head = $ecgAlertsModel->ecg_code_nme . ' Rejected By ' . $ecgAlertsModel->respondedBy()->name;
+        } elseif (!empty($action) && $action == 'alarm_played') {
+            $head = $ecgAlertsModel->ecg_code_nme . ' Played To Amplifier';
+        }
+
         FirebaseNotification::sendNotification($fcmAr, [
-            'head' => $name,
-            'body' => 'Location: ' . $loc,
+            'head' => $head,
+            'body' => $body,
             'extra' => [
                 'module' => 'ecg_alert',
-                'ref' => $id
+                'ref' => $ecgAlertsModel->id
             ]
         ]);
     }

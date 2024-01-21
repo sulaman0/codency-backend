@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Users\UserDeviceModel;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -37,6 +38,13 @@ class LanguageChangerMiddleware
 
 
         if ($request->wantsJson()) {
+            $fcmToken = $request->header('http-x-token');
+            $user = $request->user();
+
+            if (!empty($fcmToken) && !empty($user)) {
+                UserDeviceModel::storeUserDeviceInformation($user->id, $fcmToken, '');
+            }
+
             Log::info("REQUEST==LOGGING", [
                 'route' => $request->route()->uri(),
                 'user' => empty($request->user()) ? "public-route" : $request->user()->id,

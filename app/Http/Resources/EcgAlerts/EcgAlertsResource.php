@@ -23,7 +23,7 @@ class EcgAlertsResource extends JsonResource
             ],
             'location' => [
                 'name' => 'Location',
-                'value' => (string)$this->locationNME()
+                'value' => (string)$this->locationNME() . time()
             ],
             'alarm_by' => [
                 'name' => 'Alarm By',
