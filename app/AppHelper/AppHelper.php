@@ -52,7 +52,7 @@ class AppHelper
         return $time->diffForHumans();
     }
 
-    static function logErrorException($exception): JsonResponse
+    static function logErrorException($exception, $statusCode = 200): JsonResponse
     {
         Log::error('ErrorException', [
             'message' => $exception->getMessage(),
@@ -60,7 +60,10 @@ class AppHelper
             'line' => $exception->getLine()
         ]);
 
-        return response()->json(['status' => false, 'line_no' => $exception->getLine(), 'file' => $exception->getFile(), 'message' => $exception->getMessage()]);
+        return response()->json([
+            'status' => false, 'line_no' => $exception->getLine(),
+            'file' => $exception->getFile(), 'message' => $exception->getMessage()
+        ], $statusCode);
     }
 
     static function sendSuccessResponse($status = true, $message = 'success', $payload = [], $extra = [], $payloadKeyName = 'payload'): JsonResponse

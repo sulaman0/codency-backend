@@ -130,13 +130,19 @@ class User extends Authenticatable
         return $this->hasOne(UserDeviceModel::class, 'user_id', 'id')->first();
     }
 
-    public function fcmToken(): string
+    public function fcmTokenAndDevice(): array
     {
         $deviceInformation = $this->userDeviceInformation();
         if ($deviceInformation instanceof UserDeviceModel) {
-            return $deviceInformation->fcm_token();
+            return [
+                'fcm_token' => $deviceInformation->fcm_token(),
+                'device_type' => $deviceInformation->device_type,
+            ];
         } else {
-            return '';
+            return [
+                'fcm_token' => '',
+                'device_type' => '',
+            ];
         }
     }
 

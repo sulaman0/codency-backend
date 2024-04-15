@@ -102,7 +102,7 @@ class EcgAlertsService
 
         ## Validate is allow  user to  press this option.
         if (!$ecgAlertModel->shouldShowActionBtn($ecgAlertModel->played_type)) {
-            throw new BadRequestException("You're not allowed to Press this action.");
+            throw new BadRequestException("You're not allowed to Press this action..");
         }
 
         ## Validate Is this user is valid to respond this Alert.

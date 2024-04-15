@@ -247,6 +247,7 @@
             icon: "{{ asset('assets/media/logos/withoutShadow.png') }}",
             vibrate: [200, 100, 200],
             silent: false,
+            sound: '{{asset('web_notification.mp3')}}',
             data: {
                 url: payload.data.web_url,
             }

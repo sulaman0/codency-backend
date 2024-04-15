@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\AppHelper\AppHelper;
 use App\Http\Requests\Location\CreateLocationRequest;
+use App\Models\Locations\FloorModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Locations\RoomModel;
 use App\Service\LocationsService;
 use Illuminate\Contracts\View\Factory as FactoryAlias;
 use Illuminate\Contracts\View\View;
@@ -16,11 +18,15 @@ class LocationController extends Controller
 
     private LocationsService $locationsService;
     private LocationModel $locationModel;
+    private FloorModel $floorModel;
+    private RoomModel $roomModel;
 
-    public function __construct(LocationsService $locationsService, LocationModel $locationModel)
+    public function __construct(LocationsService $locationsService, LocationModel $locationModel, FloorModel $floorModel, RoomModel $roomModel)
     {
         $this->locationsService = $locationsService;
         $this->locationModel = $locationModel;
+        $this->floorModel = $floorModel;
+        $this->roomModel = $roomModel;
     }
 
     /**
@@ -28,7 +34,10 @@ class LocationController extends Controller
      */
     public function index(): FactoryAlias|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('location.index');
+        return view('location.index', [
+            'buildings' => $this->locationModel->getAllBuildingsDropdown(),
+            'floors' => $this->floorModel->getAllFloorDropdown(),
+        ]);
     }
 
     public function tableRecord(Request $request)

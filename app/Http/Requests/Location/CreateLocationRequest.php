@@ -21,8 +21,22 @@ class CreateLocationRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        return [
-            'loc_name' => 'required',
-        ];
+        if ($this->step == 2) {
+            return [
+                'building' => 'required',
+                'floor_name' => 'required',
+            ];
+        } else if ($this->step == 3) {
+            return [
+                'building' => 'required',
+                'floor' => 'required',
+                'room_name' => 'required',
+            ];
+        } else {
+            return [
+                'building_name' => 'required',
+            ];
+        }
+
     }
 }

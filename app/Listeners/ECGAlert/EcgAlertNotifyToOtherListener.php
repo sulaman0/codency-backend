@@ -43,7 +43,7 @@ class EcgAlertNotifyToOtherListener
 
                         // User id is not equal.
                         if ($alarmTriggeredById <> $userModel->id) {
-                            $fcmToken = $userModel->fcmToken();
+                            $fcmToken = $userModel->fcmTokenAndDevice();
                             if (!empty($fcmToken)) {
                                 $fcmAr[] = $fcmToken;
                             }
@@ -58,14 +58,14 @@ class EcgAlertNotifyToOtherListener
                     } elseif ($action == 'manager_accepted' || $action == 'manager_rejected') {
                         // User id is not equal.
                         if ($ecgAlertModel->respond_by_id <> $userModel->id) {
-                            $fcmToken = $userModel->fcmToken();
+                            $fcmToken = $userModel->fcmTokenAndDevice();
                             if (!empty($fcmToken)) {
                                 $fcmAr[] = $fcmToken;
                             }
                         }
                     } elseif ($action == 'alarm_played') {
                         // Sent to all
-                        $fcmToken = $userModel->fcmToken();
+                        $fcmToken = $userModel->fcmTokenAndDevice();
                         if (!empty($fcmToken)) {
                             $fcmAr[] = $fcmToken;
                         }
@@ -101,7 +101,9 @@ class EcgAlertNotifyToOtherListener
             'extra' => [
                 'module' => 'ecg_alert',
                 'ref' => $ecgAlertsModel->id,
-                'web_url' => route('reports.code_pressed')
+                'web_url' => route('reports.code_pressed'),
+                'title' => $head,
+                'body' => $body,
             ]
         ]);
     }

@@ -69,4 +69,17 @@ class LocationModel extends Model
         return true;
     }
 
+    function saveBuildingNME($bNME)
+    {
+        $M = new LocationModel();
+        $M->building_nme = $bNME;
+        $M->save();
+        return true;
+    }
+
+    function getAllBuildingsDropdown()
+    {
+        return LocationModel::orderBy('id', 'desc')->get();
+    }
+
 }

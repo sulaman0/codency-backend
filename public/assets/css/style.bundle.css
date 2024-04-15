@@ -33,7 +33,7 @@
     --bs-light: #F9F9F9;
     --bs-primary: #9d242b;
     --bs-secondary: #DBDFE9;
-    --bs-success: #c3c3c3;
+    --bs-success: #9d242b;
     --bs-info: #7239ea;
     --bs-warning: #ffc700;
     --bs-danger: #f1416c;
@@ -33979,7 +33979,7 @@ textarea.form-control-lg {
     --bs-light: #F9F9F9;
     --bs-primary: #9d242b;
     --bs-secondary: #DBDFE9;
-    --bs-success: #50cd89;
+    --bs-success: #9d242b;
     --bs-info: #7239ea;
     --bs-warning: #ffc700;
     --bs-danger: #f1416c;
@@ -34127,7 +34127,7 @@ textarea.form-control-lg {
     --bs-white: #ffffff;
     --bs-light: #2B2B40;
     --bs-primary: #9d242b;
-    --bs-success: #50cd89;
+    --bs-success: #9d242b;
     --bs-info: #7239ea;
     --bs-warning: #ffc700;
     --bs-danger: #f1416c;

@@ -4,6 +4,29 @@
         .wrapper {
             padding-right: unset !important;
         }
+
+        .column-separator {
+            position: relative;
+            padding-right: 10px; /* Adjust spacing on the right */
+        }
+
+        .column-separator:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px; /* Line thickness */
+            background-color: #f1f1f2;
+            background-position: right;
+            background-size: 1px 10px; /* Line thickness and spacing between dots */
+            background-repeat: repeat-y;
+        }
+
+        /* Adjustments for the last column to prevent the line */
+        .col-md-4:last-child:after {
+            display: none;
+        }
     </style>
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
         <div id="kt_header" class="header mt-0 mt-lg-0 pt-lg-0" data-kt-sticky="true"
@@ -65,69 +88,129 @@
                     </div>
                 </div>
                 <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered mw-650px">
+                    <div class="modal-dialog modal-dialog-centered mw-950px">
 
                         <div class="modal-content">
-                            <form class="form" action="#" id="kt_modal_add_customer_form"
-                                  data-kt-redirect="{{ route('locations.store') }}">
-                                <input type="text" class="d-none" name="id">
-                                <div class="modal-header" id="kt_modal_add_customer_header">
-                                    <h2 class="fw-bold">Location
-                                        <div class="loading-progress-div d-none">
-                                            Loading...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </div>
-                                    </h2>
-                                    <div id="kt_modal_add_customer_close"
-                                         class="btn btn-icon btn-sm btn-active-icon-primary">
-                                        <i class="ki-duotone ki-cross fs-1">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                        </i>
+                            <div class="modal-header" id="kt_modal_add_customer_header">
+                                <h2 class="fw-bold">Location
+                                    <div class="loading-progress-div d-none">
+                                        Loading...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </div>
+                                </h2>
+                                <div id="kt_modal_add_customer_close"
+                                     class="btn btn-icon btn-sm btn-active-icon-primary">
+                                    <i class="ki-duotone ki-cross fs-1">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
                                 </div>
-                                <div class="modal-body py-10 px-lg-17">
-                                    <!--begin::Scroll-->
-                                    <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll"
-                                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
-                                         data-kt-scroll-max-height="auto"
-                                         data-kt-scroll-dependencies="#kt_modal_add_customer_header"
-                                         data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
-                                         data-kt-scroll-offset="300px">
-                                        <div class="fv-row mb-7">
-                                            <label class="required fs-6 fw-semibold mb-2">Location</label>
-                                            <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="loc_name" value=""/>
-                                        </div>
-                                        <div class="fv-row mb-7">
-                                            <label class="fs-6 fw-semibold mb-2">Room</label>
-                                            <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="room" value=""/>
-                                        </div>
-                                        <div class="fv-row mb-7">
-                                            <label class="fs-6 fw-semibold mb-2">Floor</label>
-                                            <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="floor" value=""/>
-                                        </div>
-                                        <div class="fv-row mb-7">
-                                            <label class="fs-6 fw-semibold mb-2">Building</label>
-                                            <input type="text" class="form-control form-control-solid"
-                                                   placeholder="" name="building_nme" value=""/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer flex-center">
-                                    <button type="reset" id="kt_modal_add_customer_cancel"
-                                            class="btn btn-light me-3">Discard
-                                    </button>
-                                    <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
-                                        <span class="indicator-label">Submit</span>
-                                        <span class="indicator-progress">Please wait...
+                            </div>
+                            <div class="modal-body py-10 px-lg-8">
+                                <!--begin::Scroll-->
+                                <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll"
+                                     data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                                     data-kt-scroll-max-height="auto"
+                                     data-kt-scroll-dependencies="#kt_modal_add_customer_header"
+                                     data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+                                     data-kt-scroll-offset="300px">
+
+                                    <div class="row">
+                                        <div class="col-md-4 column-separator">
+                                            <form class="form" action="#" id="kt_modal_add_customer_form"
+                                                  data-kt-redirect="{{ route('locations.store') }}">
+                                                <div class="fv-row mb-7">
+                                                    <label class="required fs-6 fw-semibold mb-2">Building</label>
+                                                    <input type="text" class="form-control form-control-solid"
+                                                           placeholder="" name="building_name" value=""/>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" id="kt_modal_add_customer_submit"
+                                                            class="btn btn-primary btn-sm">
+                                                        <span class="indicator-label">Save</span>
+                                                        <span class="indicator-progress">Please wait...
 													<span
                                                         class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    </button>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-4 column-separator">
+                                            <form class="form" action="#" id="kt_modal_add_customer_form_floor"
+                                                  data-kt-redirect="{{ route('locations.store') }}">
+                                                <input type="hidden" name="step" value="2">
+                                                <div class="fv-row mb-7">
+                                                    <label class="fs-6 fw-semibold mb-2">Building</label>
+                                                    <div class="building-select">
+                                                        <select name="building" class="form-control form-control-solid">
+                                                            @foreach($buildings as $building)
+                                                                <option
+                                                                    value="{{ $building->id }}">{{$building->building_nme}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row mb-7">
+                                                    <label class="fs-6 fw-semibold mb-2">Floor</label>
+                                                    <input type="text" class="form-control form-control-solid"
+                                                           placeholder="" name="floor_name" value=""/>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" id="kt_modal_add_customer_submit_floor"
+                                                            class="btn btn-primary btn-sm">
+                                                        <span class="indicator-label">Save</span>
+                                                        <span class="indicator-progress">Please wait...
+													<span
+                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="form" action="#" id="kt_modal_add_customer_form_room"
+                                                  data-kt-redirect="{{ route('locations.store') }}">
+                                                <input type="hidden" name="step" value="3">
+                                                <div class="fv-row mb-7">
+                                                    <label class="fs-6 fw-semibold mb-2">Building</label>
+                                                    <div class="building-select">
+                                                        <select name="building" class="form-control form-control-solid">
+                                                            @foreach($buildings as $building)
+                                                                <option
+                                                                    value="{{ $building->id }}">{{$building->building_nme}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row mb-7">
+                                                    <label class="fs-6 fw-semibold mb-2">Floor</label>
+                                                    <div class="floor-select">
+                                                        <select name="floor" class="form-control form-control-solid">
+                                                            @foreach($floors as $floor)
+                                                                <option
+                                                                    value="{{ $floor->id }}">{{$floor->floor_nme}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row mb-7">
+                                                    <label class="fs-6 fw-semibold mb-2">Room</label>
+                                                    <input type="text" class="form-control form-control-solid"
+                                                           placeholder="" name="room_name" value=""/>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" id="kt_modal_add_customer_form_room_submit"
+                                                            class="btn btn-primary btn-sm">
+                                                        <span class="indicator-label">Save</span>
+                                                        <span class="indicator-progress">Please wait...
+													<span
+                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

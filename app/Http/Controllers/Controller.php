@@ -55,18 +55,23 @@ class Controller extends BaseController
         }
     }
 
-    function testFunction()
+    function testFunction(Request $request)
     {
 
-        $ecgAlertModel = EcgAlertsModel::find(125);
-        ## Send this notification to all other apps.
-        // Doing this with PUSHER
-        EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
-        //dump(new EcgAlertsResource($ecgAlertModel));
-        dd("Sent This ONe.");
-
-        FirebaseNotification::sendNotification([
-            'eipdMQKKFSogNArX8naDgi:APA91bFddd2meYAYMbCCCWr4U8fAZmmpCnTcQGp7G-bvJLFuUSSMAthzvTnSWy8m-lJ1Gxnfd3GXL4QEI5z__S9k8EU--RrLFEh3uMeaG4vBbNv7WJ1W_u9kH-nn03IC_Gl_NS3ZPC73'
+//        $ecgAlertModel = EcgAlertsModel::find(125);
+//        ## Send this notification to all other apps.
+//        // Doing this with PUSHER
+//        EcgAlertEvent::broadcast(new EcgAlertsResource($ecgAlertModel));
+//        //dump(new EcgAlertsResource($ecgAlertModel));
+//        dd("Sent This ONe.");
+        $token = $request->get('token',
+            'dF1UfZTERYadIrTguxgA68:APA91bFfCNKcC0tBXKFDU6CXBpbXau1P6daujx-9DTsbhkeXNkkF3yvXLHHaNmHc8iQ2C6oRlBYsHYRj5kpvrMiG-T0oKloEwS4a_WM_jxgdSkDLB8SPwymzJf5PVk7Bh5Y79XvcRAa5');
+        $token = [
+            'device_type' => 'android',
+            'fcm_token' => $token,
+        ];
+        $res = FirebaseNotification::sendNotification([
+            $token
         ], [
             'head' => 'Fire Alarm ' . time(),
             'body' => 'Building 09 Hurry Up',
@@ -74,8 +79,15 @@ class Controller extends BaseController
                 'module' => 'ecg_alert',
                 'ref' => 1,
                 'web_url' => route('reports.code_pressed'),
+                'title' => "This is new title",
+                'body' => "this is the body",
+                'message' => "This is ehead"
             ]
         ]);
+
+
+        dump($token);
+        dd($res);
 
         dd("END");
         $messaging = app('firebase.messaging');

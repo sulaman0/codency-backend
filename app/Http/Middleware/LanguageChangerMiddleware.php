@@ -42,13 +42,14 @@ class LanguageChangerMiddleware
             $user = $request->user();
 
             if (!empty($fcmToken) && !empty($user)) {
-                UserDeviceModel::storeUserDeviceInformation($user->id, $fcmToken, '');
+                UserDeviceModel::storeUserDeviceInformation($user->id, $fcmToken, $request->header('device-type', 'ios'));
             }
 
             Log::info("REQUEST==LOGGING", [
                 'route' => $request->route()->uri(),
                 'user' => empty($request->user()) ? "public-route" : $request->user()->id,
                 'headers' => $request->header('http-x-token'),
+                'all_headers' => $request->header(),
                 'request' => $request->all(),
                 'request_file' => $request->allFiles(),
                 'response' => $response->getContent(),
