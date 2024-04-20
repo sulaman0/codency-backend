@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ECGAlertsController;
 use App\Http\Controllers\ECGCodesController;
+use App\Http\Controllers\StaffController;
 use App\Http\Middleware\LanguageChangerMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware([LanguageChangerMiddleware::class])->group(function () {
             Route::resource('codes', ECGCodesController::class);
             Route::resource('alerts', ECGAlertsController::class);
         });
+        Route::get('ecg-locations', [StaffController::class, 'locationAssign']);
         Route::get('ecg-codes-list', [ECGCodesController::class, 'ecgCodesListForSearch']);
         Route::get('users-list', [Controller::class, 'usersList']);
         Route::get('refresh-payload', [Controller::class, 'callOnHome']);

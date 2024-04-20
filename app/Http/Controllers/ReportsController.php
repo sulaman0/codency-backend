@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Locations\RoomModel;
 use App\Models\User;
+use App\Models\Users\UserLocationModel;
 use App\Service\EcgAlertsService;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,8 @@ class ReportsController extends Controller
     private User $user;
     private EcgCodesModel $ecgCodesModel;
     private LocationModel $locationModel;
+    private UserLocationModel $userLocationModel;
+    private RoomModel $roomModel;
 
     /**
      * @param EcgAlertsService $ecgAlertsService
@@ -22,13 +26,15 @@ class ReportsController extends Controller
     public function __construct(
         EcgAlertsService $ecgAlertsService,
         User             $user, EcgCodesModel $ecgCodesModel,
-        LocationModel    $locationModel
+        LocationModel    $locationModel,
+        RoomModel        $roomModel,
     )
     {
         $this->ecgAlertsService = $ecgAlertsService;
         $this->user = $user;
         $this->ecgCodesModel = $ecgCodesModel;
         $this->locationModel = $locationModel;
+        $this->roomModel = $roomModel;
     }
 
 
@@ -37,7 +43,7 @@ class ReportsController extends Controller
         return view('reports.code_pressed', [
             'users' => $this->user->getAllUsersForSearch(),
             'codes' => $this->ecgCodesModel->getAllCodesForSearchNoPagination(),
-            'locations' => $this->locationModel->getAllLocationsForFilters()
+            'locations' => $this->roomModel->getAllRoomDropdown()
         ]);
     }
 

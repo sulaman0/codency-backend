@@ -89,19 +89,42 @@ class StaffController extends Controller
     public function show(string $id, Request $request)
     {
         try {
+            $user = $this->user->findOrFail($id);
             if ($request->json == 1) {
-                $user = $this->user->findOrFail($id);
                 return AppHelper::sendSuccessResponse(true, 'found', [
-                    'user' => $user,
                     'group' => $user->groupArray(true),
+                    'locations' => $user->locations()
                 ]);
             } else {
-                return view('staff.details');
+                return view('staff.details', [
+                    'user' => $user,
+                ]);
             }
         } catch (\Exception $exception) {
             return AppHelper::logErrorException($exception);
         }
     }
+
+
+    public function codeInteraction(Request $request, $id): string
+    {
+        try {
+            return $this->usersService->codeInteractionTable($id);
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function locationAssign(Request $request, $id = null)
+    {
+        try {
+            $loggedInUser = $id ?: AppHelper::getUserFromRequest($request)->id;
+            return $this->usersService->locationAssignTable($loggedInUser, $request->wantsJson());
+        } catch (\Exception $exception) {
+            return "Error: " . $exception->getMessage();
+        }
+    }
+
 
     /**
      * Show the form for editing the specified resource.

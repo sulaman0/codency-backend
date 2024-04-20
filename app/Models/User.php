@@ -6,11 +6,13 @@ namespace App\Models;
 use App\AppHelper\AppHelper;
 use App\Http\Requests\Auth\Profile\UpdatePasswordRequest;
 
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Users\GroupsModel;
 use App\Models\Users\GroupUserModel;
 use App\Models\Users\UserDeviceModel;
+use App\Models\Users\UserLocationModel;
 use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -66,9 +68,20 @@ class User extends Authenticatable
         return $this->hasOne(LocationModel::class, 'id', 'location_id');
     }
 
+    function locations()
+    {
+        return $this->hasMany(UserLocationModel::class, 'user_id', 'id');
+    }
+
+    static function rooms($userId, $buildingId)
+    {
+        return UserLocationModel::where('user_id', $userId)->where('building_id', $buildingId)->get();
+    }
+
     function locationNme(): string
     {
-        return AppHelper::parseLocation($this->location()->first());
+        $loc = $this->location()->first();
+        return AppHelper::parseLocation($loc ?: '');
     }
 
     static function findUserByEmail($email): mixed
@@ -151,7 +164,7 @@ class User extends Authenticatable
         mixed $designation, mixed $phone,
         mixed $location, $password,
               $status, $id = null,
-              $group = null
+              $group = null, $rooms = []
     ): bool
     {
         $M = $this->findById($id);
@@ -165,7 +178,7 @@ class User extends Authenticatable
         $M->email = $email;
         $M->designation = $designation;
         $M->phone = $phone;
-        $M->location_id = $location;
+//        $M->location_id = $location;
         if ($isNewUser) {
             $M->status = 'active';
         } else {
@@ -186,6 +199,11 @@ class User extends Authenticatable
         if (!empty($group)) {
             GroupUserModel::saveUserGroupBulkInverse($group, $M->id);
         }
+
+        if (!empty($rooms)) {
+            UserLocationModel::storeUserLocations($M->id, $rooms);
+        }
+
         return true;
     }
 
@@ -210,5 +228,30 @@ class User extends Authenticatable
     public static function groupsIds($userId)
     {
         return GroupUserModel::where('user_id', $userId)->pluck('group_id')->toArray();
+    }
+
+    function alertPressed()
+    {
+        return $this->hasMany(EcgAlertsModel::class, 'id', 'alarm_triggered_by_id');
+    }
+
+    function alertPressedCount()
+    {
+        return $this->alertPressed()->count();
+    }
+
+    function alertRespond()
+    {
+        return $this->hasMany(EcgAlertsModel::class, 'id', 'respond_by_id');
+    }
+
+    function alertRespondCount()
+    {
+        return $this->alertRespond()->count();
+    }
+
+    function codeInteraction()
+    {
+        return EcgAlertsModel::where('alarm_triggered_by_id', $this->id)->orWhere('respond_by_id', $this->id);
     }
 }

@@ -31,6 +31,10 @@ class NewEcgCodeAlertRequest extends ApiFormRequest
             'code_id' => [
                 'required',
                 Rule::exists('ecg_codes_assigned_users', 'ecg_code_id')->whereIn('group_id', $groupId)
+            ],
+            'loc_id' => [
+                'required',
+                Rule::exists('user_location', 'id')->where('user_id', $loggedInUser->id)
             ]
         ];
     }

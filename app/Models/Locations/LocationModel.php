@@ -32,8 +32,7 @@ class LocationModel extends Model
         $M = LocationModel::where('id', '<>', 0);
         if ($request->search) {
             $M = $M->where(function ($query) use ($request) {
-                $query->orWhere('loc_nme', 'LIKE', '%' . $request->search . '%')
-                    ->orWhere('building_nme', 'LIKE', '%' . $request->search . '%');
+                $query->orWhere('building_nme', 'LIKE', '%' . $request->search . '%');
             });
         }
 
@@ -80,6 +79,36 @@ class LocationModel extends Model
     function getAllBuildingsDropdown()
     {
         return LocationModel::orderBy('id', 'desc')->get();
+    }
+
+    function floorObject()
+    {
+        return $this->hasMany(FloorModel::class, 'building_id', 'id');
+    }
+
+    function roomOBject()
+    {
+        return $this->hasMany(RoomModel::class, 'building_id', 'id');
+    }
+
+    function floorCount()
+    {
+        return $this->floorObject()->count();
+    }
+
+    function roomCount()
+    {
+        return $this->roomOBject()->count();
+    }
+
+    function floors()
+    {
+        return $this->floorObject()->get();
+    }
+
+    function rooms()
+    {
+        return $this->roomOBject()->get();
     }
 
 }

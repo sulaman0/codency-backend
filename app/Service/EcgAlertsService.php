@@ -15,6 +15,7 @@ use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\User;
+use App\Models\Users\UserLocationModel;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -52,14 +53,16 @@ class EcgAlertsService
     {
         ## User Model
         $loggedInUser = AppHelper::getUserFromRequest($request);
+        ## User Location
+        $userLocation = UserLocationModel::find($request->loc_id);
         ## EcgCode Model
         $ecgCodeModel = $this->ecgCodesModel->findById($request->code_id);
         ## Save Alert
         $ecgAlertModel = $this->ecgAlertsModel->saveAlert(
             $request->code_id,
             $ecgCodeModel->name,
-            $loggedInUser->location_id,
-            $loggedInUser->locationNme(),
+            $request->loc_id, // is, user_location_id
+            $userLocation->locationNme(),
             $loggedInUser->id,
             AppHelper::getMySQLFormattedDateTime(Carbon::now()),
             $ecgCodeModel->action

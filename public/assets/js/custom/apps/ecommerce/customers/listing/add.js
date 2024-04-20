@@ -94,14 +94,6 @@ var KTModalCustomersAdd = function () {
                     customClass: {confirmButton: "btn btn-primary", cancelButton: "btn btn-active-light"}
                 }).then((function (t) {
                     t.value ? (r.reset(), i.hide()) : ""
-                    // "cancel" === t.dismiss
-                    // && Swal.fire({
-                    // text: "Your form has not been cancelled!.",
-                    // icon: "error",
-                    // buttonsStyling: !1,
-                    // confirmButtonText: "Ok, got it!",
-                    // customClass: {confirmButton: "btn btn-primary"}
-                    // })
                 }))
             }))
         }
@@ -129,4 +121,52 @@ KTUtil.onDOMContentLoaded((function () {
             $('.loading-progress-div').addClass('d-none');
         });
     });
+    $(document).on('change', '.location-changer', function () {
+        loadDropdown()
+    })
+    $(document).on('change', '.floor-changer', function () {
+        loadDropdown('room')
+    })
+
+    function loadDropdown(type = 'floor') {
+        const building = $('select[name="location\\[\\]"]');
+        const buildingId = $(building).val();
+        const floorId = $('select[name="floor\\[\\]"]').val();
+        const remoteURL = $(building).attr('data-href') + '?1=1' + '&building_id=' + buildingId + '&floor_id=' + floorId;
+        getPageData(remoteURL, null, (res) => {
+            const resParse = JSON.parse(res)
+            if (resParse.status) {
+                if (type === 'floor') {
+                    parseFloors(resParse.payload.floors)
+                } else {
+                    parseRooms(resParse.payload.rooms)
+                }
+
+            }
+        });
+    }
+
+    function parseFloors(floors) {
+        let floorHTML = `<select name="floor[]" class="form-control form-control-solid floor-changer" multiple="multiple" data-control="select2">`;
+        floors.map(function (i, v) {
+            floorHTML += `<option ${v == 0 ? '' : ''} value="${i.id}">${i.floor_nme}</option>`;
+        })
+        floorHTML += `<select>`;
+        $('.floor-select').html(floorHTML);
+        $('.floor-select select').select2();
+        loadDropdown('room')
+    }
+
+    function parseRooms(rooms) {
+        let roomHTML = `<select name="room[]" class="form-control form-control-solid" multiple="multiple" data-control="select2">`;
+        rooms.map(function (i, v) {
+            roomHTML += `<option ${v == 0 ? 'selected' : ''} value="${i.id}">${i.room_nme}</option>`;
+        })
+        roomHTML += `<select>`;
+        $('.room-select').html(roomHTML);
+        $('.room-select select').select2();
+    }
+
+
 }));
+

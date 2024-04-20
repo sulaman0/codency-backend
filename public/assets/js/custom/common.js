@@ -34,6 +34,8 @@ function getPageData(fetcherUrl, patch, callBackFunction = null, httpMethod = 'G
     })
 }
 
+// Location floor & room select.
+
 $(function () {
     $(document).on('click', '.page-link', function (e) {
         e.preventDefault();
@@ -43,6 +45,7 @@ $(function () {
     $(document).on('click', '.delete-link', function (e) {
         e.preventDefault();
         getPageData($(this).attr('href'), null, (res) => {
+            let thiss = $(this);
             if (res.status) {
                 Swal.fire({
                     text: "Changes has been saved successfully",
@@ -51,7 +54,13 @@ $(function () {
                     confirmButtonText: "Ok, got it!",
                     customClass: {confirmButton: "btn btn-primary"}
                 }).then((function (e) {
-                    getPageData($('#main-content').attr('data-href'), 'main-content');
+                    const reloadLink = $(thiss).attr('reload-link');
+                    if (reloadLink) {
+                        getPageData(reloadLink, 'main-content');
+                    } else {
+                        getPageData($('#main-content').attr('data-href'), 'main-content');
+                    }
+
                 }))
             } else {
                 Swal.fire({
@@ -65,3 +74,5 @@ $(function () {
         }, 'GET', null, false, false, null);
     })
 });
+
+

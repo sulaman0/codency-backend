@@ -32,9 +32,20 @@ class LocationsService
 
     function getAllLocationAdmin(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('location.table', [
-            'locations' => $this->locationModel->getAllLocationAdmin($request)
-        ]);
+        if ($request->location_type == 'rooms') {
+            return view('location.rooms', [
+                'locations' => $this->roomModel->getAllRoomsAdmin($request)
+            ]);
+        } else if ($request->location_type == 'floors') {
+            return view('location.floors', [
+                'locations' => $this->floorModel->getAllFloorAdmin($request)
+            ]);
+        } else {
+            return view('location.table', [
+                'locations' => $this->locationModel->getAllLocationAdmin($request)
+            ]);
+        }
+
     }
 
     public function createLocation(CreateLocationRequest $request): \Illuminate\Http\JsonResponse
@@ -46,6 +57,28 @@ class LocationsService
         } else {
             $this->locationModel->saveBuildingNME($request->building_name);
         }
+        return AppHelper::sendSuccessResponse(true, 'created', [
+            'buildings' => $this->locationModel->getAllBuildingsDropdown(),
+            'floors' => $this->floorModel->getAllFloorDropdown(),
+        ]);
+    }
+
+    public function updateLocation(Request $request)
+    {
+        if ($request->loc_type == 'room') {
+            $locationModel = $this->roomModel->findById($request->id);
+            $locationModel->room_nme = $request->name;
+            $locationModel->save();
+        } else if ($request->loc_type == 'floor') {
+            $locationModel = $this->floorModel->findById($request->id);
+            $locationModel->floor_nme = $request->name;
+            $locationModel->save();
+        } else {
+            $locationModel = $this->locationModel->findById($request->id);
+            $locationModel->building_nme = $request->name;
+            $locationModel->save();
+        }
+
         return AppHelper::sendSuccessResponse(true, 'created', [
             'buildings' => $this->locationModel->getAllBuildingsDropdown(),
             'floors' => $this->floorModel->getAllFloorDropdown(),

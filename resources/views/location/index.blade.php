@@ -58,11 +58,21 @@
                                 </i>
                                 <input type="text" data-kt-customer-table-filter="search"
                                        class="form-control form-control-solid w-250px ps-13 search-location"
-                                       placeholder="Search Location"/>
+                                       placeholder="Search"/>
                             </div>
                         </div>
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                                <div class="w-150px me-3">
+                                    <select class="form-select form-select-solid location-type" data-control="select2"
+                                            data-hide-search="true"
+                                            data-kt-ecommerce-order-filter="status">
+                                        <option></option>
+                                        <option selected value="buildings">Building</option>
+                                        <option value="floors">Floor</option>
+                                        <option value="rooms">Room</option>
+                                    </select>
+                                </div>
                                 <div class="w-150px me-3">
                                     <select class="form-select form-select-solid user-status" data-control="select2"
                                             data-hide-search="true" data-placeholder="Status"
@@ -208,6 +218,60 @@
                                                 </div>
                                             </form>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="kt_modal_edit_location" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered mw-400px">
+
+                        <div class="modal-content">
+                            <div class="modal-header" id="kt_modal_add_customer_header">
+                                <h2 class="fw-bold">Location
+                                    <div class="loading-progress-div d-none">
+                                        Loading...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </div>
+                                </h2>
+                                <div id="edit_modal_close"
+                                     class="btn btn-icon btn-sm btn-active-icon-primary">
+                                    <i class="ki-duotone ki-cross fs-1">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="modal-body py-10 px-lg-8">
+                                <!--begin::Scroll-->
+                                <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll"
+                                     data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                                     data-kt-scroll-max-height="auto"
+                                     data-kt-scroll-dependencies="#kt_modal_add_customer_header"
+                                     data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+                                     data-kt-scroll-offset="300px">
+
+                                    <div class="row">
+                                        <form class="form" id="kt_modal_edit_location_form"
+                                              action="{{ route('update_location') }}">
+                                            <div class="fv-row mb-7">
+                                                <label class="fs-6 fw-semibold mb-2">Name</label>
+                                                <input type="hidden" name="loc_type">
+                                                <input type="hidden" name="id">
+                                                <input type="text" class="form-control form-control-solid"
+                                                       placeholder="" name="name" value=""/>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" id="kt_modal_edit_location_form_submit"
+                                                        class="btn btn-primary btn-sm">
+                                                    <span class="indicator-label">Save</span>
+                                                    <span class="indicator-progress">Please wait...
+													<span
+                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

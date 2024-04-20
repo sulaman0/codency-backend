@@ -12,7 +12,9 @@ use App\Http\Resources\User\UserResource;
 use App\Listeners\Registered\SendWelcomeEmailListener;
 use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\EcgCodes\EcgCodesModel;
+use App\Models\Locations\FloorModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Locations\RoomModel;
 use App\Models\User;
 use App\Models\Users\GroupsModel;
 use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
@@ -178,7 +180,13 @@ class Controller extends BaseController
             $status = $request->status == 0 ? 'active' : 'blocked';
             switch ($request->model) {
                 case 'location':
-                    LocationModel::find($request->ref)->update(['status' => $status]);
+                    if ($request->type == 'floor') {
+                        FloorModel::find($request->ref)->update(['status' => $status]);
+                    } else if ($request->type == 'room') {
+                        RoomModel::find($request->ref)->update(['status' => $status]);
+                    } else {
+                        LocationModel::find($request->ref)->update(['status' => $status]);
+                    }
                     break;
                 case 'ecgCode':
                     EcgCodesModel::find($request->ref)->update(['status' => $status]);

@@ -8,6 +8,7 @@ use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\User;
+use App\Models\Users\UserLocationModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,7 @@ class EcgAlertsModel extends Model
         $M = new EcgAlertsModel();
         $M->ecg_code_id = $ecgCodeId;
         $M->ecg_code_nme = $ecgCodeNme;
-        $M->location_id = $locationId;
+        $M->user_location_id = $locationId;
         $M->location_nme = $locationNme;
         $M->alarm_triggered_by_id = $triggeredById;
         $M->alarm_triggered_at = $triggeredAt;
@@ -82,7 +83,7 @@ class EcgAlertsModel extends Model
                 'ecg_alerts.id as id',
                 'ecg_codes.name as ecg_code_nme',
                 'ecg_code_id',
-                DB::raw('CONCAT_WS(" ", locations.loc_nme, locations.building_nme) as location_nme'),
+                DB::raw('CONCAT_WS(" ", locations.building_nme, loc_floor.floor_nme, loc_room.room_nme) as location_nme'),
                 'alarm_triggered_by_id',
                 'alarm_triggered_at',
                 'respond_by_id',
@@ -97,7 +98,10 @@ class EcgAlertsModel extends Model
             )
             ->leftJoin('users as responder', 'ecg_alerts.respond_by_id', '=', 'responder.id')
             ->leftJoin('ecg_codes', 'ecg_alerts.ecg_code_id', '=', 'ecg_codes.id')
-            ->leftJoin('locations', 'ecg_alerts.location_id', '=', 'locations.id')
+            ->leftJoin('user_location', 'ecg_alerts.user_location_id', '=', 'user_location.id')
+            ->leftJoin('loc_room', 'user_location.loc_room_id', '=', 'loc_room.id')
+            ->leftJoin('loc_floor', 'user_location.loc_floor_id', '=', 'loc_floor.id')
+            ->leftJoin('locations', 'user_location.building_id', '=', 'locations.id')
             ->leftJoin('users as sender', 'ecg_alerts.alarm_triggered_by_id', '=', 'sender.id')
             ->where(function ($query) use ($request) {
                 if ($request->senders_list) {
@@ -113,7 +117,7 @@ class EcgAlertsModel extends Model
                 }
 
                 if ($request->locations_list) {
-                    $query->whereIn('ecg_alerts.location_id', $request->locations_list);
+                    $query->whereIn('ecg_alerts.user_location_id', $request->locations_list);
                 }
 
                 if (!empty($request->date_range)) {
@@ -154,13 +158,13 @@ class EcgAlertsModel extends Model
 
     function location()
     {
-        return $this->hasOne(LocationModel::class, 'id', 'location_id')->first();
+        return $this->hasOne(UserLocationModel::class, 'id', 'user_location_id')->first();
     }
 
     function locationNME(): string
     {
         $location = $this->location();
-        return $location instanceof LocationModel ? $location->locationName() : '-';
+        return $location instanceof UserLocationModel ? $location->locationNme() : '-';
     }
 
     function respondedByNME()

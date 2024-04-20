@@ -72,9 +72,36 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
-        return AppHelper::sendSuccessResponse(true, 'found', $this->locationModel->findById($id));
+        if ($request->loc_type == 'floor') {
+            $locationModel = $this->floorModel->findById($id);
+            $nme = $locationModel->floor_nme;
+        } else if ($request->loc_type == 'room') {
+            $locationModel = $this->roomModel->findById($id);
+            $nme = $locationModel->room_nme;
+        } else {
+            $locationModel = $this->locationModel->findById($id);
+            $nme = $locationModel->building_nme;
+        }
+        return AppHelper::sendSuccessResponse(true, 'found', [
+            'type' => $request->loc_type ?: '',
+            'name' => $nme,
+            'id' => $locationModel->id
+        ]);
+
+//        if ($request->wantsJson()) {
+//            return AppHelper::sendSuccessResponse(true, 'found', [
+//                'type' => $request->type,
+//                'name' => $nme,
+//                'id' => $locationModel->id
+//            ]);
+//        } else {
+//            return view('location.details', [
+//                'floors' => $locationModel->floors(),
+//                'rooms' => $locationModel->rooms(),
+//            ]);
+//        }
     }
 
     /**
@@ -82,15 +109,18 @@ class LocationController extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            return $this->locationsService->updateLocation($request);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
+        }
     }
 
     /**
@@ -99,5 +129,25 @@ class LocationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    // get location on based of building || floor
+    public function floorOrRooms(Request $request)
+    {
+        $buildingId = explode(',', $request->building_id);
+        $floorId = explode(',', $request->floor_id);
+
+        $floors = $rooms = [];
+        if ($buildingId) {
+            $floors = $this->floorModel->getAllFloorAdmin(null, $buildingId, false);
+        }
+        if ($buildingId && $floorId) {
+            $rooms = $this->roomModel->getAllRoomsAdmin(null, $buildingId, $floorId, false);
+        }
+
+        return AppHelper::sendSuccessResponse(true, 'responded', [
+            'floors' => $floors,
+            'rooms' => $rooms
+        ]);
     }
 }
