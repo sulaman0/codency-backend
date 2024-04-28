@@ -12,7 +12,10 @@
     @foreach($locations as $location)
         <tr>
             <td>
-                {{ $location->floor_nme }}
+                <a href="{{ route('location_table', ['locationId' => $location->id, 'buildingId' => $location->building_id, 'details_of' => 'floors'] ) }}"
+                   class="location-details fs-5 text-primary">
+                    {{ $location->floor_nme }}
+                </a>
             </td>
             <td>
                 {{ $location->roomCount() }}
@@ -57,4 +60,8 @@
     @endforeach
     </tbody>
 </table>
+<a href="{{ route('location_table') }}"
+   class="location-details fs-5 text-primary mt-5 d-flex">
+    <i class="ki-duotone ki-black-left fs-2 text-primary"></i> &nbsp;Go Back
+</a>
 {{ $locations->appends(request()->query())->links() }}

@@ -111,22 +111,19 @@
 
                         <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8"
                             role="tablist">
-                            <!--begin:::Tab item-->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link text-active-primary active" data-bs-toggle="tab"
-                                   href="#senders_tab" aria-selected="true" role="tab">Ecg Calls</a>
+                                   href="#receiver_tab" aria-selected="false" tabindex="-1" role="tab">Locations</a>
                             </li>
-                            <!--end:::Tab item-->
-                            <!--begin:::Tab item-->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link text-active-primary" data-bs-toggle="tab"
-                                   href="#receiver_tab" aria-selected="false" tabindex="-1" role="tab">Locations</a>
+                                   href="#senders_tab" aria-selected="true" role="tab">Ecg Calls</a>
                             </li>
                         </ul>
 
 
                         <div class="tab-content mt-n6">
-                            <div class="tab-pane fade active show" id="senders_tab">
+                            <div class="tab-pane fade" id="senders_tab">
                                 <div class="card pt-4 mb-6 mt-4 mb-xl-9">
                                     <div class="card-body pt-0 pb-5" id="senders_tab_load"
                                          data-href="{{ route('ecg_code_interaction_table', ['userId' => $user->id]) }}">
@@ -137,7 +134,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="receiver_tab">
+                            <div class="tab-pane fade active show" id="receiver_tab">
                                 <div class="card pt-4 mb-6 mt-4 mb-xl-9">
                                     <div class="card-body pt-0 pb-5" id="receiver_tab_load"
                                          data-href="{{ route('user_location_assigned_table', ['userId' => $user->id]) }}">

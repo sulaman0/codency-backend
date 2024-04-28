@@ -1,29 +1,31 @@
-<table class="table align-middle table-row-dashed gy-5"
-       id="kt_table_customers_payment">
-    <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-    <tr class="text-start text-muted text-uppercase gs-0">
-        <th class="min-w-100px">Building Name</th>
-        <th class="min-w-100px">Floor Name</th>
-        <th class="min-w-100px">Room Name</th>
-        <th class="min-w-100px">Assigned At</th>
-    </tr>
-    </thead>
-    <tbody class="fs-6 fw-semibold text-black-600">
-    @foreach($userLocation as $location)
-        <tr>
-            <td>
-                {{  $location->buildingName() }}
-            </td>
-            <td>
-                {{ $location->FloorName() }}
-            </td>
-            <td>
-                {{ $location->roomName() }}
-            </td>
-            <td>{{ \App\AppHelper\AppHelper::getAppDateAndTime($location->created_at) }}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
-{{ $userLocation->appends(request()->query())->links() }}
+@php use App\Models\Locations\RoomModel;use App\Models\Users\UserLocationModel; @endphp
+<style>
+    .locationBox {
+        border: 1px solid black;
+        padding: 10px;
+        flex: 1 0 21%;
+        margin: 5px;
+    }
+
+    .assignedLocation {
+        background-color: var(--bs-primary) !important;
+        color: white;
+        flex: 1 0 21%;
+        margin: 5px;
+        padding: 10px;
+    }
+</style>
+@foreach($allLocations as $locations)
+    <h4 class="bg-primary text-white p-4">{{ $locations->buildingNme() }}</h4>
+    <div style="display: flex;  flex-wrap: wrap;">
+        @foreach(RoomModel::where('building_id', $locations->building_id)->get() as $location)
+            <div
+                class="cursor-pointer user-location-block @if(UserLocationModel::checkLocationIsAssigned($user_id, $location->id)) assignedLocation  @else locationBox @endif"
+                data-href="{{ route('location_assign_to_user', ['userId' => $user_id,'locationId' => $location->id])}}">
+                <p>{{ $location->floorNme() }}</p>
+                <p>{{ $location->room_nme }}</p>
+            </div>
+        @endforeach
+    </div>
+@endforeach
 

@@ -17,8 +17,21 @@ $(function () {
         status = $(this).val();
         getPageData(endPoint + queryString(), 'main-content');
     });
+
+    $(document).on('click', '.location-details', function (e) {
+        e.preventDefault();
+        getPageData($(this).attr('href'), 'main-content');
+        resetQueryString();
+    });
 });
 
 function queryString() {
     return `&status=${status}&location_type=${locationType}&search=${$('.search-location').val()}`;
 }
+
+function resetQueryString() {
+    $('.search-location').val('');
+    locationType = '';
+    status = 'active';
+}
+

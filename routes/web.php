@@ -32,7 +32,8 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     });
     Route::resource('staff', StaffController::class);
-    Route::get('staff-assigned-location/{userId}', [StaffController::class, 'locationAssign'])->name('user_location_assigned_table');
+    Route::get('staff-assigned-location/{userId}', [StaffController::class, 'locationAssigned'])->name('user_location_assigned_table');
+    Route::get('staff-location-assign/{userId}/{locationId}', [StaffController::class, 'locationAssign'])->name('location_assign_to_user');
     Route::get('ecg-staff', [StaffController::class, 'tableRecord'])->name('staff_table');
     Route::resource('groups', GroupController::class);
     Route::get('ecg-group', [GroupController::class, 'tableRecord'])->name('group_table');

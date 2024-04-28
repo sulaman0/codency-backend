@@ -32,7 +32,7 @@ class RoomModel extends Model
         return RoomModel::all();
     }
 
-    function getAllRoomsAdmin(Request $request = null, $buildingId = null, $floorId = null, $paginated = null)
+    function getAllRoomsAdmin(Request $request = null, $buildingId = null, $floorId = null, $paginated = true)
     {
         $M = RoomModel::where('id', '<>', 0);
         if ($request && $request->search) {
@@ -101,5 +101,9 @@ class RoomModel extends Model
         return sprintf("%s, %s - %s", $this->buildingNme(), $this->floorNme(), $this->room_nme);
     }
 
+    static function getDistinctRooms()
+    {
+        return RoomModel::groupBy('building_id')->get();
+    }
 
 }

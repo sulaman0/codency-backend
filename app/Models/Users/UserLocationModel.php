@@ -14,9 +14,19 @@ class UserLocationModel extends Model
 
     protected $table = 'user_location';
 
-    static function storeUserLocations($userId, $rooms)
+    static function storeUserLocations($userId, $rooms): void
     {
         foreach ($rooms as $room) {
+            self::storeLoc($room, $userId);
+        }
+    }
+
+    static function storeLoc($room, $userId): void
+    {
+        $isExists = self::checkLocationIsAssigned($userId, $room);
+        if ($isExists) {
+            $isExists->delete();
+        } else {
             $M = new UserLocationModel();
             $roomModel = RoomModel::find($room);
             $M->user_id = $userId;
@@ -63,5 +73,10 @@ class UserLocationModel extends Model
     function locationNme()
     {
         return sprintf("%s %s %s", $this->buildingName(), $this->floorName(), $this->roomName());
+    }
+
+    static function checkLocationIsAssigned($userId, $locationId)
+    {
+        return UserLocationModel::where('user_id', $userId)->where('loc_room_id', $locationId)->first();
     }
 }

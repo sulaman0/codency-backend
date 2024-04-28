@@ -163,37 +163,37 @@
                                                 <option value="blocked">Locked</option>
                                             </Select>
                                         </div>
-                                        <div class="fv-row mb-5">
-                                            <label class="required fs-6 fw-semibold mb-2">Location</label>
-                                            <Select class="form-control form-control-solid location-changer"
-                                                    name="location[]"
-                                                    data-control="select2"
-                                                    multiple="multiple"
-                                                    data-href="{{ route('room_floor_on_based_of_loc') }}">
-                                                @foreach($locations as $location)
-                                                    <option
-                                                        value="{{ $location->id }}">{{ $location->locationName() }}</option>
-                                                @endforeach
-                                            </Select>
-                                        </div>
-                                        <div class="fv-row mb-5">
-                                            <label class="required fs-6 fw-semibold mb-2">Floor</label>
-                                            <div class="floor-select">
-                                                <Select class="form-control form-control-solid floor-changer"
-                                                        data-control="select2"
-                                                        multiple="multiple"
-                                                        name="floor[]"></Select>
-                                            </div>
-                                        </div>
-                                        <div class="fv-row mb-5">
-                                            <label class="required fs-6 fw-semibold mb-2">Room</label>
-                                            <div class="room-select">
-                                                <Select class="form-control form-control-solid"
-                                                        data-control="select2"
-                                                        multiple="multiple"
-                                                        name="room[]"></Select>
-                                            </div>
-                                        </div>
+                                        {{--                                        <div class="fv-row mb-5">--}}
+                                        {{--                                            <label class="required fs-6 fw-semibold mb-2">Location</label>--}}
+                                        {{--                                            <Select class="form-control form-control-solid location-changer"--}}
+                                        {{--                                                    name="location[]"--}}
+                                        {{--                                                    data-control="select2"--}}
+                                        {{--                                                    multiple="multiple"--}}
+                                        {{--                                                    data-href="{{ route('room_floor_on_based_of_loc') }}">--}}
+                                        {{--                                                @foreach($locations as $location)--}}
+                                        {{--                                                    <option--}}
+                                        {{--                                                        value="{{ $location->id }}">{{ $location->locationName() }}</option>--}}
+                                        {{--                                                @endforeach--}}
+                                        {{--                                            </Select>--}}
+                                        {{--                                        </div>--}}
+                                        {{--                                        <div class="fv-row mb-5">--}}
+                                        {{--                                            <label class="required fs-6 fw-semibold mb-2">Floor</label>--}}
+                                        {{--                                            <div class="floor-select">--}}
+                                        {{--                                                <Select class="form-control form-control-solid floor-changer"--}}
+                                        {{--                                                        data-control="select2"--}}
+                                        {{--                                                        multiple="multiple"--}}
+                                        {{--                                                        name="floor[]"></Select>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
+                                        {{--                                        <div class="fv-row mb-5">--}}
+                                        {{--                                            <label class="required fs-6 fw-semibold mb-2">Room</label>--}}
+                                        {{--                                            <div class="room-select">--}}
+                                        {{--                                                <Select class="form-control form-control-solid"--}}
+                                        {{--                                                        data-control="select2"--}}
+                                        {{--                                                        multiple="multiple"--}}
+                                        {{--                                                        name="room[]"></Select>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
                                         <div class="fv-row mb-5">
                                             <label class="fs-6 fw-semibold mb-2">Group</label>
                                             <Select class="form-control form-control-solid select2"

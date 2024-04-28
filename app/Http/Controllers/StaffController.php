@@ -12,7 +12,9 @@ use App\Service\UsersService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -93,7 +95,8 @@ class StaffController extends Controller
             if ($request->json == 1) {
                 return AppHelper::sendSuccessResponse(true, 'found', [
                     'group' => $user->groupArray(true),
-                    'locations' => $user->locations()
+                    'locations' => $user->locations(),
+                    'user' => $user,
                 ]);
             } else {
                 return view('staff.details', [
@@ -115,13 +118,22 @@ class StaffController extends Controller
         }
     }
 
-    public function locationAssign(Request $request, $id = null)
+    public function locationAssigned(Request $request, $id = null)
     {
         try {
             $loggedInUser = $id ?: AppHelper::getUserFromRequest($request)->id;
             return $this->usersService->locationAssignTable($loggedInUser, $request->wantsJson());
         } catch (\Exception $exception) {
             return "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function locationAssign($userId, $id): JsonResponse
+    {
+        try {
+            return $this->usersService->assignLocation($userId, $id);
+        } catch (\Exception $exception) {
+            return AppHelper::logErrorException($exception);
         }
     }
 

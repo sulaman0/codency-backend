@@ -67,9 +67,8 @@
                                     <select class="form-select form-select-solid location-type" data-control="select2"
                                             data-hide-search="true"
                                             data-kt-ecommerce-order-filter="status">
-                                        <option></option>
                                         <option selected value="buildings">Building</option>
-                                        <option value="floors">Floor</option>
+                                            <option value="floors">Floor</option>
                                         <option value="rooms">Room</option>
                                     </select>
                                 </div>

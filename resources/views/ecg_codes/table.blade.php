@@ -23,7 +23,7 @@
                     <div class="ms-5">
                         <!--begin::Title-->
                         <a href="{{ route('ecg-codes.show', $ecgCode->id) }}"
-                           class=" fs-5 fw-bold text-primary"
+                           class=" fs-5 text-primary"
                            data-kt-ecommerce-product-filter="product_name">{{ $ecgCode->code() }}</a>
                     </div>
                 </div>

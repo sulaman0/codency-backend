@@ -32,13 +32,13 @@ class LocationsService
 
     function getAllLocationAdmin(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        if ($request->location_type == 'rooms') {
+        if ($request->location_type == 'rooms' || ($request->details_of == 'floors' && $request->buildingId && $request->locationId)) {
             return view('location.rooms', [
-                'locations' => $this->roomModel->getAllRoomsAdmin($request)
+                'locations' => $this->roomModel->getAllRoomsAdmin($request, $request->buildingId, $request->locationId)
             ]);
-        } else if ($request->location_type == 'floors') {
+        } else if ($request->location_type == 'floors' || ($request->details_of == 'buildings' && $request->ref)) {
             return view('location.floors', [
-                'locations' => $this->floorModel->getAllFloorAdmin($request)
+                'locations' => $this->floorModel->getAllFloorAdmin($request, $request->ref)
             ]);
         } else {
             return view('location.table', [

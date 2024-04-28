@@ -58,4 +58,8 @@
     @endforeach
     </tbody>
 </table>
-{{ $locations->appends(request()->query())->links() }}
+<a href="{{ route('location_table', ['location_type'=> 'floors']) }}"
+   class="location-details fs-5 text-primary mt-5 d-flex">
+    <i class="ki-duotone ki-black-left fs-2 text-primary"></i> &nbsp;Go Back
+</a>
+{{  $locations->appends(request()->query())->links() }}

@@ -109,7 +109,6 @@ var KTModalCustomersAdd = function () {
                 })),
                 floor.addEventListener("click", (function (e) {
                     e.preventDefault(), floorValidate_N && floorValidate_N.validate().then((function (e) {
-                        alert(e)
                         if (e === "Invalid") {
                             return;
                         }

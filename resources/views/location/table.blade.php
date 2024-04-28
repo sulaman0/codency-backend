@@ -12,7 +12,10 @@
     @foreach($locations as $location)
         <tr>
             <td>
-                {{ $location->building_nme }}
+                <a href="{{ route('location_table', ['ref' => $location->id, 'details_of' => 'buildings'] ) }}"
+                   class="location-details fs-5 text-primary">
+                    {{ $location->building_nme }}
+                </a>
             </td>
             <td>
                 {{ $location->floorCount() }}
