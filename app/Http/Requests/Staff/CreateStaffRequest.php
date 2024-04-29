@@ -26,9 +26,6 @@ class CreateStaffRequest extends ApiFormRequest
             'email' => 'required|unique:users,email|email',
             'designation' => 'required',
             'phone' => 'nullable',
-            'location' => 'required',
-            'floor' => 'required',
-            'room' => 'required',
             'password' => 'required',
         ];
 

@@ -89,7 +89,9 @@ class UsersService
 
     function assignLocation($userId, $roomLocationId): \Illuminate\Http\JsonResponse
     {
-        $this->userLocationModel->storeLoc($roomLocationId, $userId);
-        return AppHelper::sendSuccessResponse(true);
+        $action = $this->userLocationModel->storeLoc($roomLocationId, $userId);
+        return AppHelper::sendSuccessResponse(true, '', [
+            'action' => $action
+        ]);
     }
 }

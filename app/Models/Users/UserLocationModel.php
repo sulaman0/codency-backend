@@ -21,11 +21,12 @@ class UserLocationModel extends Model
         }
     }
 
-    static function storeLoc($room, $userId): void
+    static function storeLoc($room, $userId): string
     {
         $isExists = self::checkLocationIsAssigned($userId, $room);
         if ($isExists) {
             $isExists->delete();
+            return 'remove';
         } else {
             $M = new UserLocationModel();
             $roomModel = RoomModel::find($room);
@@ -34,6 +35,7 @@ class UserLocationModel extends Model
             $M->loc_floor_id = $roomModel->loc_floor_id;;
             $M->loc_room_id = $room;
             $M->save();
+            return 'add';
         }
     }
 

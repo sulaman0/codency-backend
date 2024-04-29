@@ -18,10 +18,10 @@
 @foreach($allLocations as $locations)
     <h4 class="bg-primary text-white p-4">{{ $locations->buildingNme() }}</h4>
     <div style="display: flex;  flex-wrap: wrap;">
-        @foreach(RoomModel::where('building_id', $locations->building_id)->get() as $location)
+        @foreach(RoomModel::where('building_id', $locations->building_id)->orderBy('id', 'asc')->get() as $location)
             <div
-                class="cursor-pointer user-location-block @if(UserLocationModel::checkLocationIsAssigned($user_id, $location->id)) assignedLocation  @else locationBox @endif"
-                data-href="{{ route('location_assign_to_user', ['userId' => $user_id,'locationId' => $location->id])}}">
+                    class="cursor-pointer user-location-block @if(UserLocationModel::checkLocationIsAssigned($user_id, $location->id)) assignedLocation  @else locationBox @endif"
+                    data-href="{{ route('location_assign_to_user', ['userId' => $user_id,'locationId' => $location->id])}}">
                 <p>{{ $location->floorNme() }}</p>
                 <p>{{ $location->room_nme }}</p>
             </div>

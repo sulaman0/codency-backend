@@ -70,12 +70,12 @@ class User extends Authenticatable
 
     function locations()
     {
-        return $this->hasMany(UserLocationModel::class, 'user_id', 'id');
+        return $this->hasMany(UserLocationModel::class, 'user_id', 'id')->orderBy('loc_room_id', 'asc');
     }
 
     static function rooms($userId, $buildingId)
     {
-        return UserLocationModel::where('user_id', $userId)->where('building_id', $buildingId)->get();
+        return UserLocationModel::where('user_id', $userId)->where('building_id', $buildingId)->orderBy('loc_room_id', 'asc')->get();
     }
 
     function locationNme(): string
@@ -119,7 +119,10 @@ class User extends Authenticatable
     {
         $users = User::where('id', '<>', 0);
         if ($request->search) {
-            $users = $users->where('name', 'LIKE', '%' . $request->search . '%');
+            $search = $request->search;
+            $users = $users->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%');
+            });
         }
 
         if ($request->status && $request->status != 'all') {
@@ -133,6 +136,7 @@ class User extends Authenticatable
         if ($request->ecg_code && $request->ecg_code != 'all') {
             $users = $users->whereIn('id', EcgCodesAssignedToUsersModel::getStaffIds($request->ecg_code));
         }
+
 
         return $users->orderBy('id', 'desc')->paginate(10);
     }

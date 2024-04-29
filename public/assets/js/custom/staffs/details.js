@@ -9,7 +9,12 @@ $(function () {
         getPageData($(this).attr('data-href'), '', function (res) {
             const parseRes = JSON.parse(res);
             if (parseRes.status) {
-                $(element).removeClass('locationBox').addClass('assignedLocation')
+                if (parseRes.payload.action === 'add') {
+                    $(element).removeClass('locationBox').addClass('assignedLocation')
+                } else {
+                    $(element).removeClass('assignedLocation').addClass('locationBox')
+                }
+
             }
         });
     })
