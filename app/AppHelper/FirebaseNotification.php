@@ -25,9 +25,10 @@ class FirebaseNotification
                         ->withData($body['extra']);
 
 
-                    Firebase::messaging()->send($message);
-//                dump($message);
+                    $messageAr[] = $message;
 
+//                    Firebase::messaging()->send($message);
+//                dump($message);
                     // for android don't send notification array key.
 //                $v_local = CloudMessage::withTarget('token', $fcmToken['fcm_token'])
 //                    ->withDefaultSounds()

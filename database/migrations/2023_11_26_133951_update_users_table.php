@@ -12,6 +12,8 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('location_id')->nullable()->after('phone');
+            $table->time('shift_start_time')->after('status')->nullable();
+            $table->time('shift_end_time')->after('status')->nullable();
         });
 
         Schema::table('users', function (Blueprint $table) {

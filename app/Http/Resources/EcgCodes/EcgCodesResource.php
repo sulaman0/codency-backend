@@ -14,7 +14,6 @@ class EcgCodesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        dd($this);
         $ecgCode = $this->ecgCodes();
         return [
             'id' => (int)$ecgCode->id,

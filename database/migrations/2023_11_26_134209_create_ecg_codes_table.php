@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('tune_en');
             $table->string('tune_ar')->nullable();
             $table->string('details');
+            $table->integer('no_of_times_play')->default(1)->comment("Tell, how many time play an audio");
             $table->softDeletes();
             $table->timestamps();
         });

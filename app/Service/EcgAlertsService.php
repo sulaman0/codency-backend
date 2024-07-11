@@ -174,8 +174,8 @@ class EcgAlertsService
     {
         try {
             $this->ecgAmplifierStatusModel->saveAmplifierStatus(
-                $request->header('header-x-unique'),
-                $request->header('header-x-battery-health')
+                $request->header('Header-X-Unique'),
+                $request->header('header-x-battery-health') ?: '100%'
             );
             return AppHelper::sendSuccessResponse(
                 true,

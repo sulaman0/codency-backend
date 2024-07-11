@@ -1,13 +1,16 @@
 <?php
 
 use App\AppHelper\AppHelper;
+use App\Http\Controllers\AmplifierController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ECGAlertsController;
 use App\Http\Controllers\ECGCodesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\StaffController;
+use App\Http\Middleware\AmplifierWebMiddleware;
 use App\Http\Middleware\LanguageChangerMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,7 +40,6 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     Route::get('ecg-staff', [StaffController::class, 'tableRecord'])->name('staff_table');
     Route::resource('groups', GroupController::class);
     Route::get('ecg-group', [GroupController::class, 'tableRecord'])->name('group_table');
-
     Route::resource('ecg-codes', ECGCodesController::class);
     Route::get('code-sender-table/{id}', [ECGCodesController::class, 'senderTableList'])->name('ecg_code_sender_table');
     Route::get('code-receiver-table/{id}', [ECGCodesController::class, 'receiverTableList'])->name('ecg_code_receiver_table');
@@ -60,5 +62,12 @@ Route::middleware([LanguageChangerMiddleware::class, 'auth'])->group(function ()
     Route::get('delete_model', [Controller::class, 'deleteModel'])->name('delete_model');
     Route::get('load-dashboard-content', [Controller::class, 'loadDashboardContent'])->name('load_dashboard_content');
     Route::any('store-token', [Controller::class, 'saveFcmToken'])->name('store.token');
+
+    ## Amplifier Routes.
+    Route::middleware(AmplifierWebMiddleware::class)->group(function (){
+        Route::get("amplifier-start", [AmplifierController::class, 'amplifierStart']);
+        Route::get('un-played-alert', [ECGAlertsController::class, 'getUnPlayedAlarm']);
+        Route::get('mark-alert-played/{id}', [ECGAlertsController::class, 'markAlarmPlayed']);
+    });
 });
 Route::get('test', [Controller::class, 'testFunction']);

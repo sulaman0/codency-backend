@@ -68,14 +68,15 @@ class Controller extends BaseController
 //        dd("Sent This ONe.");
         $token = $request->get('token',
             'dF1UfZTERYadIrTguxgA68:APA91bFfCNKcC0tBXKFDU6CXBpbXau1P6daujx-9DTsbhkeXNkkF3yvXLHHaNmHc8iQ2C6oRlBYsHYRj5kpvrMiG-T0oKloEwS4a_WM_jxgdSkDLB8SPwymzJf5PVk7Bh5Y79XvcRAa5');
+        $deviceType = $request->get('device_type', 'android');
         $token = [
-            'device_type' => 'android',
+            'device_type' => $deviceType,
             'fcm_token' => $token,
         ];
         $res = FirebaseNotification::sendNotification([
             $token
         ], [
-            'head' => 'Fire Alarm ' . time(),
+            'head' => 'Fire Alarm Manual URL',
             'body' => 'Building 09 Hurry Up',
             'extra' => [
                 'module' => 'ecg_alert',

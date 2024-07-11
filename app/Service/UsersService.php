@@ -58,7 +58,9 @@ class UsersService
             $request->status,
             $request->id,
             $request->group,
-            $request->room
+            $request->room,
+            $request->shift_start_time,
+            $request->shift_end_time,
         ));
     }
 

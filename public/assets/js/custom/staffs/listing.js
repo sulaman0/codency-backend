@@ -14,7 +14,7 @@ $(function () {
         getPageData(generateUrl(), 'main-content');
     });
 
-    $(document).on('change', '.ecg-code', function (e) {
+    $(document).on('change', '.ecg-code', function (e)   {
         getPageData(generateUrl(), 'main-content');
     });
 

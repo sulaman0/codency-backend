@@ -42,18 +42,18 @@ class EcgAlertNotifyToOtherListener
                     if ($action == 'created') {
 
                         // User id is not equal.
-                        if ($alarmTriggeredById <> $userModel->id) {
-                            $fcmToken = $userModel->fcmTokenAndDevice();
-                            if (!empty($fcmToken)) {
-                                $fcmAr[] = $fcmToken;
-                            }
-                            // On Action Created
-                            $userModel->notify(new EcgAlertNotification(
-                                $ecgAlertModel->id,
-                                $ecgAlertModel->ecg_code_nme,
-                                $ecgAlertModel->locationNME(),
-                            ));
+//                        if ($alarmTriggeredById <> $userModel->id) {
+                        $fcmToken = $userModel->fcmTokenAndDevice();
+                        if (!empty($fcmToken)) {
+                            $fcmAr[] = $fcmToken;
                         }
+                        // On Action Created
+                        $userModel->notify(new EcgAlertNotification(
+                            $ecgAlertModel->id,
+                            $ecgAlertModel->ecg_code_nme,
+                            $ecgAlertModel->locationNME(),
+                        ));
+//                        }
 
                     } elseif ($action == 'manager_accepted' || $action == 'manager_rejected') {
                         // User id is not equal.

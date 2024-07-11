@@ -20,12 +20,31 @@ class EcgCodesModel extends Model
     public function getAllCodes($loggedInUserId)
     {
         $groupIds = User::groupsIds($loggedInUserId);
+//        dump(EcgCodesAssignedToUsersModel
+//            ::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
+//            ->whereIn('ecg_codes_assigned_users.group_id', $groupIds)
+//            ->where('status', 'active')
+//            ->orderBy('ecg_codes.id', 'asc')->getBindings());
+//
+//        dd(EcgCodesAssignedToUsersModel
+//            ::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
+//            ->whereIn('ecg_codes_assigned_users.group_id', $groupIds)
+//            ->where('status', 'active')
+//            ->groupBy('code')
+//            ->orderBy('ecg_codes.id', 'asc')->toSql());
+
+
         return EcgCodesAssignedToUsersModel
-            ::leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
+            ::select('ecg_codes.id as id')
+            ->addselect('ecg_codes.name as name')
+            ->addselect('ecg_codes.code as code')
+            ->addselect('ecg_codes.color_code as color_code')
+            ->leftJoin('ecg_codes', 'ecg_codes_assigned_users.ecg_code_id', '=', 'ecg_codes.id')
             ->whereIn('ecg_codes_assigned_users.group_id', $groupIds)
             ->where('status', 'active')
             ->orderBy('ecg_codes.id', 'asc')
-            ->paginate();
+            ->groupBy('code')
+            ->paginate(100);
     }
 
     ## This one is for Admin Panel
@@ -123,7 +142,12 @@ class EcgCodesModel extends Model
             ->leftJoin('groups', 'ecg_codes_alert_assigned_users.group_id', '=', 'groups.id');
     }
 
-    public function createEcgCode(mixed $code_nme, mixed $action, mixed $code, mixed $details, mixed $color_code, mixed $lang, $id = null): EcgCodesModel
+    public function createEcgCode(
+        mixed $code_nme, mixed $action,
+        mixed $code, mixed $details, mixed $color_code,
+        mixed $lang, $id = null,
+        mixed $howManyNotificationPlayed = null
+    ): EcgCodesModel
     {
         $M = $this->findById($id);
         if (empty($M)) {
@@ -135,6 +159,7 @@ class EcgCodesModel extends Model
         $M->action = $action;
         $M->details = $details;
         $M->preferred_lang = $lang;
+        $M->no_of_times_play = $howManyNotificationPlayed ?: 1;
         $M->save();
         return $M;
     }

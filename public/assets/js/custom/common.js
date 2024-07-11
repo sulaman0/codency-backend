@@ -41,7 +41,6 @@ $(function () {
         e.preventDefault();
         getPageData($(this).attr('href'), 'main-content');
     });
-
     $(document).on('click', '.delete-link', function (e) {
         e.preventDefault();
         getPageData($(this).attr('href'), null, (res) => {
@@ -72,7 +71,12 @@ $(function () {
                 });
             }
         }, 'GET', null, false, false, null);
-    })
+    });
+    $(".time-input").flatpickr({
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
 });
 
 

@@ -6,6 +6,7 @@ namespace App\AppHelper;
 
 use App\Models\Locations\LocationModel;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -475,6 +476,20 @@ class AppHelper
             return $lString;
         } else {
             return '-';
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    static function onlineUserPressAlert(User $user): void
+    {
+        $shiftStartTime = Carbon::createFromFormat('H:i:s', $user->shift_start_time);
+        $shiftEndTime = Carbon::createFromFormat('H:i:s', $user->shift_end_time);
+        $currentTime = Carbon::now();
+
+        if (!$currentTime->between($shiftStartTime, $shiftEndTime)) {
+            throw new \Exception("Offline user can't press or accept code!");
         }
     }
 

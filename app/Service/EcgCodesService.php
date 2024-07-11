@@ -96,6 +96,8 @@ class EcgCodesService
                 $request->details,
                 $request->color_code,
                 $request->lang,
+                null,
+                $request->times_to_play
             );
 
             // Assign Codes to Users
@@ -139,7 +141,8 @@ class EcgCodesService
             $request->details,
             $request->color_code,
             $request->lang,
-            $id
+            $id,
+            $request->times_to_play
         );
 
         // Assign Codes to Users

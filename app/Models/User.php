@@ -168,7 +168,8 @@ class User extends Authenticatable
         mixed $designation, mixed $phone,
         mixed $location, $password,
               $status, $id = null,
-              $group = null, $rooms = []
+              $group = null, $rooms = [],
+              $shiftStartTime = null, $shiftEndTime = null,
     ): bool
     {
         $M = $this->findById($id);
@@ -192,8 +193,15 @@ class User extends Authenticatable
         if ($password != 'testing09') {
             $M->password = Hash::make($password);
         }
-        $M->save();
 
+        if ($shiftStartTime){
+            $M->shift_start_time = $shiftStartTime;
+        }
+        if ($shiftEndTime){
+            $M->shift_end_time = $shiftEndTime;
+        }
+
+        $M->save();
         if ($isNewUser) {
             $M->notify(new SendWelcomeEmailToUsersNotifications($password));
         } else {
@@ -257,5 +265,10 @@ class User extends Authenticatable
     function codeInteraction()
     {
         return EcgAlertsModel::where('alarm_triggered_by_id', $this->id)->orWhere('respond_by_id', $this->id);
+    }
+
+    function isUserAllowedToViewAmplifier()
+    {
+        return $this->role == 'amplifier';
     }
 }

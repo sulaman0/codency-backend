@@ -47,12 +47,20 @@
                             </div>
                         </div>
 
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Code Name</span></span>
-                            </label>
-                            <input type="text" class="form-control form-control-solid"
-                                   placeholder="e.g, Fire Alarm" name="code_nme" value="{{ $ecgCode->name }}"/>
+                        <div class="row g-9 mb-8">
+                            <div class="col-md-6 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                    <span class="required">Code Name</span></span>
+                                </label>
+                                <input type="text" class="form-control form-control-solid"
+                                       placeholder="e.g, Fire Alarm" name="code_nme" value="{{ $ecgCode->name }}"/>
+                            </div>
+                            <div class="col-md-6 fv-row">
+                                <label class="required fs-6 fw-semibold mb-2">How many times you want to play</label>
+                                <input type="text" class="form-control form-control-solid"
+                                       placeholder="e.g, 3" name="times_to_play" value="value="{{ $ecgCode->no_of_times_play }}""/>
+                            </div>
+
                         </div>
 
                         <div class="row g-9 mb-8">

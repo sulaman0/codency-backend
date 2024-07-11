@@ -67,6 +67,7 @@ class ECGAlertsController extends Controller
     public function store(NewEcgCodeAlertRequest $request): JsonResponse|bool
     {
         try {
+            AppHelper::onlineUserPressAlert($request->user());
             $this->ecgAlertsService->pressCode($request);
             return AppHelper::sendSuccessResponse(true, 'Be Safe, Alert Sent to Admin!');
         } catch (\Exception $exception) {
@@ -96,6 +97,7 @@ class ECGAlertsController extends Controller
     public function update(RespondEcgCodeRequest $request, string $id): JsonResponse
     {
         try {
+            AppHelper::onlineUserPressAlert($request->user());
             $message = $this->ecgAlertsService->respondToCde($request, $id);
             return AppHelper::sendSuccessResponse(true, $message);
         } catch (\Exception $exception) {

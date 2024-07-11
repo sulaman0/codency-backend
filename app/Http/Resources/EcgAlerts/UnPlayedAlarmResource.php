@@ -18,6 +18,8 @@ class UnPlayedAlarmResource extends JsonResource
             'id' => $this->id,
             'tune' => $this->preferred_lang == 'ar' ? $this->tune_ar : $this->tune_en,
             'played_at' => $this->played_at_amplifier,
+            'name' => $this->ecg_code_nme,
+            'times' => $this->no_of_times_play,
         ];
     }
 }
