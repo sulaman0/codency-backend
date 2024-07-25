@@ -26,6 +26,7 @@
         </div>
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="container-xxl" id="kt_content_container">
+                @include('alert_synced_notification')
                 <div class="card">
                     <div class="card-body pt-0" id="main-content"
                          data-href="{{ route('reports.amplifier_status_json') }}">

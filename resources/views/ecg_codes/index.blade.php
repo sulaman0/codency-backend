@@ -24,15 +24,11 @@
             </div>
         </div>
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-            <!--begin::Container-->
             <div class="container-xxl" id="kt_content_container">
-                <!--begin::Card-->
+                @include('alert_synced_notification')
                 <div class="card">
-                    <!--begin::Card header-->
                     <div class="card-header border-0 pt-6">
-                        <!--begin::Card title-->
                         <div class="card-title">
-                            <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                                     <span class="path1"></span>

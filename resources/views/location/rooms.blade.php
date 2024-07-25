@@ -5,7 +5,7 @@
         <th class="min-w-125px">Floor</th>
         <th class="min-w-125px">Building</th>
         <th class="min-w-125px">Status</th>
-        <th class="min-w-125px">Sync Status</th>
+        <th class="min-w-125px">Audio Sync</th>
         <th class="text-end min-w-70px">Actions</th>
     </tr>
     </thead>

@@ -20,6 +20,7 @@
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="container-xxl" id="kt_content_container">
                 <div class="row gy-5 g-xl-10">
+                    @include('alert_synced_notification')
                     <div class="col-xl-6">
                         <div class="card card-xl-stretch mb-xl-10 theme-dark-bg-body"
                              style="background-color: #F7D9E3">

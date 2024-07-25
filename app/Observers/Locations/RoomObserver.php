@@ -19,8 +19,7 @@ class RoomObserver
      */
     public function updated(RoomModel $roomModel): void
     {
-        $roomModel->audio_status = 'pending';
-        $roomModel->save();
+        $roomModel->updateAction();
     }
 
     /**

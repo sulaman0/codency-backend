@@ -6,7 +6,12 @@ use App\Events\EcgAlert\EcgAlertEvent;
 use App\Events\EcgAlertNotificationEvent;
 use App\Listeners\ECGAlert\EcgAlertNotifyToOtherListener;
 use App\Listeners\Registered\SendWelcomeEmailListener;
+use App\Models\Locations\FloorModel;
+use App\Models\Locations\LocationModel;
 use App\Models\Locations\RoomModel;
+use App\Observers\Locations\FloorObserver;
+use App\Observers\Locations\LocationAsBuildingObserver;
+use App\Observers\Locations\RoomObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -39,8 +44,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RoomModel::observe(RoomModel::class);
-
+        RoomModel::observe(RoomObserver::class);
+        FloorModel::observe(FloorObserver::class);
+        LocationModel::observe(LocationAsBuildingObserver::class);
     }
 
     /**

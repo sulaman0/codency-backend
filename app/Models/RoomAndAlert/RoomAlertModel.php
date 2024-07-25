@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RoomAlertModel extends Model
 {
     use HasFactory;
+    protected $table = 'loc_room_ecg_alerts';
 
     static function saveAudio($roomId, $ecgAlertId, $audioFilePath, $audioText, $apiResponse)
     {

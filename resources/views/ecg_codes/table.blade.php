@@ -4,6 +4,7 @@
     <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
         <th class="min-w-125px">Code</th>
         <th class="min-w-125px">Name</th>
+        <th class="min-w-125px">Audio Sync</th>
         <th class="min-w-125px">Status</th>
         <th class="min-w-125px">Operation</th>
         <th class="min-w-125px">Notify By</th>
@@ -30,6 +31,13 @@
             </td>
             <td>
                 {{ $ecgCode->name }}
+            </td>
+            <td>
+                @if($ecgCode->audio_status == "synced")
+                    <div class="badge badge-light-success">Synced</div>
+                @else
+                    <div class="badge badge-light-danger">Syncing</div>
+                @endif
             </td>
             <td>
                 @if($ecgCode->status == "active")

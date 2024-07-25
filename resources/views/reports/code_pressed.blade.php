@@ -26,6 +26,8 @@
         </div>
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="container-xxl" id="kt_content_container">
+                @include('alert_synced_notification')
+
                 <div class="card">
                     <div class="card-header border-0 pt-6">
                         <div class="card-title"></div>
