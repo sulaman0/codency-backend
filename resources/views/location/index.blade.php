@@ -68,7 +68,7 @@
                                             data-hide-search="true"
                                             data-kt-ecommerce-order-filter="status">
                                         <option selected value="buildings">Building</option>
-                                            <option value="floors">Floor</option>
+                                        <option value="floors">Floor</option>
                                         <option value="rooms">Room</option>
                                     </select>
                                 </div>

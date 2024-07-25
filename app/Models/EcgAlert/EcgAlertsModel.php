@@ -7,6 +7,7 @@ use App\Models\EcgCodes\EcgCodesAlertsAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesAssignedToUsersModel;
 use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
+use App\Models\RoomAndAlert\RoomAlertModel;
 use App\Models\User;
 use App\Models\Users\UserLocationModel;
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EcgAlertsModel extends Model
@@ -283,5 +285,37 @@ GROUP BY DateRange.alarm_date, day, month
 ORDER BY DateRange.alarm_date ASC;
 
         ");
+    }
+
+    function setAudioCompilingStatus($audioStatus = 'pending'): void
+    {
+        $this->audio_status = $audioStatus;
+        $this->saveQuietly();
+    }
+
+    function updateAction()
+    {
+        // Update the status
+        $this->setAudioCompilingStatus();
+
+        // delete all audio files
+        $disk = Storage::disk('audio');
+        $path = ''; // Specify the directory path if needed
+        $prefix = "_" . $this->id;
+
+        // Get all files in the directory
+        $allFiles = $disk->allFiles($path);
+
+        // Filter files that start with the specified prefix
+        $matchingFiles = array_filter($allFiles, function ($file) use ($prefix) {
+            return str_starts_with(basename($file), $prefix);
+        });
+
+        foreach ($matchingFiles as $file) {
+            echo $file . "<br>";
+        }
+
+        // delete compiled record.
+        RoomAlertModel::deleteByAlertId($this->id);
     }
 }

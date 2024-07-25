@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('loc_floor_id');
             $table->string('room_nme');
             $table->enum('status', ['active', 'inactive']);
+            $table->enum('audio_status', ['synced', 'pending', 'processing'])->default('pending');
+            $table->string('audio_url');
             $table->timestamps();
         });
         Schema::table('loc_room', function (Blueprint $table) {

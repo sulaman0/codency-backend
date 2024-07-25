@@ -15,6 +15,7 @@ use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\FloorModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Locations\RoomModel;
+use App\Models\RoomAndAlert\RoomAlertModel;
 use App\Models\User;
 use App\Models\Users\GroupsModel;
 use App\Notifications\Users\SendWelcomeEmailToUsersNotifications;
@@ -23,11 +24,13 @@ use App\Service\UsersService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -57,8 +60,93 @@ class Controller extends BaseController
         }
     }
 
+    function convertTextToSound($text)
+    {
+        $data = [
+            'token' => 'ec2e672c45df5ba3a694af6886fd5a25',
+            'email' => 'qkhan.it@gmail.com',
+            'voice' => 'John',
+            'text' => $text,
+            'format' => 'mp3',
+            'speed' => 1,
+            'pitch' => 0,
+            'emotion' => 'good',
+        ];
+        $url = "https://speechgen.io/index.php?r=api/text";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+
+        $rawResponse = $response = curl_exec($ch);
+        $response = json_decode($response, true);
+        if (curl_errno($ch)) {
+            var_dump("Connection error with text recognition server, " . curl_error($ch));
+        } else {
+            var_dump($response);
+            if ($response["status"] == 1) {
+                //Copy
+                echo " ok " . $response["file"];
+                copy($response["file"], './../Filename.' . $response["format"]);
+                dd($response);
+            } else {
+                //Error, no voiceover possible
+                echo $response["error"];
+            }
+        }
+        curl_close($ch);
+
+        return [
+            'api_response' => $rawResponse,
+        ];
+    }
+
     function testFunction(Request $request)
     {
+
+        RoomModel::where('audio_status', '<>', 'pending')
+            ->chunk(function ($rooms) {
+                foreach ($rooms as $room) {
+
+                    // set the status location is now in audio process.
+                    $room->setAudioCompilingStatus('processing');
+
+                    // location string.
+                    $audio = $room->locationName();
+
+                    $ecgAlerts = EcgAlertsModel::all();
+                    foreach ($ecgAlerts as $ecgAlert) {
+                        // set the status for alert code.
+                        $ecgAlert->setAudioCompilingStatus('processing');
+
+                        // make an audio file
+                        $audio = sprintf("%s %s", $audio, $ecgAlert->ecg_code_nme);
+
+                        $audioParse = $this->convertTextToSound();
+                        $fileName = sprintf("%s_%s.mp3", $room->id, $ecgAlert->id);
+
+                        if ($audioParse && Storage::disk('audio')->exists($fileName)) {
+                            RoomAlertModel::saveAudio(
+                                $room->id,
+                                $ecgAlert->id,
+                                '',
+                                $audio
+                            );
+                            $room->setAudioCompilingStatus('synced');
+                            $ecgAlert->setAudioCompilingStatus('synced');
+
+                        }
+                    }
+                }
+            });
+
+
+//        $this->convertTextToSound();
+        dd("=== END");
 
 //        $ecgAlertModel = EcgAlertsModel::find(125);
 //        ## Send this notification to all other apps.

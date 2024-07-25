@@ -4,7 +4,10 @@
 namespace App\AppHelper;
 
 
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\Locations\LocationModel;
+use App\Models\Locations\RoomModel;
+use App\Models\RoomAndAlert\RoomAlertModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -491,6 +494,19 @@ class AppHelper
         if (!$currentTime->between($shiftStartTime, $shiftEndTime)) {
             throw new \Exception("Offline user can't press or accept code!");
         }
+    }
+
+    static function isAllAudioSynced(): array
+    {
+        $totalRoomCount = RoomModel::count();
+        $totalEcgAlert = EcgAlertsModel::count();
+        $totalSoundShouldBe = $totalRoomCount * $totalEcgAlert;
+        $totalCompiled = RoomAlertModel::count();
+
+        return [
+            'isSynced' => $totalCompiled >= $totalSoundShouldBe,
+            'unSynced' => abs($totalSoundShouldBe - $totalCompiled)
+        ];
     }
 
 }

@@ -3,10 +3,13 @@
 namespace App\Models\Locations;
 
 use App\AppHelper\AppHelper;
+use App\Models\RoomAndAlert\RoomAlertModel;
+use App\Observers\Locations\RoomObserver;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RoomModel extends Model
 {
@@ -14,7 +17,8 @@ class RoomModel extends Model
 
     protected $table = 'loc_room';
     protected $fillable = [
-        'status'
+        'status',
+        'audio_status'
     ];
 
     public function saveRoom(mixed $building, mixed $floor, mixed $room_name)
@@ -98,7 +102,7 @@ class RoomModel extends Model
 
     function locationName()
     {
-        return sprintf("%s, %s - %s", $this->buildingNme(), $this->floorNme(), $this->room_nme);
+        return sprintf("%s, %s, %s", $this->buildingNme(), $this->floorNme(), $this->room_nme);
     }
 
     static function getDistinctRooms()
@@ -106,4 +110,36 @@ class RoomModel extends Model
         return RoomModel::groupBy('building_id')->get();
     }
 
+
+    function setAudioCompilingStatus($audioStatus = 'pending'): void
+    {
+        $this->audio_status = $audioStatus;
+        $this->saveQuietly();
+    }
+
+    function updateAction()
+    {
+        // Update the status
+        $this->setAudioCompilingStatus();
+
+        // delete all audio files
+        $disk = Storage::disk('audio');
+        $path = ''; // Specify the directory path if needed
+        $prefix = $this->id . '_';
+
+        // Get all files in the directory
+        $allFiles = $disk->allFiles($path);
+
+        // Filter files that start with the specified prefix
+        $matchingFiles = array_filter($allFiles, function ($file) use ($prefix) {
+            return str_starts_with(basename($file), $prefix);
+        });
+
+        foreach ($matchingFiles as $file) {
+            echo $file . "<br>";
+        }
+
+        // delete compiled record.
+        RoomAlertModel::deleteByRoomId($this->id);
+    }
 }

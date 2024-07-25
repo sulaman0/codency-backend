@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedInteger('ecg_code_id');
             $table->string('ecg_code_nme');
+            $table->enum('audio_status', ['synced', 'pending', 'processing'])->default('pending');
             $table->unsignedInteger('location_id');
             $table->string('location_nme');
             $table->unsignedInteger('alarm_triggered_by_id');

@@ -6,6 +6,7 @@ use App\Events\EcgAlert\EcgAlertEvent;
 use App\Events\EcgAlertNotificationEvent;
 use App\Listeners\ECGAlert\EcgAlertNotifyToOtherListener;
 use App\Listeners\Registered\SendWelcomeEmailListener;
+use App\Models\Locations\RoomModel;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -38,7 +39,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RoomModel::observe(RoomModel::class);
+
     }
 
     /**

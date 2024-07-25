@@ -175,6 +175,7 @@
                 </div>
             </div>
         </div>
+        @include('alert_synced_notification')
         @yield('main-layout')
     </div>
 </div>
