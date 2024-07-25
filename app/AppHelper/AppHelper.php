@@ -509,4 +509,8 @@ class AppHelper
         ];
     }
 
+    static function reportError(\Exception $exception = null, $errorMessage = null)
+    {
+
+    }
 }

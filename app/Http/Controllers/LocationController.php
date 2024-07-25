@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\Factory as FactoryAlias;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LocationController extends Controller
 {

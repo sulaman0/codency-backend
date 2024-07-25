@@ -8,8 +8,8 @@ class FloorObserver
 {
     public function updated(FloorModel $floorModel): void
     {
-        $floorModel->roomOBject()->update([
-            'audio_status' => 'pending',
-        ]);
+        foreach ($floorModel->roomOBject()->get() as $room) {
+            $room->updateAction();
+        }
     }
 }

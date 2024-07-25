@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Lcobucci\JWT\Exception;
 
 class EcgAlertsModel extends Model
 {
@@ -290,32 +291,37 @@ ORDER BY DateRange.alarm_date ASC;
     function setAudioCompilingStatus($audioStatus = 'pending'): void
     {
         $this->audio_status = $audioStatus;
-        $this->saveQuietly();
+        $this->save();
     }
 
-    function updateAction()
+    function updateAction(): void
     {
-        // Update the status
-        $this->setAudioCompilingStatus();
+        try {
+            Log::error("Update audio value to null... from ecg alerts");
+            // Update the status
+            $this->setAudioCompilingStatus();
 
-        // delete all audio files
-        $disk = Storage::disk('audio');
-        $path = ''; // Specify the directory path if needed
-        $prefix = "_" . $this->id;
+            // delete all audio files
+            $disk = Storage::disk('audio');
+            $allFiles = $disk->allFiles();
+            $prefix = '_' . $this->id;
 
-        // Get all files in the directory
-        $allFiles = $disk->allFiles($path);
+            // Filter files that start with the specified prefix
+            $matchingFiles = array_filter($allFiles, function ($file) use ($prefix) {
+                return str_starts_with(basename($file), $prefix);
+            });
 
-        // Filter files that start with the specified prefix
-        $matchingFiles = array_filter($allFiles, function ($file) use ($prefix) {
-            return str_starts_with(basename($file), $prefix);
-        });
+            foreach ($matchingFiles as $file) {
+                Storage::disk('audio')->delete($file);
+                if (Storage::disk('audio')->exists($file)) {
+                    throw new \Exception("Audio file is not compiled from ecg alerts" . $this->id);
+                }
+            }
 
-        foreach ($matchingFiles as $file) {
-            echo $file . "<br>";
+            // delete compiled record.
+            RoomAlertModel::deleteByAlertId($this->id);
+        } catch (Exception $exception) {
+            AppHelper::reportError($exception, "Error When Setting Audio Value to NULL from ecg alerts");
         }
-
-        // delete compiled record.
-        RoomAlertModel::deleteByAlertId($this->id);
     }
 }

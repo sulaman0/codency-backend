@@ -60,8 +60,15 @@ class Controller extends BaseController
         }
     }
 
-    function convertTextToSound($text)
+    function convertTextToSound($text, $fileName)
     {
+        if (Storage::disk('audio')->exists($fileName)) {
+            Storage::disk('audio')->delete($fileName); // delete the audio file if exits.
+        }
+
+        // Create file path
+        $path = Storage::disk('audio')->path('/');
+
         $data = [
             'token' => 'ec2e672c45df5ba3a694af6886fd5a25',
             'email' => 'qkhan.it@gmail.com',
@@ -73,7 +80,6 @@ class Controller extends BaseController
             'emotion' => 'good',
         ];
         $url = "https://speechgen.io/index.php?r=api/text";
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -91,7 +97,7 @@ class Controller extends BaseController
             if ($response["status"] == 1) {
                 //Copy
                 echo " ok " . $response["file"];
-                copy($response["file"], './../Filename.' . $response["format"]);
+                copy($response["file"], $path . $response["format"]);
                 dd($response);
             } else {
                 //Error, no voiceover possible
@@ -108,41 +114,61 @@ class Controller extends BaseController
     function testFunction(Request $request)
     {
 
-        RoomModel::where('audio_status', '<>', 'pending')
-            ->chunk(function ($rooms) {
-                foreach ($rooms as $room) {
+        RoomModel::where('audio_status', 'pending')->chunk(function ($rooms) {
+            foreach ($rooms as $room) {
+                // set the status location is now in audio process.
+                $room->setAudioCompilingStatus('processing');
+                // location string.
+                $audio = $room->locationName();
+                $ecgAlerts = EcgAlertsModel::all();
+                foreach ($ecgAlerts as $ecgAlert) {
+                    // set the status for alert code.
+                    $ecgAlert->setAudioCompilingStatus('processing');
 
-                    // set the status location is now in audio process.
-                    $room->setAudioCompilingStatus('processing');
+                    // make an audio file
+                    $audio = sprintf("%s %s", $audio, $ecgAlert->ecg_code_nme);
 
-                    // location string.
-                    $audio = $room->locationName();
+                    $audioParse = $this->convertTextToSound();
+                    $fileName = sprintf("%s_%s.mp3", $room->id, $ecgAlert->id);
 
-                    $ecgAlerts = EcgAlertsModel::all();
-                    foreach ($ecgAlerts as $ecgAlert) {
-                        // set the status for alert code.
-                        $ecgAlert->setAudioCompilingStatus('processing');
+                    if ($audioParse && Storage::disk('audio')->exists($fileName)) {
+                        RoomAlertModel::saveAudio(
+                            $room->id,
+                            $ecgAlert->id,
+                            '',
+                            $audio
+                        );
+                        $room->setAudioCompilingStatus('synced');
+                        $ecgAlert->setAudioCompilingStatus('synced');
 
-                        // make an audio file
-                        $audio = sprintf("%s %s", $audio, $ecgAlert->ecg_code_nme);
-
-                        $audioParse = $this->convertTextToSound();
-                        $fileName = sprintf("%s_%s.mp3", $room->id, $ecgAlert->id);
-
-                        if ($audioParse && Storage::disk('audio')->exists($fileName)) {
-                            RoomAlertModel::saveAudio(
-                                $room->id,
-                                $ecgAlert->id,
-                                '',
-                                $audio
-                            );
-                            $room->setAudioCompilingStatus('synced');
-                            $ecgAlert->setAudioCompilingStatus('synced');
-
-                        }
                     }
                 }
-            });
+            }
+        });
+        EcgAlertsModel::where('audio_status', 'pending')->chunk(100, function ($ecgAlerts) {
+            foreach ($ecgAlerts as $alert) {
+                $alert->setAudioCompilingStatus('processing');
+                $audio = $alert->ecg_code_nme;
+                $rooms = RoomModel::all();
+                foreach ($rooms as $room) {
+                    $room->setAudioCompilingStatus('processing');
+                    $audio = sprintf("%s %s", $room->locationName(), $audio);
+                    $audioParse = $this->convertTextToSound();
+                    $fileName = sprintf("%s_%s.mp3", $room->id, $alert->id);
+
+                    if ($audioParse && Storage::disk('audio')->exists($fileName)) {
+                        RoomAlertModel::saveAudio(
+                            $room->id,
+                            $alert->id,
+                            '',
+                            $audio
+                        );
+                        $room->setAudioCompilingStatus('synced');
+                        $alert->setAudioCompilingStatus('synced');
+                    }
+                }
+            }
+        });
 
 
 //        $this->convertTextToSound();

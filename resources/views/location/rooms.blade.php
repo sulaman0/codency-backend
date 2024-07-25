@@ -32,7 +32,7 @@
                 @if($location->audio_status == "synced")
                     <div class="badge badge-light-success">Synced</div>
                 @else
-                    <div class="badge badge-light-danger">Syncing</div>
+                    <div class="badge badge-light-danger text-capitalize">{{ $location->audio_status }}</div>
                 @endif
             </td>
             <td class="text-end">

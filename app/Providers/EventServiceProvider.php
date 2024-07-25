@@ -6,9 +6,11 @@ use App\Events\EcgAlert\EcgAlertEvent;
 use App\Events\EcgAlertNotificationEvent;
 use App\Listeners\ECGAlert\EcgAlertNotifyToOtherListener;
 use App\Listeners\Registered\SendWelcomeEmailListener;
+use App\Models\EcgAlert\EcgAlertsModel;
 use App\Models\Locations\FloorModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Locations\RoomModel;
+use App\Observers\EcgAlert\EcgAlertsObserver;
 use App\Observers\Locations\FloorObserver;
 use App\Observers\Locations\LocationAsBuildingObserver;
 use App\Observers\Locations\RoomObserver;
@@ -47,6 +49,7 @@ class EventServiceProvider extends ServiceProvider
         RoomModel::observe(RoomObserver::class);
         FloorModel::observe(FloorObserver::class);
         LocationModel::observe(LocationAsBuildingObserver::class);
+        EcgAlertsModel::observe(EcgAlertsObserver::class);
     }
 
     /**
