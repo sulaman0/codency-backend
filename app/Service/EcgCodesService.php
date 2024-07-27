@@ -111,19 +111,19 @@ class EcgCodesService
             }
 
             // Now Uploading Tunes
-            $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
-            ## upload file English TUne
-            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
-            ## get full path
-            $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
+//            $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
+//            ## upload file English TUne
+//            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
+//            ## get full path
+//            $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
 
             ## upload file English TUne
-            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
+//            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
             ## get full path
-            $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
+//            $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
 
-            $ecgCode->tune_en = $mediaUrlEnglish;
-            $ecgCode->tune_ar = $mediaUrlArabic;
+//            $ecgCode->tune_en = $mediaUrlEnglish;
+//            $ecgCode->tune_ar = $mediaUrlArabic;
             $ecgCode->save();
         });
 
@@ -157,24 +157,24 @@ class EcgCodesService
             $this->ecgCodesAlertsAssignedToUsersModel->assignedCodesAlertsToUser($senders, $ecgCode->id);
         }
 
-        // Now Uploading Tunes
-        $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
-
-        if ($request->hasFile('tune_en')) {
-            ## upload file English TUne
-            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
-            ## get full path
-            $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
-            $ecgCode->tune_en = $mediaUrlEnglish;
-        }
-
-        if ($request->hasFile('tune_ar')) {
-            ## upload file English TUne
-            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
-            ## get full path
-            $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
-            $ecgCode->tune_ar = $mediaUrlArabic;
-        }
+//        // Now Uploading Tunes
+//        $fileUploadBasePath = 'ecg_codes/' . $ecgCode->id;
+//
+//        if ($request->hasFile('tune_en')) {
+//            ## upload file English TUne
+//            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_en);
+//            ## get full path
+//            $mediaUrlEnglish = Storage::disk('public')->url($uploadedFileName);
+//            $ecgCode->tune_en = $mediaUrlEnglish;
+//        }
+//
+//        if ($request->hasFile('tune_ar')) {
+//            ## upload file English TUne
+//            $uploadedFileName = Storage::disk('public')->put($fileUploadBasePath, $request->tune_ar);
+//            ## get full path
+//            $mediaUrlArabic = Storage::disk('public')->url($uploadedFileName);
+//            $ecgCode->tune_ar = $mediaUrlArabic;
+//        }
 
         $ecgCode->save();
         return AppHelper::sendSuccessResponse();

@@ -7,7 +7,9 @@ use App\Http\Requests\Location\CreateLocationRequest;
 use App\Models\Locations\FloorModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Locations\RoomModel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LocationsService
 {
@@ -48,7 +50,7 @@ class LocationsService
 
     }
 
-    public function createLocation(CreateLocationRequest $request): \Illuminate\Http\JsonResponse
+    public function createLocation(CreateLocationRequest $request): JsonResponse
     {
         if ($request->step == 2) {
             $this->floorModel->saveFloor($request->building, $request->floor_name);
@@ -63,21 +65,36 @@ class LocationsService
         ]);
     }
 
-    public function updateLocation(Request $request)
+    public function updateLocation(Request $request): JsonResponse
     {
-        if ($request->loc_type == 'room') {
-            $locationModel = $this->roomModel->findById($request->id);
-            $locationModel->room_nme = $request->name;
-            $locationModel->save();
-        } else if ($request->loc_type == 'floor') {
-            $locationModel = $this->floorModel->findById($request->id);
-            $locationModel->floor_nme = $request->name;
-            $locationModel->save();
-        } else {
-            $locationModel = $this->locationModel->findById($request->id);
-            $locationModel->building_nme = $request->name;
-            $locationModel->save();
-        }
+        DB::transaction(function () use ($request) {
+            if ($request->loc_type == 'room') {
+                $locationModel = $this->roomModel->findById($request->id);
+                $locationModel->room_nme = $request->name;
+                $locationModel->save();
+
+                // delete all audio that attached with the specific room.
+                $locationModel->updateAction();
+            } else if ($request->loc_type == 'floor') {
+                $locationModel = $this->floorModel->findById($request->id);
+                $locationModel->floor_nme = $request->name;
+                $locationModel->save();
+
+                // delete all room audios that attached with this floor
+                foreach ($locationModel->roomOBject()->get() as $room) {
+                    $room->updateAction();
+                }
+            } else {
+                $locationModel = $this->locationModel->findById($request->id);
+                $locationModel->building_nme = $request->name;
+                $locationModel->save();
+
+                // delete all room audios that attached with this building
+                foreach ($locationModel->roomOBject()->get() as $room) {
+                    $room->updateAction();
+                }
+            }
+        });
 
         return AppHelper::sendSuccessResponse(true, 'created', [
             'buildings' => $this->locationModel->getAllBuildingsDropdown(),

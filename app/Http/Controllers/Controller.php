@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Kreait\Firebase\Factory;
@@ -60,119 +61,10 @@ class Controller extends BaseController
         }
     }
 
-    function convertTextToSound($text, $fileName)
-    {
-        if (Storage::disk('audio')->exists($fileName)) {
-            Storage::disk('audio')->delete($fileName); // delete the audio file if exits.
-        }
-
-        // Create file path
-        $path = Storage::disk('audio')->path('/');
-
-        $data = [
-            'token' => 'ec2e672c45df5ba3a694af6886fd5a25',
-            'email' => 'qkhan.it@gmail.com',
-            'voice' => 'John',
-            'text' => $text,
-            'format' => 'mp3',
-            'speed' => 1,
-            'pitch' => 0,
-            'emotion' => 'good',
-        ];
-        $url = "https://speechgen.io/index.php?r=api/text";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-
-        $rawResponse = $response = curl_exec($ch);
-        $response = json_decode($response, true);
-        if (curl_errno($ch)) {
-            var_dump("Connection error with text recognition server, " . curl_error($ch));
-        } else {
-            var_dump($response);
-            if ($response["status"] == 1) {
-                //Copy
-                echo " ok " . $response["file"];
-                copy($response["file"], $path . $response["format"]);
-                dd($response);
-            } else {
-                //Error, no voiceover possible
-                echo $response["error"];
-            }
-        }
-        curl_close($ch);
-
-        return [
-            'api_response' => $rawResponse,
-        ];
-    }
 
     function testFunction(Request $request)
     {
-
-        RoomModel::where('audio_status', 'pending')->chunk(function ($rooms) {
-            foreach ($rooms as $room) {
-                // set the status location is now in audio process.
-                $room->setAudioCompilingStatus('processing');
-                // location string.
-                $audio = $room->locationName();
-                $ecgAlerts = EcgAlertsModel::all();
-                foreach ($ecgAlerts as $ecgAlert) {
-                    // set the status for alert code.
-                    $ecgAlert->setAudioCompilingStatus('processing');
-
-                    // make an audio file
-                    $audio = sprintf("%s %s", $audio, $ecgAlert->ecg_code_nme);
-
-                    $audioParse = $this->convertTextToSound();
-                    $fileName = sprintf("%s_%s.mp3", $room->id, $ecgAlert->id);
-
-                    if ($audioParse && Storage::disk('audio')->exists($fileName)) {
-                        RoomAlertModel::saveAudio(
-                            $room->id,
-                            $ecgAlert->id,
-                            '',
-                            $audio
-                        );
-                        $room->setAudioCompilingStatus('synced');
-                        $ecgAlert->setAudioCompilingStatus('synced');
-
-                    }
-                }
-            }
-        });
-        EcgAlertsModel::where('audio_status', 'pending')->chunk(100, function ($ecgAlerts) {
-            foreach ($ecgAlerts as $alert) {
-                $alert->setAudioCompilingStatus('processing');
-                $audio = $alert->ecg_code_nme;
-                $rooms = RoomModel::all();
-                foreach ($rooms as $room) {
-                    $room->setAudioCompilingStatus('processing');
-                    $audio = sprintf("%s %s", $room->locationName(), $audio);
-                    $audioParse = $this->convertTextToSound();
-                    $fileName = sprintf("%s_%s.mp3", $room->id, $alert->id);
-
-                    if ($audioParse && Storage::disk('audio')->exists($fileName)) {
-                        RoomAlertModel::saveAudio(
-                            $room->id,
-                            $alert->id,
-                            '',
-                            $audio
-                        );
-                        $room->setAudioCompilingStatus('synced');
-                        $alert->setAudioCompilingStatus('synced');
-                    }
-                }
-            }
-        });
-
-
-//        $this->convertTextToSound();
-        dd("=== END");
+        $this->convertTextToSound('Code Red', '1_3');
 
 //        $ecgAlertModel = EcgAlertsModel::find(125);
 //        ## Send this notification to all other apps.
@@ -292,15 +184,25 @@ class Controller extends BaseController
     public function deleteModel(Request $request)
     {
         try {
-            $status = $request->status == 0 ? 'active' : 'blocked';
+            $status = $request->status == 0 ? 'active' : 'inactive';
             switch ($request->model) {
                 case 'location':
                     if ($request->type == 'floor') {
+
                         FloorModel::find($request->ref)->update(['status' => $status]);
+                        if ($status == 'blocked') {
+                            RoomModel::where('loc_floor_id', $request->ref)->update(['status' => $status]);
+                        }
+
                     } else if ($request->type == 'room') {
                         RoomModel::find($request->ref)->update(['status' => $status]);
                     } else {
                         LocationModel::find($request->ref)->update(['status' => $status]);
+
+                        if ($status == 'blocked') {
+                            FloorModel::where('building_id', $request->ref)->update(['status' => $status]);
+                            RoomModel::where('building_id', $request->ref)->update(['status' => $status]);
+                        }
                     }
                     break;
                 case 'ecgCode':

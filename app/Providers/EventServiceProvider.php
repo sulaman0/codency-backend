@@ -46,10 +46,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RoomModel::observe(RoomObserver::class);
-        FloorModel::observe(FloorObserver::class);
-        LocationModel::observe(LocationAsBuildingObserver::class);
-        EcgAlertsModel::observe(EcgAlertsObserver::class);
+//        RoomModel::observe(RoomObserver::class);
+//        FloorModel::observe(FloorObserver::class);
+//        LocationModel::observe(LocationAsBuildingObserver::class);
+//        EcgAlertsModel::observe(EcgAlertsObserver::class);
     }
 
     /**

@@ -80,7 +80,7 @@
                                         <option></option>
                                         <option value="all">All</option>
                                         <option selected value="active">Active</option>
-                                        <option value="blocked">In-Active</option>
+                                        <option value="inactive">In-Active</option>
                                     </select>
                                 </div>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"

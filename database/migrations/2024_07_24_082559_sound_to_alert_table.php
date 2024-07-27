@@ -13,16 +13,17 @@ return new class extends Migration {
         Schema::create('loc_room_ecg_alerts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('room_id');
-            $table->unsignedBigInteger('ecg_alerts_id');
+            $table->unsignedBigInteger('ecg_codes_id');
             $table->string("audio_url");
             $table->string("audio_text");
             $table->string('api_response');
             $table->unique(['room_id', 'ecg_alerts_id']);
+            $table->timestamps();
         });
 
         Schema::table('loc_room_ecg_alerts', function (Blueprint $table) {
             $table->foreign('room_id')->references('id')->on('loc_room');
-            $table->foreign('ecg_alerts_id')->references('id')->on('ecg_alerts');
+            $table->foreign('ecg_codes_id')->references('id')->on('ecg_codes');
         });
     }
 

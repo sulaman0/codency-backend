@@ -64,15 +64,6 @@
                                             Your browser does not support the audio element.
                                         </audio>
                                     </div>
-
-                                    <div class="text-gray-600 mt-5">Notification Tune In Arabic</div>
-                                    <div class="text-gray-600 mt-3">
-                                        <audio controls>
-                                            <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>

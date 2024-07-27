@@ -4,7 +4,9 @@
 namespace App\AppHelper;
 
 
+use App\Mail\AmplifierOfflineMail;
 use App\Models\EcgAlert\EcgAlertsModel;
+use App\Models\EcgCodes\EcgCodesModel;
 use App\Models\Locations\LocationModel;
 use App\Models\Locations\RoomModel;
 use App\Models\RoomAndAlert\RoomAlertModel;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Imagick;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -498,8 +501,8 @@ class AppHelper
 
     static function isAllAudioSynced(): array
     {
-        $totalRoomCount = RoomModel::count();
-        $totalEcgAlert = EcgAlertsModel::count();
+        $totalRoomCount = RoomModel::where('status', 'active')->count();
+        $totalEcgAlert = EcgCodesModel::where('status', 'active')->count();
         $totalSoundShouldBe = $totalRoomCount * $totalEcgAlert;
         $totalCompiled = RoomAlertModel::count();
 
@@ -512,5 +515,14 @@ class AppHelper
     static function reportError(\Exception $exception = null, $errorMessage = null)
     {
 
+    }
+
+    static function sendHighEmergencyAlert($message = "Amplifier is Down!!")
+    {
+        self::reportError(null, $message);
+        Mail::to([
+            "symikhan70@gmail.com",
+            "qkhan.it@gmail.com",
+        ])->send(new AmplifierOfflineMail($message));
     }
 }

@@ -12,6 +12,6 @@ class RoomObserver
      */
     public function updated(RoomModel $roomModel): void
     {
-        $roomModel->updateAction();
+
     }
 }

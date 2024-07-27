@@ -31,7 +31,7 @@ class EditEcgCodeRequest extends FormRequest
             'receivers_list' => 'required',
             'receivers_list.*' => 'required',
             'color_code' => 'required|unique:ecg_codes,color_code,' . $this->id . ',id',
-            'lang' => 'required|in:en,ar',
+//            'lang' => 'required|in:en,ar',
         ];
     }
 }

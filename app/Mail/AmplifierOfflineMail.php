@@ -13,12 +13,15 @@ class AmplifierOfflineMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    private $errorMessage;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($errorMessage)
     {
         //
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -27,7 +30,7 @@ class AmplifierOfflineMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'HurryUp! Amplifier is Offline',
+            subject: 'CODENCY Alert!' . $this->errorMessage,
         );
     }
 

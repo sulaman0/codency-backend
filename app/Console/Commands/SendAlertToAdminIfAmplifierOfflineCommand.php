@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\AppHelper\AppHelper;
 use App\Mail\AmplifierOfflineMail;
 use App\Models\Amplifier\EcgAmplifierStatusModel;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class SendAlertToAdminIfAmplifierOfflineCommand extends Command
 {
@@ -33,10 +36,8 @@ class SendAlertToAdminIfAmplifierOfflineCommand extends Command
         $currentTime = Carbon::now();
         $differenceInSeconds = $currentTime->diffInSeconds($lastAmplifierStatus->created_at);
         if ($differenceInSeconds > 30) {
-            Mail::to([
-                "symikhan70@gmail.com",
-                "qkhan.it@gmail.com",
-            ])->send(new AmplifierOfflineMail());
+            AppHelper::sendHighEmergencyAlert();
         }
     }
+
 }

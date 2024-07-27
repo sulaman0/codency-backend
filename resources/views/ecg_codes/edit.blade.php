@@ -58,28 +58,29 @@
                             <div class="col-md-6 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2">How many times you want to play</label>
                                 <input type="text" class="form-control form-control-solid"
-                                       placeholder="e.g, 3" name="times_to_play" value="value="{{ $ecgCode->no_of_times_play }}""/>
+                                       placeholder="e.g, 3" name="times_to_play"
+                                       value="value="{{ $ecgCode->no_of_times_play }}""/>
                             </div>
 
                         </div>
 
                         <div class="row g-9 mb-8">
-                            <div class="col-md-6 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Operation</label>
-                                <select class="form-select form-select-solid" data-control="select2"
-                                        data-hide-search="true" data-placeholder="Select a Team Member"
-                                        name="action">
-                                    <option
-                                        {{ $ecgCode->action == "sent_to_amplifier_directly" ? 'selected': '' }} value="sent_to_amplifier_directly">
-                                        Sent to Amplifier Directly
-                                    </option>
-                                    <option
-                                        {{ $ecgCode->action == "sent_to_manager" ? 'selected': '' }} value="sent_to_manager">
-                                        Managed by Manager
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 fv-row">
+                            {{--                            <div class="col-md-6 fv-row">--}}
+                            {{--                                <label class="required fs-6 fw-semibold mb-2">Operation</label>--}}
+                            {{--                                <select class="form-select form-select-solid" data-control="select2"--}}
+                            {{--                                        data-hide-search="true" data-placeholder="Select a Team Member"--}}
+                            {{--                                        name="action">--}}
+                            {{--                                    <option--}}
+                            {{--                                        {{ $ecgCode->action == "sent_to_amplifier_directly" ? 'selected': '' }} value="sent_to_amplifier_directly">--}}
+                            {{--                                        Sent to Amplifier Directly--}}
+                            {{--                                    </option>--}}
+                            {{--                                    <option--}}
+                            {{--                                        {{ $ecgCode->action == "sent_to_manager" ? 'selected': '' }} value="sent_to_manager">--}}
+                            {{--                                        Managed by Manager--}}
+                            {{--                                    </option>--}}
+                            {{--                                </select>--}}
+                            {{--                            </div>--}}
+                            <div class="col-md-12 fv-row">
                                 <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                     <span class="required">Code</span></span>
                                 </label>
@@ -145,51 +146,51 @@
                                        style="height: 43px"
                                        placeholder="e.g, 10" name="color_code" value="{{ $ecgCode->color_code }}"/>
                             </div>
-                            <div class="col-md-6 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Preferred Language</label>
-                                <select class="form-select form-select-solid"
-                                        data-control="select2"
-                                        data-hide-search="true"
-                                        data-placeholder="Select Preferred Language for Notification"
-                                        name="lang">
-                                    <option {{ $ecgCode->preferred_lang == 'en' ? 'selected' :'' }} value="en">English
-                                    </option>
-                                    <option {{ $ecgCode->preferred_lang == 'ar' ? 'selected' :'' }} value="ar">Arabic
-                                    </option>
-                                </select>
-                            </div>
+                            {{--                            <div class="col-md-6 fv-row">--}}
+                            {{--                                <label class="required fs-6 fw-semibold mb-2">Preferred Language</label>--}}
+                            {{--                                <select class="form-select form-select-solid"--}}
+                            {{--                                        data-control="select2"--}}
+                            {{--                                        data-hide-search="true"--}}
+                            {{--                                        data-placeholder="Select Preferred Language for Notification"--}}
+                            {{--                                        name="lang">--}}
+                            {{--                                    <option {{ $ecgCode->preferred_lang == 'en' ? 'selected' :'' }} value="en">English--}}
+                            {{--                                    </option>--}}
+                            {{--                                    <option {{ $ecgCode->preferred_lang == 'ar' ? 'selected' :'' }} value="ar">Arabic--}}
+                            {{--                                    </option>--}}
+                            {{--                                </select>--}}
+                            {{--                            </div>--}}
                         </div>
-                        <div class="row g-9 mb-8">
-                            <div class="col-md-6 fv-row">
-                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                    <span class="required">Notification Tune English</span></span>
-                                </label>
-                                <!--end::Label-->
-                                <input type="file" class="form-control form-control-solid mb-5"
-                                       accept=".mp3,audio/*"
-                                       placeholder="e.g, 10" name="tune_en"/>
+                        {{--                        <div class="row g-9 mb-8">--}}
+                        {{--                            <div class="col-md-6 fv-row">--}}
+                        {{--                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">--}}
+                        {{--                                    <span class="required">Notification Tune English</span></span>--}}
+                        {{--                                </label>--}}
+                        {{--                                <!--end::Label-->--}}
+                        {{--                                <input type="file" class="form-control form-control-solid mb-5"--}}
+                        {{--                                       accept=".mp3,audio/*"--}}
+                        {{--                                       placeholder="e.g, 10" name="tune_en"/>--}}
 
-                                <audio controls>
-                                    <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
+                        {{--                                <audio controls>--}}
+                        {{--                                    <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">--}}
+                        {{--                                    Your browser does not support the audio element.--}}
+                        {{--                                </audio>--}}
 
-                            </div>
-                            <div class="col-md-6 fv-row">
-                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                    <span class="required">Notification Tune Arabic</span></span>
-                                </label>
-                                <!--end::Label-->
-                                <input type="file" class="form-control form-control-solid mb-5"
-                                       accept=".mp3,audio/*"
-                                       placeholder="e.g, 10" name="tune_ar"/>
+                        {{--                            </div>--}}
+                        {{--                            <div class="col-md-6 fv-row">--}}
+                        {{--                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">--}}
+                        {{--                                    <span class="required">Notification Tune Arabic</span></span>--}}
+                        {{--                                </label>--}}
+                        {{--                                <!--end::Label-->--}}
+                        {{--                                <input type="file" class="form-control form-control-solid mb-5"--}}
+                        {{--                                       accept=".mp3,audio/*"--}}
+                        {{--                                       placeholder="e.g, 10" name="tune_ar"/>--}}
 
-                                <audio controls>
-                                    <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
-                            </div>
-                        </div>
+                        {{--                                <audio controls>--}}
+                        {{--                                    <source src="{{ $ecgCode->tune_ar }}" type="audio/mpeg">--}}
+                        {{--                                    Your browser does not support the audio element.--}}
+                        {{--                                </audio>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div>--}}
                     </form>
                 </div>
 

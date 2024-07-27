@@ -287,41 +287,4 @@ ORDER BY DateRange.alarm_date ASC;
 
         ");
     }
-
-    function setAudioCompilingStatus($audioStatus = 'pending'): void
-    {
-        $this->audio_status = $audioStatus;
-        $this->save();
-    }
-
-    function updateAction(): void
-    {
-        try {
-            Log::error("Update audio value to null... from ecg alerts");
-            // Update the status
-            $this->setAudioCompilingStatus();
-
-            // delete all audio files
-            $disk = Storage::disk('audio');
-            $allFiles = $disk->allFiles();
-            $prefix = '_' . $this->id;
-
-            // Filter files that start with the specified prefix
-            $matchingFiles = array_filter($allFiles, function ($file) use ($prefix) {
-                return str_starts_with(basename($file), $prefix);
-            });
-
-            foreach ($matchingFiles as $file) {
-                Storage::disk('audio')->delete($file);
-                if (Storage::disk('audio')->exists($file)) {
-                    throw new \Exception("Audio file is not compiled from ecg alerts" . $this->id);
-                }
-            }
-
-            // delete compiled record.
-            RoomAlertModel::deleteByAlertId($this->id);
-        } catch (Exception $exception) {
-            AppHelper::reportError($exception, "Error When Setting Audio Value to NULL from ecg alerts");
-        }
-    }
 }

@@ -32,9 +32,9 @@ class CreateNewEcgCodeRequest extends ApiFormRequest
             'receivers_list' => 'required',
             'receivers_list.*' => 'required',
             'color_code' => 'required|unique:ecg_codes,color_code',
-            'lang' => 'required|in:en,ar',
-            'tune_en' => 'required',
-            'tune_ar' => 'required',
+//            'lang' => 'required|in:en,ar',
+//            'tune_en' => 'required',
+//            'tune_ar' => 'required',
         ];
     }
 }

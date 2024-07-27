@@ -8,8 +8,5 @@ class FloorObserver
 {
     public function updated(FloorModel $floorModel): void
     {
-        foreach ($floorModel->roomOBject()->get() as $room) {
-            $room->updateAction();
-        }
     }
 }
