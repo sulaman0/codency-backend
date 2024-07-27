@@ -42,6 +42,7 @@ class ConvertTextToSoundCommand extends Command
     public function handle()
     {
 
+        Log::info("CRON IS RUNNING");
         DB::transaction(function () {
             RoomModel
                 ::where('status', 'active')
@@ -100,7 +101,6 @@ class ConvertTextToSoundCommand extends Command
                 });
         });
 
-
         DB::transaction(function () {
             EcgCodesModel
                 ::where('status', 'active')
@@ -139,7 +139,7 @@ class ConvertTextToSoundCommand extends Command
     {
 
         // Mock Response.
-        return json_encode([]);
+//        return json_encode([]);
 
         if (Storage::disk('audio')->exists($fileName . '.mp3')) {
             Storage::disk('audio')->delete($fileName . '.mp3'); // delete the audio file if exits.
@@ -162,6 +162,9 @@ class ConvertTextToSoundCommand extends Command
 
         if ($apiResponse->successful()) {
             $response = $apiResponse->json();
+            Log::info("SPEECH TEXT TO AUDIO RESPONSE", [
+                'response' => $response
+            ]);
             if ($response['status'] == 1) {
                 copy($response["file"], $path . $fileName . '.' . $response["format"]); // copy the file.
                 if ($response['balans'] < 2000) {

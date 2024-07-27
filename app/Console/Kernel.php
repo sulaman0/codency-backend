@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:send-alert-to-admin-if-amplifier-offline')->everyMinute();
-        $schedule->command('app:convert-text-to-sound')->everyTenMinutes();
+        $schedule->command('app:convert-text-to-sound')->everyMinute();
 
     }
 

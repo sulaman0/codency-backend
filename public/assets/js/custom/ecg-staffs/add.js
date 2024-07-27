@@ -119,6 +119,8 @@ KTUtil.onDOMContentLoaded((function () {
             $(formElement).find('input[name=designation]').val(res.payload.designation);
             $(formElement).find('input[name=phone]').val(res.payload.phone);
             $(formElement).find('select[name=location]').val(res.payload.location_id);
+            $(formElement).find('input[name=shift_start_time]').val(res.payload.shift_start_time);
+            $(formElement).find('input[name=shift_end_time]').val(res.payload.shift_end_time);
         }, 'GET', false, false, false, function () {
             $('.loading-progress-div').addClass('d-none');
         });

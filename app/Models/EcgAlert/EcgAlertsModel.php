@@ -188,6 +188,12 @@ class EcgAlertsModel extends Model
 
     function shouldShowActionBtn($action)
     {
+        if (empty($this->respond_by_id)) {
+            return true;
+        } else {
+            return false;
+        }
+
         if ($action == "sent_to_amplifier_directly") {
             return false;
         } else if ($action == "sent_to_manager" && empty($this->respond_by_id)) {

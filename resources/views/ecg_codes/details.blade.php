@@ -57,13 +57,16 @@
                                     <div
                                         class="text-gray-600">{{ empty($lastCall) || empty($lastCall->played_at_amplifier) ? '-' : \App\AppHelper\AppHelper::getAppDateAndTime($lastCall->played_at_amplifier)  }}</div>
 
-                                    <div class="text-gray-600 mt-5">Notification Tune In English</div>
-                                    <div class="text-gray-600 mt-3">
-                                        <audio controls>
-                                            <source src="{{ $ecgCode->tune_en }}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    </div>
+                                    @if($lastAudio)
+                                        <div class="text-gray-600 mt-5">Notification Tune</div>
+                                        <div class="text-gray-600 mt-3">
+                                            <audio controls>
+                                                <source src="{{ $lastAudio }}" type="audio/mp3">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        </div>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>

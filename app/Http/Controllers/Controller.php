@@ -190,7 +190,7 @@ class Controller extends BaseController
                     if ($request->type == 'floor') {
 
                         FloorModel::find($request->ref)->update(['status' => $status]);
-                        if ($status == 'blocked') {
+                        if ($status == 'inactive') {
                             RoomModel::where('loc_floor_id', $request->ref)->update(['status' => $status]);
                         }
 
@@ -199,7 +199,7 @@ class Controller extends BaseController
                     } else {
                         LocationModel::find($request->ref)->update(['status' => $status]);
 
-                        if ($status == 'blocked') {
+                        if ($status == 'inactive') {
                             FloorModel::where('building_id', $request->ref)->update(['status' => $status]);
                             RoomModel::where('building_id', $request->ref)->update(['status' => $status]);
                         }

@@ -115,7 +115,6 @@ class EcgAlertsService
         if (
             $ecgAlertModel instanceof EcgAlertsModel
             && $isValidToRespond instanceof EcgCodesAlertsAssignedToUsersModel
-            && $ecgAlertModel->played_type == "sent_to_manager"
         ) {
             ## Update status of responding
             $this->ecgAlertsModel->updateAlertResponded($ecgAlertModel,
@@ -125,7 +124,7 @@ class EcgAlertsService
             if ($request->action == "accept") {
                 $this->sentToDevices($ecgAlertModel, 'manager_accepted');
                 ## Now send to Amplifier
-                $message = $ecgAlertModel->ecg_code_nme . ' accepted to play on Amplifier';
+                $message = $ecgAlertModel->ecg_code_nme . ' accepted';
                 $this->sendToAmplifier($ecgAlertModel, $ecgCode);
                 return $message;
             } else {

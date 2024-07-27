@@ -128,7 +128,8 @@ class ECGCodesController extends Controller
             'alertsToUsers' => $ecgCode->alertAssignedToUsers(),
             'ecgCode' => $ecgCode,
             'lastCall' => $ecgCode->lastCallAt($ecgCode->id),
-            'totalCodePressed' => $ecgCode->totalCodePressed($ecgCode->id)
+            'totalCodePressed' => $ecgCode->totalCodePressed($ecgCode->id),
+            'lastAudio' => $ecgCode->lastAudio()
         ]);
     }
 

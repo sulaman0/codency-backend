@@ -1,8 +1,8 @@
-let locationType = '';
+let locationType = 'rooms';
 let status = 'active';
 $(function () {
     let endPoint = $('#main-content').attr('data-href') + '?=1'
-    getPageData(endPoint + '&status=active', 'main-content');
+    getPageData(endPoint + `&status=active&location_type=${locationType}`, 'main-content');
 
     $(document).on('keyup', '.search-location', function (e) {
         getPageData(endPoint + queryString(), 'main-content');

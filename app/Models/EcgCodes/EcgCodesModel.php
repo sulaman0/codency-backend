@@ -64,6 +64,7 @@ class EcgCodesModel extends Model
             $M->where('status', $request->status);
         }
 
+
         return $M->orderBy('id', 'desc')->paginate(6);
 
     }
@@ -220,6 +221,12 @@ class EcgCodesModel extends Model
         } catch (Exception $exception) {
             AppHelper::reportError($exception, "Error When Setting Audio Value to NULL from ecg alerts");
         }
+    }
+
+    function lastAudio()
+    {
+        $audio = RoomAlertModel::where('ecg_codes_id', $this->id)->orderBy('id', 'desc')->first();
+        return $audio ? $audio->audio_url : '';
     }
 
 }
